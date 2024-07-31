@@ -1,9 +1,13 @@
-import { combineReducers, Reducer } from "redux";
+import { combineReducers } from "redux";
 
-const RootReducers: Reducer<AppState> = combineReducers<AppState>({});
+import { CountReducers } from "@/redux/reducers";
+
+const RootReducers = combineReducers({
+    count: CountReducers
+});
 
 export default RootReducers;
 
 declare global {
-    export type AppState = {};
+    export type AppState = ReturnType<typeof RootReducers>;
 }
