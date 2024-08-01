@@ -1,4 +1,5 @@
-import { applyMiddleware, configureStore, EnhancedStore } from "@reduxjs/toolkit";
+import { applyMiddleware, configureStore, EnhancedStore, StoreEnhancer } from "@reduxjs/toolkit";
+import { compact } from "lodash";
 import createSagaMiddleware from "redux-saga";
 
 import { Reactotron } from "@/services";
@@ -17,9 +18,14 @@ class StoreConfig {
 
     private sagaMiddleware = createSagaMiddleware({ sagaMonitor: this.reactotron.tron?.createSagaMonitor?.() });
 
+    private enhancers: StoreEnhancer[] = compact([
+        applyMiddleware(this.sagaMiddleware),
+        this.reactotron.tron?.createEnhancer?.()
+    ]);
+
     public store: EnhancedStore<AppState> = configureStore({
         reducer: RootReducers,
-        enhancers: (getDefaultEnhancers) => getDefaultEnhancers().concat(applyMiddleware(this.sagaMiddleware))
+        enhancers: (getDefaultEnhancers) => getDefaultEnhancers().concat(this.enhancers)
     });
 
     constructor() {
