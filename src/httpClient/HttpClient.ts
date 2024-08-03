@@ -34,7 +34,12 @@ class HttpClient {
         }
     }
 
-    async request<Data extends Record<string, any>, Method extends ApiMethod, Body = any, Params = any>(
+    async request<
+        Data extends Record<string, any>,
+        Method extends ApiMethod,
+        Body = Record<string, any>,
+        Params = Record<string, any>
+    >(
         endpoint: string,
         apiConfig: ApiClientConfig<Body, Params, Method>,
         config?: AxiosRequestConfig
