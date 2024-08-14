@@ -1,6 +1,8 @@
 enum ActionTypes {
     INCREMENT = "INCREMENT",
-    DECREMENT = "DECREMENT"
+    SET_INCREMENT = "SET_INCREMENT",
+    DECREMENT = "DECREMENT",
+    SET_DECREMENT = "SET_DECREMENT"
 }
 
 export default ActionTypes;

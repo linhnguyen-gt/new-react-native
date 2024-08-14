@@ -1,4 +1,4 @@
-export type Count = number;
+export type Count = number | undefined;
 
 declare global {
     export type CountReducers = {

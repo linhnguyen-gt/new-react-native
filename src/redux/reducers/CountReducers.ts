@@ -8,11 +8,11 @@ const initState: CountReducers = {
 
 const CountReducers = createReducer(initState, (builder) =>
     builder
-        .addCase(actions.CountActions.increment, (state, action) => {
-            state.count += action.payload;
+        .addCase(actions.CountActions.setIncrement, (state, action) => {
+            state.count = action.payload;
         })
-        .addCase(actions.CountActions.decrement, (state, action) => {
-            state.count -= action.payload;
+        .addCase(actions.CountActions.setDecrement, (state, action) => {
+            state.count = action.payload;
         })
         .addDefaultCase((state) => state)
 );

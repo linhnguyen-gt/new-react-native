@@ -6,7 +6,7 @@ const DEFAULT_API_CONFIG = {
     baseURL: ""
 } as const;
 
-const methodRes = [ApiMethod.GET, ApiMethod.DELETE];
+const _methodRes = [ApiMethod.GET, ApiMethod.DELETE];
 
 class HttpClient {
     private static _instance: HttpClient;
@@ -45,18 +45,15 @@ class HttpClient {
         config?: AxiosRequestConfig
     ): Promise<BaseResponse<Data>> {
         const { method, params, body } = apiConfig;
+        const data = _methodRes.includes(method)
+            ? {
+                  params
+              }
+            : body;
         try {
             const res = await (
                 this.INSTANCE[method.toLowerCase() as "get" | "post" | "put" | "patch" | "delete"] as AxiosRequestMethod
-            )(
-                endpoint,
-                methodRes.includes(method)
-                    ? {
-                          params
-                      }
-                    : body,
-                config
-            );
+            )(endpoint, data, config);
 
             return {
                 ok: true,

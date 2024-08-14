@@ -1,19 +1,9 @@
 import { HttpStatusCode } from "axios";
-import { Alert } from "react-native";
 
 export const apiProblem = (response: BaseResponse<Data>): BaseResponse<Data> => {
-    const { message } = response.data;
+    // const { message } = response.data;
     switch (response.status) {
-        case HttpStatusCode.Ok:
         case HttpStatusCode.Unauthorized:
-            Alert.alert("", message, [
-                {
-                    text: "OK",
-                    onPress: () => {
-                        /*empty*/
-                    }
-                }
-            ]);
             return { ok: false, data: response.data };
         case HttpStatusCode.Forbidden:
             return { ok: false, data: response.data };
