@@ -17,6 +17,7 @@ import { useActions } from "@/hooks";
 function App(): React.JSX.Element {
     const increment = useActions(actions.CountActions.increment);
     const decrement = useActions(actions.CountActions.decrement);
+
     const count = useSelector(selectors.CountSelectors.count);
 
     const isDarkMode = useColorScheme() === "dark";
