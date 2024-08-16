@@ -1,17 +1,25 @@
-import { put, select, takeEvery } from "redux-saga/effects";
+import { delay, put, select, takeEvery } from "redux-saga/effects";
 
 import { actions, selectors } from "@/redux";
 
+import { handleApiCall } from "./ApiSagaHelper";
+
 function* increment() {
-    const data: number = yield select(selectors.CountSelectors.count);
-    const count = data + 1;
-    yield put(actions.CountActions.setIncrement(count));
+    yield* handleApiCall(actions.CountActions.increment.type, function* () {
+        yield delay(1000);
+        const data: number = yield select(selectors.CountSelectors.count);
+        const count = data + 1;
+        yield put(actions.CountActions.setIncrement(count));
+    });
 }
 
 function* decrement() {
-    const data: number = yield select(selectors.CountSelectors.count);
-    const count = data - 1;
-    yield put(actions.CountActions.setDecrement(count));
+    yield handleApiCall(actions.CountActions.decrement.type, function* () {
+        yield delay(1000);
+        const data: number = yield select(selectors.CountSelectors.count);
+        const count = data - 1;
+        yield put(actions.CountActions.setDecrement(count));
+    });
 }
 
 export default function* watchCount() {

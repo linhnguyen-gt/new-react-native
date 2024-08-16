@@ -1,20 +1,24 @@
-import { createReducer } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
-import { actions } from "..";
+import { actions } from "@/redux";
 
-const initState: CountReducers = {
+const initialState: CountReducers = {
     count: 0
 };
 
-const CountReducers = createReducer(initState, (builder) =>
-    builder
-        .addCase(actions.CountActions.setIncrement, (state, action) => {
-            state.count = action.payload;
-        })
-        .addCase(actions.CountActions.setDecrement, (state, action) => {
-            state.count = action.payload;
-        })
-        .addDefaultCase((state) => state)
-);
+const CountReducers = createSlice({
+    name: "count",
+    initialState,
+    reducers: {},
+    extraReducers: (builder) =>
+        builder
+            .addCase(actions.CountActions.setIncrement, (state, action) => {
+                state.count = action.payload;
+            })
+            .addCase(actions.CountActions.setDecrement, (state, action) => {
+                state.count = action.payload;
+            })
+            .addDefaultCase((state) => state)
+});
 
-export default CountReducers;
+export default CountReducers.reducer;

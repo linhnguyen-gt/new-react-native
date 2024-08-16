@@ -12,6 +12,9 @@
     "adb:reactotron": "adb reverse tcp:9090 tcp:9090"
   },
   "dependencies": {
+    "@gluestack-style/react": "^1.0.57",
+    "@gluestack-ui/config": "^1.1.20",
+    "@gluestack-ui/themed": "^1.1.44",
     "@react-native-async-storage/async-storage": "^1.24.0",
     "@reduxjs/toolkit": "^2.2.7",
     "axios": "^1.7.2",
@@ -19,6 +22,7 @@
     "react": "18.2.0",
     "react-native": "0.74.4",
     "react-native-reanimated": "^3.14.0",
+    "react-native-svg": "13.4.0",
     "react-redux": "^9.1.2",
     "reactotron-react-native": "^5.1.7",
     "reactotron-redux": "^3.1.9",
