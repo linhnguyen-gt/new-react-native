@@ -10,7 +10,8 @@ import React from "react";
 import { Button, SafeAreaView, ScrollView, StatusBar, Text, useColorScheme, View } from "react-native";
 import { Colors, Header } from "react-native/Libraries/NewAppScreen";
 import { useSelector } from "react-redux";
-import { Loading } from "src/components";
+
+import { Loading } from "@/components";
 
 import { actions, selectors } from "@/redux";
 
@@ -19,12 +20,12 @@ import { useActions, useLoading } from "@/hooks";
 import { config } from "@/config/gluestack-ui.config";
 
 function App(): React.JSX.Element {
+    const isLoading = useLoading([actions.CountActions.increment.type, actions.CountActions.decrement.type]);
+
     const increment = useActions(actions.CountActions.increment);
     const decrement = useActions(actions.CountActions.decrement);
 
     const count = useSelector(selectors.CountSelectors.count);
-
-    const isLoading = useLoading([actions.CountActions.increment.type, actions.CountActions.decrement.type]);
 
     const isDarkMode = useColorScheme() === "dark";
 
