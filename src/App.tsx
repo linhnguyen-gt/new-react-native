@@ -10,12 +10,12 @@ import React from "react";
 import { Button, SafeAreaView, ScrollView, StatusBar, Text, useColorScheme, View } from "react-native";
 import { Colors, Header } from "react-native/Libraries/NewAppScreen";
 import { useSelector } from "react-redux";
+import { Loading } from "src/components";
 
 import { actions, selectors } from "@/redux";
 
 import { useActions } from "@/hooks";
 
-import { Loading } from "@/component";
 import { config } from "@/config/gluestack-ui.config";
 
 function App(): React.JSX.Element {

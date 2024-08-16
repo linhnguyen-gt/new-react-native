@@ -21,7 +21,7 @@ module.exports = {
         "plugin:prettier/recommended"
     ],
     plugins: ["react", "react-native", "detox", "react-hooks", "import"],
-    ignorePatterns: ["!.*", "dist", "node_modules", "react-native-tuya-smart-life"],
+    ignorePatterns: ["!.*", "dist", "node_modules"],
     rules: {
         "no-console": ["error", { allow: ["warn", "error"] }],
         "react-hooks/rules-of-hooks": "error",
@@ -89,17 +89,12 @@ module.exports = {
                 },
                 pathGroups: [
                     {
-                        pattern: "@/common",
+                        pattern: "@/components",
                         group: "internal",
                         position: "before"
                     },
                     {
                         pattern: "@/redux",
-                        group: "internal",
-                        position: "before"
-                    },
-                    {
-                        pattern: "@/enums",
                         group: "internal",
                         position: "before"
                     },
@@ -129,7 +124,7 @@ module.exports = {
                         position: "before"
                     },
                     {
-                        pattern: "@/httpServices",
+                        pattern: "@/httpClient",
                         group: "internal",
                         position: "before"
                     },
