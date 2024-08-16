@@ -14,7 +14,7 @@ import { Loading } from "src/components";
 
 import { actions, selectors } from "@/redux";
 
-import { useActions } from "@/hooks";
+import { useActions, useLoading } from "@/hooks";
 
 import { config } from "@/config/gluestack-ui.config";
 
@@ -23,18 +23,14 @@ function App(): React.JSX.Element {
     const decrement = useActions(actions.CountActions.decrement);
 
     const count = useSelector(selectors.CountSelectors.count);
-    const isLoading = useSelector(selectors.LoadingSelectors.isLoading);
+
+    const isLoading = useLoading([actions.CountActions.increment.type, actions.CountActions.decrement.type]);
 
     const isDarkMode = useColorScheme() === "dark";
 
     const backgroundStyle = {
         backgroundColor: isDarkMode ? Colors.darker : Colors.lighter
     };
-
-    const isLoadingPage = React.useMemo(
-        () => isLoading[actions.CountActions.increment.type] || isLoading[actions.CountActions.decrement.type],
-        [isLoading]
-    );
 
     return (
         <GluestackUIProvider config={config}>
@@ -54,7 +50,7 @@ function App(): React.JSX.Element {
                     </View>
                 </ScrollView>
             </SafeAreaView>
-            <Loading isLoading={isLoadingPage} />
+            <Loading isLoading={isLoading} />
         </GluestackUIProvider>
     );
 }
