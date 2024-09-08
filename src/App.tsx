@@ -20,18 +20,29 @@ import { useActions, useLoading } from "@/hooks";
 import { config } from "@/config/gluestack-ui.config";
 
 function App(): React.JSX.Element {
-    const isLoading = useLoading([actions.CountActions.increment.type, actions.CountActions.decrement.type]);
+    const isLoading = useLoading([
+        actions.CountActions.increment.type,
+        actions.CountActions.decrement.type,
+        actions.ResponseActions.getResponse.type
+    ]);
 
     const increment = useActions(actions.CountActions.increment);
     const decrement = useActions(actions.CountActions.decrement);
+    const getResponse = useActions(actions.ResponseActions.getResponse);
 
     const count = useSelector(selectors.CountSelectors.count);
+    const response = useSelector(selectors.ResponseSelectors.response);
 
     const isDarkMode = useColorScheme() === "dark";
 
     const backgroundStyle = {
         backgroundColor: isDarkMode ? Colors.darker : Colors.lighter
     };
+
+    React.useEffect(() => {
+        getResponse();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <GluestackUIProvider config={config}>
@@ -43,6 +54,7 @@ function App(): React.JSX.Element {
                 <ScrollView contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
                     <Header />
                     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+                        <Text style={{ fontSize: 24, marginBottom: 20 }}>Response: {response.length}</Text>
                         <Text style={{ fontSize: 24, marginBottom: 20 }}>Counter: {count}</Text>
                         <View style={{ flexDirection: "row", width: 200, justifyContent: "space-around" }}>
                             <Button title="Increment" onPress={() => increment()} />

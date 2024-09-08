@@ -4,7 +4,7 @@ import { saga } from "@/redux";
 
 class RootSaga {
     static *saga() {
-        yield all([fork(saga.watchCount)]);
+        yield all([fork(saga.watchCount), fork(saga.watchResponse)]);
     }
 }
 

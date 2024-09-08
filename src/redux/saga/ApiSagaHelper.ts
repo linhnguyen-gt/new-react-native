@@ -4,7 +4,16 @@ import { ActionTypes } from "@/constants";
 
 import { startLoading, stopLoading } from "../reducers";
 
-type Saga = (...args: any[]) => Generator<CallEffect | PutEffect | SelectEffect, void, any>;
+type Saga = (
+    ...args: any[]
+) => Generator<
+    | CallEffect
+    | PutEffect
+    | SelectEffect
+    | Promise<SuccessfulResponse<Record<string, any>> | ErrorResponse<Record<string, any>>>,
+    void,
+    any
+>;
 
 export function* handleApiCall(actionType: ActionTypes, apiSaga: Saga, ...args: any[]): Generator {
     try {

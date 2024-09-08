@@ -1,37 +1,32 @@
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from "axios";
 
 import ApiMethod from "./ApiMethod";
 
 const DEFAULT_API_CONFIG = {
-    baseURL: ""
+    baseURL: "https://datausa.io/api/"
 } as const;
 
 const _methodRes = [ApiMethod.GET, ApiMethod.DELETE];
 
 class HttpClient {
     private static _instance: HttpClient;
-    INSTANCE!: AxiosInstance;
-    TOKEN!: string | undefined;
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    private readonly INSTANCE: AxiosInstance;
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    private TOKEN?: string;
 
-    constructor() {
-        this._init();
+    private constructor() {
+        this.INSTANCE = axios.create({
+            baseURL: DEFAULT_API_CONFIG.baseURL
+        });
+        this.setInterceptors();
     }
 
     static getInstance(): HttpClient {
         if (!HttpClient._instance) {
-            return new HttpClient();
+            HttpClient._instance = new HttpClient();
         }
         return HttpClient._instance;
-    }
-
-    _init() {
-        if (!this.INSTANCE) {
-            this.INSTANCE = axios.create({
-                baseURL: DEFAULT_API_CONFIG.baseURL
-            });
-            this.setInterceptorRequest();
-            this.setInterceptorResponse();
-        }
     }
 
     async request<
@@ -45,15 +40,15 @@ class HttpClient {
         config?: AxiosRequestConfig
     ): Promise<BaseResponse<Data>> {
         const { method, params, body } = apiConfig;
-        const data = _methodRes.includes(method)
-            ? {
-                  params
-              }
-            : body;
+
         try {
-            const res = await (
-                this.INSTANCE[method.toLowerCase() as "get" | "post" | "put" | "patch" | "delete"] as AxiosRequestMethod
-            )(endpoint, data, config);
+            const res = await this.INSTANCE.request<Data>({
+                method: method.toLowerCase(),
+                url: endpoint,
+                params: _methodRes.includes(method) ? params : undefined,
+                data: !_methodRes.includes(method) ? body : undefined,
+                ...config
+            });
 
             return {
                 ok: true,
@@ -70,21 +65,9 @@ class HttpClient {
         }
     }
 
-    setInterceptorRequest() {
-        return this.INSTANCE.interceptors.request.use(
-            async (config) => {
-                this.TOKEN = "token";
-
-                if (this.TOKEN) {
-                    config.headers.Authorization = `Bearer ${this.TOKEN}`;
-                }
-
-                return config;
-            },
-            (error) => {
-                return Promise.reject(error);
-            }
-        );
+    private setInterceptors(): void {
+        this.INSTANCE.interceptors.request.use(this.requestInterceptor.bind(this));
+        this.INSTANCE.interceptors.response.use((response) => response, this.responseErrorInterceptor.bind(this));
     }
 
     // update headers if needed
@@ -97,32 +80,42 @@ class HttpClient {
         }
     }
 
-    setInterceptorResponse() {
-        return this.INSTANCE.interceptors.response.use(
-            (response) => response,
-            async (error) => {
-                console.warn("error config::", error.response.data);
-                // Access Token was expired
-                if (error.response.status === 401) {
-                    if (error.response.data.message === "Unauthorized") {
-                        try {
-                            await this.refreshToken();
-                            return this.INSTANCE.request(error.config);
-                        } catch (refreshError) {
-                            return Promise.reject(refreshError.response?.data || refreshError);
-                        }
-                    } else {
-                        return Promise.reject(error.response.data || error);
-                    }
-                }
-
-                return Promise.reject(error);
-            }
-        );
+    private requestInterceptor(config: InternalAxiosRequestConfig): InternalAxiosRequestConfig {
+        this.TOKEN = "token"; // Consider implementing proper token management
+        if (this.TOKEN) {
+            config.headers = config.headers || {};
+            config.headers.Authorization = `Bearer ${this.TOKEN}`;
+        }
+        return config;
     }
 
-    async refreshToken() {
-        // refresh token
+    private async responseErrorInterceptor(error: AxiosError): Promise<AxiosResponse> {
+        if (
+            error.response?.status === 401 &&
+            error.response.data &&
+            typeof error.response.data === "object" &&
+            "message" in error.response.data &&
+            error.response.data.message === "Unauthorized"
+        ) {
+            try {
+                await this.refreshToken();
+                return this.INSTANCE.request(error.config!);
+            } catch (refreshError) {
+                return Promise.reject(this.extractErrorData(refreshError));
+            }
+        }
+        return Promise.reject(this.extractErrorData(error));
+    }
+
+    private extractErrorData(error: unknown): unknown {
+        if (error instanceof AxiosError) {
+            return error.response?.data || error;
+        }
+        return error;
+    }
+
+    private async refreshToken(): Promise<void> {
+        // Implement token refresh logic
     }
 }
 
@@ -138,10 +131,4 @@ declare global {
     type ApiClientConfig<B, P, M extends ApiMethod> = M extends ApiMethod.GET | ApiMethod.DELETE
         ? HttpClientBaseConfig<M, P>
         : HttpClientBaseConfig<M, P, B>;
-
-    type AxiosRequestMethod = <T = any, R = AxiosResponse<T>>(
-        url: string,
-        data?: any,
-        config?: AxiosRequestConfig
-    ) => Promise<R>;
 }

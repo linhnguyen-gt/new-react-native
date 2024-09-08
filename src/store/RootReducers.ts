@@ -1,9 +1,10 @@
 import { combineReducers } from "redux";
 
-import { CountReducers, LoadingReducers } from "@/redux/reducers";
+import { CountReducers, LoadingReducers, ResponseReducers } from "@/redux/reducers";
 
 const RootReducers = combineReducers({
     count: CountReducers,
+    response: ResponseReducers,
     loading: LoadingReducers
 });
 
