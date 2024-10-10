@@ -5,7 +5,7 @@
  * @format
  */
 
-import { GluestackUIProvider } from "@gluestack-ui/themed";
+import { Box, GluestackUIProvider } from "@gluestack-ui/themed";
 import React from "react";
 import { Button, SafeAreaView, ScrollView, StatusBar, Text, useColorScheme, View } from "react-native";
 import { Colors, Header } from "react-native/Libraries/NewAppScreen";
@@ -53,14 +53,14 @@ function App(): React.JSX.Element {
                 />
                 <ScrollView contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
                     <Header />
-                    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+                    <Box style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
                         <Text style={{ fontSize: 24, marginBottom: 20 }}>Response: {response.length}</Text>
                         <Text style={{ fontSize: 24, marginBottom: 20 }}>Counter: {count}</Text>
                         <View style={{ flexDirection: "row", width: 200, justifyContent: "space-around" }}>
                             <Button title="Increment" onPress={() => increment()} />
                             <Button title="Decrement" onPress={() => decrement()} />
                         </View>
-                    </View>
+                    </Box>
                 </ScrollView>
             </SafeAreaView>
             <Loading isLoading={isLoading} />
