@@ -1,6 +1,7 @@
-import { Box } from "@gluestack-ui/themed";
 import React from "react";
 import { ActivityIndicator } from "react-native";
+
+import { Box } from "@/components";
 
 type LoadingFooterProps = {
     isLoading?: boolean;
