@@ -5,19 +5,18 @@
  * @format
  */
 
-import { Box, GluestackUIProvider } from "@gluestack-ui/themed";
 import React from "react";
-import { Button, SafeAreaView, ScrollView, StatusBar, Text, useColorScheme, View } from "react-native";
+import { Button, SafeAreaView, ScrollView, StatusBar, useColorScheme } from "react-native";
 import { Colors, Header } from "react-native/Libraries/NewAppScreen";
 import { useSelector } from "react-redux";
 
-import { Loading } from "@/components";
+import { GluestackUIProvider, HStack, Loading, Text, VStack } from "@/components";
 
 import { actions, selectors } from "@/redux";
 
 import { useActions, useLoading } from "@/hooks";
 
-import { config } from "@/config/gluestack-ui.config";
+import "../global.css";
 
 function App(): React.JSX.Element {
     const isLoading = useLoading([
@@ -45,7 +44,7 @@ function App(): React.JSX.Element {
     }, []);
 
     return (
-        <GluestackUIProvider config={config}>
+        <GluestackUIProvider>
             <SafeAreaView style={backgroundStyle}>
                 <StatusBar
                     barStyle={isDarkMode ? "light-content" : "dark-content"}
@@ -53,14 +52,15 @@ function App(): React.JSX.Element {
                 />
                 <ScrollView contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
                     <Header />
-                    <Box style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-                        <Text style={{ fontSize: 24, marginBottom: 20 }}>Response: {response.length}</Text>
-                        <Text style={{ fontSize: 24, marginBottom: 20 }}>Counter: {count}</Text>
-                        <View style={{ flexDirection: "row", width: 200, justifyContent: "space-around" }}>
+
+                    <VStack space="sm" className="items-center">
+                        <Text className="text-2xl font-bold">Response: {response.length}</Text>
+                        <Text className="text-2xl">Counter: {count}</Text>
+                        <HStack space="lg">
                             <Button title="Increment" onPress={() => increment()} />
                             <Button title="Decrement" onPress={() => decrement()} />
-                        </View>
-                    </Box>
+                        </HStack>
+                    </VStack>
                 </ScrollView>
             </SafeAreaView>
             <Loading isLoading={isLoading} />

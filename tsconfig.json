@@ -31,6 +31,8 @@
     "jest.config.js",
     "index.js",
     "src",
-    "__tests__/App.test.tsx"
+    "__tests__/App.test.tsx",
+    "tailwind.config.js",
+    "nativewind-env.d.ts"
   ]
 }
