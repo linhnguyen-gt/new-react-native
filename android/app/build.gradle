@@ -2,10 +2,16 @@ apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
 
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
+
+project.ext.envConfigFiles = [debug      : ".env",
+                              development: ".env.development",
+                              staging    : ".env.staging",
+                              production : ".env.production",]
+
 /**
  * This is the configuration block to customize your React Native Android app.
- * By default you don't need to apply any configuration, just uncomment the lines you need.
- */
+ * By default you don't need to apply any configuration, just uncomment the lines you need.*/
 react {
     /* Folders */
     //   The root of your project, i.e. where "package.json" lives. Default is '../..'
@@ -55,8 +61,7 @@ react {
 }
 
 /**
- * Set this to true to Run Proguard on Release builds to minify the Java bytecode.
- */
+ * Set this to true to Run Proguard on Release builds to minify the Java bytecode.*/
 def enableProguardInReleaseBuilds = false
 
 /**
@@ -68,8 +73,7 @@ def enableProguardInReleaseBuilds = false
  * The international variant includes ICU i18n library and necessary data
  * allowing to use e.g. `Date.toLocaleString` and `String.localeCompare` that
  * give correct results when using with locales other than en-US. Note that
- * this variant is about 6MiB larger per architecture than default.
- */
+ * this variant is about 6MiB larger per architecture than default.*/
 def jscFlavor = 'org.webkit:android-jsc:+'
 
 android {
@@ -82,8 +86,8 @@ android {
         applicationId "com.newreactnative"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode project.env.get("APP_VERSION_CODE").toInteger()
+        versionName project.env.get("APP_VERSION_NAME")
     }
     signingConfigs {
         debug {
@@ -105,12 +109,33 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
+
+    flavorDimensions "default"
+    productFlavors {
+        development {
+            dimension 'default'
+            applicationId "com.newreactnative.dev"
+            resValue "string", "build_config_package", 'com.newreactnative'
+        }
+        staging {
+            dimension 'default'
+            applicationId "com.newreactnative.stg"
+            resValue "string", "build_config_package", 'com.newreactnative'
+        }
+        production {
+            dimension 'default'
+            applicationId "com.newreactnative.production"
+            resValue "string", "build_config_package", 'com.newreactnative'
+        }
+    }
+
 }
 
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
-
+    // React Native Config
+    implementation project(':react-native-config')
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
     } else {

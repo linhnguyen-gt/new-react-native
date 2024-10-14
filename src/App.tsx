@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import { GluestackUIProvider, HStack, Loading, Text, VStack } from "@/components";
 
 import { actions, selectors } from "@/redux";
+import Config from "react-native-config";
 
 import { useActions, useLoading } from "@/hooks";
 
@@ -54,6 +55,7 @@ function App(): React.JSX.Element {
                     <Header />
 
                     <VStack space="sm" className="items-center">
+                        <Text className="text-2xl font-bold">Environment: {Config.APP_FLAVOR}</Text>
                         <Text className="text-2xl font-bold">Response: {response.length}</Text>
                         <Text className="text-2xl">Counter: {count}</Text>
                         <HStack space="lg">

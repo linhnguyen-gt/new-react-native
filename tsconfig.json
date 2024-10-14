@@ -33,6 +33,7 @@
     "src",
     "__tests__/App.test.tsx",
     "tailwind.config.js",
-    "nativewind-env.d.ts"
+    "nativewind-env.d.ts",
+    "react-native-config.d.ts"
   ]
 }
