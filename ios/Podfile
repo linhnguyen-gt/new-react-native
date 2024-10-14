@@ -8,6 +8,16 @@ require Pod::Executable.execute_command('node', ['-p',
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
+# configuration name
+project 'NewReactNative',{
+        'Debug' => :debug,
+        'Dev.Debug' => :debug,
+        'Dev.Release' => :release,
+        'Release' => :release,
+        'Staging.Debug' => :debug,
+        'Staging.Release' => :release,
+}
+
 linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
   Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green

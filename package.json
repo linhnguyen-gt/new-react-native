@@ -8,6 +8,8 @@
     "android:dev": "cd android && ENVFILE=.env.development && ./gradlew clean && cd .. && react-native run-android --mode=developmentDebug --appId=com.newreactnative.dev",
     "android:pro": "cd android && ENVFILE=.env.production && ./gradlew clean && cd .. && react-native run-android --mode=productionDebug --appId=com.newreactnative.production",
     "ios": "react-native run-ios",
+    "ios:stg": "react-native run-ios --scheme Staging --mode Staging.Debug",
+    "ios:dev": "react-native run-ios --scheme Dev --mode Dev.Debug",
     "lint": "eslint .",
     "start": "react-native start",
     "lint:fix": "eslint . --fix --ext .ts,.tsx",
