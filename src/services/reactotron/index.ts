@@ -1,1 +1,1 @@
-export { default as Reactotron } from "./Reactotron";
+export { default as reactotron } from "./reactotronInstance";

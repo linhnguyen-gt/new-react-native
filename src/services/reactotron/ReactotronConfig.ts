@@ -1,4 +1,4 @@
-import { NativeModules } from "react-native";
+import { TurboModuleRegistry } from "react-native";
 
 export interface ReactotronConfig {
     /** The name of the app. */
@@ -22,15 +22,17 @@ export interface ReactotronConfig {
 /**
  * The default Reactotron configuration.
  */
-const host = NativeModules.SourceCode.scriptURL.split("://")[1].split(":")[0];
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+const host = TurboModuleRegistry.getEnforcing("SourceCode").getConstants()?.scriptURL.split("://")[1].split(":")[0];
 export const DEFAULT_REACTOTRON_CONFIG: ReactotronConfig = {
     clearOnLoad: true,
     host,
     useAsyncStorage: true,
-    ignoreUrls: /codepush.appcenter.ms|Hubs\/*/,
+    ignoreUrls: /(logs|symbolicate)$/,
     state: {
         initial: true,
         snapshots: false
     },
-    exceptActions: ["persist/PERSIST", "persist/REHYDRATE", "SET_CURRENT_ROUTE"]
+    exceptActions: ["persist/PERSIST", "persist/REHYDRATE"]
 };

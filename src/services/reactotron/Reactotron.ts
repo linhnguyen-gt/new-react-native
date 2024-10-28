@@ -1,11 +1,13 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Tron from "reactotron-react-native";
-import { reactotronRedux as reduxPlugin } from "reactotron-redux";
+import {reactotronRedux as reduxPlugin} from "reactotron-redux";
 import sagaPlugin from "reactotron-redux-saga";
 
-import { name } from "../../../package.json";
+import {name} from "../../../package.json";
 
-import { DEFAULT_REACTOTRON_CONFIG, ReactotronConfig } from "./ReactotronConfig";
+import {DEFAULT_REACTOTRON_CONFIG, ReactotronConfig} from "./ReactotronConfig";
+
+/** Do Nothing. */
 
 // in dev, we attach Reactotron, in prod we attach an interface-compatible mock.
 if (__DEV__) {
@@ -24,17 +26,14 @@ export default class Reactotron {
     }
 
     setup() {
-        this.tron = Tron.configure({
+        this.tron = Tron.setAsyncStorageHandler(AsyncStorage).configure({
             name: this.config.name || name,
-            host: this.config.host
+            host: this.config.host,
+            port: 9090
         });
 
-        if (this.config.useAsyncStorage) {
-            this.tron.setAsyncStorageHandler?.(AsyncStorage);
-        }
-
         this.tron.useReactNative({
-            asyncStorage: this.config.useAsyncStorage ? { ignore: ["persist:root", "NAVIGATION_STATE"] } : false,
+            asyncStorage: this.config.useAsyncStorage ? { ignore: ["persist:root"] } : false,
             networking: { ignoreUrls: this.config.ignoreUrls }
         });
 
@@ -54,6 +53,10 @@ export default class Reactotron {
 
     createEnhancer() {
         return this.tron.createEnhancer?.();
+    }
+
+    createSagaMonitor() {
+        return this.tron.createSagaMonitor?.();
     }
 }
 

@@ -1,2 +1,2 @@
 export { default as RootNavigator } from "./RootNavigator";
-export { Reactotron } from "./reactotron";
+export { reactotron } from "./reactotron";

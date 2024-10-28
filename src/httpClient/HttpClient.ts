@@ -67,6 +67,7 @@ class HttpClient {
 
     private setInterceptors(): void {
         this.INSTANCE.interceptors.request.use(this.requestInterceptor.bind(this));
+
         this.INSTANCE.interceptors.response.use((response) => response, this.responseErrorInterceptor.bind(this));
     }
 

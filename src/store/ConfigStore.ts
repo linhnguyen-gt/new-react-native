@@ -1,35 +1,40 @@
-import { applyMiddleware, configureStore, EnhancedStore, StoreEnhancer } from "@reduxjs/toolkit";
+import { configureStore, EnhancedStore, StoreEnhancer } from "@reduxjs/toolkit";
 import { compact } from "lodash";
 import createSagaMiddleware from "redux-saga";
 
-import { Reactotron } from "@/services";
+import { reactotron } from "@/services";
 
 import RootReducers from "./RootReducers";
 import RootSaga from "./RootSaga";
 
-const createReactotron = (): Reactotron => {
-    const reactotron = new Reactotron();
-    reactotron.setup();
-    return reactotron;
-};
-
 class StoreConfig {
-    private reactotron = createReactotron();
+    private sagaMiddleware = createSagaMiddleware({
+        sagaMonitor: reactotron?.createSagaMonitor?.(),
+        onError: (error) => {
+            console.error("Saga error:", error);
+        }
+    });
 
-    private sagaMiddleware = createSagaMiddleware({ sagaMonitor: this.reactotron.tron?.createSagaMonitor?.() });
-
-    private enhancers: StoreEnhancer[] = compact([
-        applyMiddleware(this.sagaMiddleware),
-        this.reactotron.tron?.createEnhancer?.()
-    ]);
+    private enhancers: StoreEnhancer[] = compact([reactotron?.createEnhancer?.()]);
 
     public store: EnhancedStore<AppState> = configureStore({
         reducer: RootReducers,
-        enhancers: (getDefaultEnhancers) => getDefaultEnhancers().concat(this.enhancers)
+        enhancers: (getDefaultEnhancers) => getDefaultEnhancers().concat(this.enhancers),
+        middleware: (getDefaultMiddleware) =>
+            getDefaultMiddleware({
+                serializableCheck: false,
+                thunk: false,
+                immutableCheck: !__DEV__
+            }).concat(this.sagaMiddleware),
+        devTools: __DEV__
     });
 
     constructor() {
-        this.sagaMiddleware.run(RootSaga.saga);
+        try {
+            this.sagaMiddleware.run(RootSaga.saga);
+        } catch (error) {
+            console.error("Failed to start saga:", error);
+        }
     }
 }
 
