@@ -8,12 +8,12 @@
 import React from "react";
 import { Button, SafeAreaView, ScrollView, StatusBar, useColorScheme } from "react-native";
 import { Colors, Header } from "react-native/Libraries/NewAppScreen";
+import Config from "react-native-config";
 import { useSelector } from "react-redux";
 
 import { GluestackUIProvider, HStack, Loading, Text, VStack } from "@/components";
 
 import { actions, selectors } from "@/redux";
-import Config from "react-native-config";
 
 import { useActions, useLoading } from "@/hooks";
 
