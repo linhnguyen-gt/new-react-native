@@ -1,7 +1,7 @@
-import { HttpStatusCode, AxiosError } from "axios";
+import { AxiosError, HttpStatusCode } from "axios";
 import { Alert } from "react-native";
 
-export const apiProblem = (response: BaseResponse<Data> | AxiosError): BaseResponse<Data> => {
+export const apiProblem = <T extends Data>(response: ErrorResponse<T>): ErrorResponse<T> => {
     try {
         if (response instanceof AxiosError) {
             // Handle AxiosError
@@ -50,31 +50,41 @@ export const apiProblem = (response: BaseResponse<Data> | AxiosError): BaseRespo
     }
 };
 
-const showErrorDialog = (errorResponse: ErrorResponse<Data>) => {
+const showErrorDialog = <T extends Data>(errorResponse: ErrorResponse<T>) => {
     if (__DEV__) {
         console.error("Error occurred:", errorResponse.data);
     }
 
     const errorMessage = typeof errorResponse.data === "string" ? errorResponse.data : "An unexpected error occurred";
 
-    Alert.alert("Error", errorMessage, [{ text: "OK", onPress: () => {} }], {
-        cancelable: false
-    });
+    Alert.alert(
+        "Error",
+        errorMessage,
+        [
+            {
+                text: "OK",
+                onPress: () => {}
+            }
+        ],
+        {
+            cancelable: false
+        }
+    );
 };
 
 declare global {
-    type Data = any;
+    type Data = Record<string, any>;
 
-    type SuccessfulResponse<D extends Record<string, any>, S = HttpStatusCode> = {
+    type SuccessfulResponse<D extends Data, S = HttpStatusCode> = {
         ok: true;
         data: D;
         status?: S;
     };
 
-    type ErrorResponse<D extends Record<string, any>, S = HttpStatusCode> = {
+    type ErrorResponse<D extends Data, S = HttpStatusCode> = {
         ok: false;
         data: D | unknown;
         status?: S;
     };
-    type BaseResponse<D extends Record<string, any>> = SuccessfulResponse<D> | ErrorResponse<D>;
+    type BaseResponse<D extends Data> = SuccessfulResponse<D> | ErrorResponse<D>;
 }
