@@ -1,11 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Tron from "reactotron-react-native";
-import {reactotronRedux as reduxPlugin} from "reactotron-redux";
+import { reactotronRedux as reduxPlugin } from "reactotron-redux";
 import sagaPlugin from "reactotron-redux-saga";
 
-import {name} from "../../../package.json";
+import { name } from "../../../package.json";
 
-import {DEFAULT_REACTOTRON_CONFIG, ReactotronConfig} from "./ReactotronConfig";
+import { DEFAULT_REACTOTRON_CONFIG, ReactotronConfig } from "./ReactotronConfig";
 
 /** Do Nothing. */
 
