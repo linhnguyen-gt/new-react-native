@@ -1,11 +1,9 @@
-import { ResponseModel } from "@/model";
-
 import { ApiMethod, apiProblem, HttpClient } from "@/httpClient";
 
-export const responseApi = async (): Promise<BaseResponse<ResponseModel.ResponseData[]>> => {
+export const responseApi = async (): Promise<BaseResponse<ResponseData[]>> => {
     const response = await HttpClient.request<
         {
-            data: ResponseModel.ResponseData[];
+            data: ResponseData[];
         },
         ApiMethod.GET
     >("data", {

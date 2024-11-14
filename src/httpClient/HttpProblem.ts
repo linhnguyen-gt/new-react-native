@@ -1,19 +1,8 @@
-import { AxiosError, HttpStatusCode } from "axios";
+import { HttpStatusCode } from "axios";
 import { Alert } from "react-native";
 
 export const apiProblem = <T extends Data>(response: ErrorResponse<T>): ErrorResponse<T> => {
     try {
-        if (response instanceof AxiosError) {
-            // Handle AxiosError
-            const errorResponse: ErrorResponse<Data> = {
-                ok: false,
-                data: response.response?.data || response.message,
-                status: response.response?.status || HttpStatusCode.InternalServerError
-            };
-            showErrorDialog(errorResponse);
-            return errorResponse;
-        }
-
         let errorResponse: ErrorResponse<Data>;
         switch (response.status) {
             case HttpStatusCode.BadRequest:
@@ -32,7 +21,7 @@ export const apiProblem = <T extends Data>(response: ErrorResponse<T>): ErrorRes
                 errorResponse = { ok: false, data: response.data, status: response.status };
                 break;
             default:
-                errorResponse = { ok: false, data: undefined, status: response.status };
+                errorResponse = { ok: false, data: response.data, status: response.status };
         }
         showErrorDialog(errorResponse);
         return errorResponse;
@@ -42,7 +31,7 @@ export const apiProblem = <T extends Data>(response: ErrorResponse<T>): ErrorRes
         }
         const unexpectedErrorResponse: ErrorResponse<Data> = {
             ok: false,
-            data: "An unexpected error occurred",
+            data: response.data ?? "An unexpected error occurred",
             status: HttpStatusCode.InternalServerError
         };
         showErrorDialog(unexpectedErrorResponse);
@@ -55,21 +44,17 @@ const showErrorDialog = <T extends Data>(errorResponse: ErrorResponse<T>) => {
         console.error("Error occurred:", errorResponse.data);
     }
 
-    const errorMessage = typeof errorResponse.data === "string" ? errorResponse.data : "An unexpected error occurred";
+    let errorMessage = "An unexpected error occurred";
 
-    Alert.alert(
-        "Error",
-        errorMessage,
-        [
-            {
-                text: "OK",
-                onPress: () => {}
-            }
-        ],
-        {
-            cancelable: false
+    if (errorResponse.data) {
+        if (typeof errorResponse.data === "string") {
+            errorMessage = errorResponse.data;
+        } else if (typeof errorResponse.data === "object" && "message" in errorResponse.data) {
+            errorMessage = errorResponse.data.message as string;
         }
-    );
+    }
+
+    Alert.alert("Error", errorMessage, [{ text: "OK", onPress: () => {} }], { cancelable: false });
 };
 
 declare global {
