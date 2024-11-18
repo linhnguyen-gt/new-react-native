@@ -1,6 +1,4 @@
-import { CallEffect, put, PutEffect, SelectEffect } from "redux-saga/effects";
-
-import { ActionTypes } from "@/constants";
+import { ActionPattern, CallEffect, put, PutEffect, SelectEffect } from "redux-saga/effects";
 
 import { startLoading, stopLoading } from "../reducers";
 
@@ -15,7 +13,7 @@ type Saga = (
     any
 >;
 
-export function* handleApiCall(actionType: ActionTypes, apiSaga: Saga, ...args: any[]): Generator {
+export function* handleApiCall(actionType: ActionPattern, apiSaga: Saga, ...args: any[]): Generator {
     try {
         yield put(startLoading(actionType));
         yield* apiSaga(...args);

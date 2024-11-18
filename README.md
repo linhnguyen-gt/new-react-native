@@ -1,72 +1,87 @@
-# New React Native Project
+<div align="center">
+  <h1>🚀 New React Native Project</h1>
+  <p>A powerful React Native boilerplate with production-ready configurations and best practices</p>
+</div>
 
-This is a new React Native project with additional configurations and custom components.
+<div align="center">
+  <img alt="React Native" src="https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" />
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" />
+  <img alt="Redux" src="https://img.shields.io/badge/Redux-593D88?style=for-the-badge&logo=redux&logoColor=white" />
+</div>
 
-## Getting Started
+## ✨ Features
+
+- 🏗️ Built with TypeScript for type safety
+- 📱 Cross-platform (iOS & Android) support
+- 🔄 Redux + Redux Saga for state management
+- 🎨 NativeWind for styling
+- 🛠️ Reactotron integration for debugging
+- 🌐 Environment-specific configurations
+- 📦 Pre-configured folder structure
+
+## 🚀 Quick Start
 
 ### Prerequisites
 
-- Node.js (version 20 or later)
+Make sure you have the following installed:
+
+- Node.js (v20+)
 - Yarn
 - React Native CLI
-- Xcode (for iOS development)
-- Android Studio (for Android development)
+- Xcode (iOS)
+- Android Studio (Android)
 
 ### Installation
 
-1. Clone the repository:
-   ```
-   git clone https://github.com/linhnguyen-gt/new-react-native
-   ```
+1. **Clone the repository**
+```bash
+git clone https://github.com/linhnguyen-gt/new-react-native
+cd new-react-native
+```
 
-2. Install dependencies:
-   ```
-   yarn install
-   ```
+2. **Install dependencies**
+```bash
+yarn install
+```
 
-3. Install iOS dependencies:
-   ```
-   cd ios && pod install && cd ..
-   ```
+3. **iOS Setup**
+```bash
+cd ios && pod install && cd ..
+```
 
-### Running the App
+### 🏃‍♂️ Running the App
 
-- For iOS:
-  ```
-  yarn ios
-  ```
+**iOS**
+```bash
+yarn ios
+```
 
-- For Android:
-  ```
-  yarn android
-  ```
+**Android**
+```bash
+yarn android
+```
 
-## Project Structure
+## 📁 Project Structure
 
-- `src/`: Contains the main source code
-    - `components/`: Reusable React components
-    - `constants/`: Constant values and enums
-    - `hooks/`: Custom React hooks
-    - `httpClient/`: HTTP client configuration
-    - `model/`: Data models and types
-    - `redux/`: Redux store, actions, reducers, and sagas
-    - `services/`: Various services including Reactotron setup
-    - `store/`: Redux store configuration
+```
+src/
+├── components/     # Reusable UI components
+├── constants/      # App-wide constants and enums
+├── hooks/          # Custom React hooks
+├── httpClient/     # API client configuration
+├── model/         # Data models and TypeScript types
+├── redux/         # Redux store, actions, and reducers
+├── services/      # Business logic and services
+└── store/         # Redux store configuration
+```
 
-## Key Features
+## ⚙️ Environment Configuration
 
-- Redux for state management
-- Redux Saga for side effects
-- Reactotron for debugging
-- Custom UI components using NativeWind
-- Environment-specific configurations
+The project uses `react-native-config` for environment management. Create the following files:
 
-## Environment Setup
-
-This project uses `react-native-config` for environment variable management. Create `.env` files for different
-environments:
-
-- `.env.development`
-- `.env.staging`
-- `.env.production`
+```bash
+.env.development   # Development environment variables
+.env.staging      # Staging environment variables
+.env.production   # Production environment variables
+```
 
