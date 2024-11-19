@@ -26,8 +26,11 @@ function App(): React.JSX.Element {
         actions.ResponseActions.getResponse.type
     ]);
 
-    const increment = useActions(actions.CountActions.increment);
-    const decrement = useActions(actions.CountActions.decrement);
+    const { increment, decrement } = useActions({
+        increment: actions.CountActions.increment,
+        decrement: actions.CountActions.decrement
+    });
+
     const getResponse = useActions(actions.ResponseActions.getResponse);
 
     const count = useSelector(selectors.CountSelectors.count);

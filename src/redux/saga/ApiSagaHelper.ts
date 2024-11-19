@@ -8,19 +8,45 @@ type Saga = (
     | CallEffect
     | PutEffect
     | SelectEffect
-    | Promise<SuccessfulResponse<Record<string, any>> | ErrorResponse<Record<string, any>>>,
+    | Promise<SuccessfulResponse<Record<string, any>> | ErrorResponse<Record<string, any>>>
+    | Promise<void>,
     void,
     any
 >;
 
-export function* handleApiCall(actionType: ActionPattern, apiSaga: Saga, ...args: any[]): Generator {
+type LoadingOptions = {
+    isLoading?: boolean;
+};
+
+function isLoadingOptions(obj: any): obj is LoadingOptions {
+    return typeof obj === "object" && !("type" in obj);
+}
+
+export function* handleApiCall(
+    optionsOrActionType: LoadingOptions | ActionPattern,
+    actionTypeOrSaga: ActionPattern | Saga,
+    apiSaga?: Saga,
+    ...args: any[]
+): Generator {
+    const options = isLoadingOptions(optionsOrActionType) ? optionsOrActionType : { isLoading: true };
+    const actionType = isLoadingOptions(optionsOrActionType)
+        ? (actionTypeOrSaga as ActionPattern)
+        : (optionsOrActionType as ActionPattern);
+    const saga = isLoadingOptions(optionsOrActionType) ? apiSaga! : (actionTypeOrSaga as Saga);
+
+    const isLoading = options.isLoading ?? true;
+
     try {
-        yield put(startLoading(actionType));
-        yield* apiSaga(...args);
+        if (isLoading) {
+            yield put(startLoading(actionType));
+        }
+        yield* saga(...args);
     } catch (error) {
         console.error(error);
         throw error;
     } finally {
-        yield put(stopLoading(actionType));
+        if (isLoading) {
+            yield put(stopLoading(actionType));
+        }
     }
 }
