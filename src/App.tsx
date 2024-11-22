@@ -5,70 +5,40 @@
  * @format
  */
 
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
-import { Button, SafeAreaView, ScrollView, StatusBar, useColorScheme } from "react-native";
-import { Colors, Header } from "react-native/Libraries/NewAppScreen";
-import Config from "react-native-config";
-import { useSelector } from "react-redux";
 
-import { GluestackUIProvider, HStack, Loading, Text, VStack } from "@/components";
+import { GluestackUIProvider, KeyboardViewSpacer } from "@/components";
 
-import { actions, selectors } from "@/redux";
+import { RootNavigator } from "@/services";
 
-import { useActions, useLoading } from "@/hooks";
+import { screenOptions } from "@/helper";
+
+import { RouteName } from "@/enums";
+import { LoginPage, MainPage } from "@/screens";
 
 import "../global.css";
 
+const Stack = createStackNavigator();
+
+const AppStack = () => {
+    return (
+        <KeyboardViewSpacer>
+            <NavigationContainer ref={RootNavigator.navigationRef}>
+                <Stack.Navigator screenOptions={screenOptions} initialRouteName={RouteName.Login}>
+                    <Stack.Screen name={RouteName.Login} component={LoginPage} />
+                    <Stack.Screen name={RouteName.Main} component={MainPage} />
+                </Stack.Navigator>
+            </NavigationContainer>
+        </KeyboardViewSpacer>
+    );
+};
+
 function App(): React.JSX.Element {
-    const isLoading = useLoading([
-        actions.CountActions.increment.type,
-        actions.CountActions.decrement.type,
-        actions.ResponseActions.getResponse.type
-    ]);
-
-    const { increment, decrement } = useActions({
-        increment: actions.CountActions.increment,
-        decrement: actions.CountActions.decrement
-    });
-
-    const getResponse = useActions(actions.ResponseActions.getResponse);
-
-    const count = useSelector(selectors.CountSelectors.count);
-    const response = useSelector(selectors.ResponseSelectors.response);
-
-    const isDarkMode = useColorScheme() === "dark";
-
-    const backgroundStyle = {
-        backgroundColor: isDarkMode ? Colors.darker : Colors.lighter
-    };
-
-    React.useEffect(() => {
-        getResponse();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
     return (
         <GluestackUIProvider>
-            <SafeAreaView style={backgroundStyle}>
-                <StatusBar
-                    barStyle={isDarkMode ? "light-content" : "dark-content"}
-                    backgroundColor={backgroundStyle.backgroundColor}
-                />
-                <ScrollView contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
-                    <Header />
-
-                    <VStack space="sm" className="items-center">
-                        <Text className="text-2xl font-bold">Environment: {Config.APP_FLAVOR}</Text>
-                        <Text className="text-2xl font-bold">Response: {response.length}</Text>
-                        <Text className="text-2xl">Counter: {count}</Text>
-                        <HStack space="lg">
-                            <Button title="Increment" onPress={() => increment()} />
-                            <Button title="Decrement" onPress={() => decrement()} />
-                        </HStack>
-                    </VStack>
-                </ScrollView>
-            </SafeAreaView>
-            <Loading isLoading={isLoading} />
+            <AppStack />
         </GluestackUIProvider>
     );
 }
