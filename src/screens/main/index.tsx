@@ -1,10 +1,10 @@
 import React from "react";
-import { Button, ScrollView, StatusBar, useColorScheme } from "react-native";
+import { Button, StatusBar, useColorScheme } from "react-native";
 import { Colors, Header } from "react-native/Libraries/NewAppScreen";
 import Config from "react-native-config";
 import { useSelector } from "react-redux";
 
-import { Box, HStack, Loading, Text, VStack } from "@/components";
+import { Box, HStack, Loading, ScrollView, Text, VStack } from "@/components";
 
 import { actions, selectors } from "@/redux";
 
@@ -38,18 +38,26 @@ const MainPage = () => {
     }, []);
 
     return (
-        <Box className="flex-1">
+        <Box flex={1}>
             <StatusBar
                 barStyle={isDarkMode ? "light-content" : "dark-content"}
                 backgroundColor={backgroundStyle.backgroundColor}
             />
-            <ScrollView contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
+            <ScrollView
+                contentInsetAdjustmentBehavior="automatic"
+                backgroundColor={isDarkMode ? Colors.darker : Colors.lighter}>
                 <Header />
 
-                <VStack space="sm" className="items-center">
-                    <Text className="text-2xl font-bold">Environment: {Config.APP_FLAVOR}</Text>
-                    <Text className="text-2xl font-bold">Response: {response.length}</Text>
-                    <Text className="text-2xl">Counter: {count}</Text>
+                <VStack space="sm" alignItems="center">
+                    <Text size="2xl" fontWeight="bold">
+                        Environment: {Config.APP_FLAVOR}
+                    </Text>
+                    <Text size="2xl" fontWeight="bold">
+                        Response: {response.length}
+                    </Text>
+                    <Text size="lg" color="gray" fontWeight="bold">
+                        Counter: {count}
+                    </Text>
                     <HStack space="lg">
                         <Button title="Increment" onPress={() => increment()} />
                         <Button title="Decrement" onPress={() => decrement()} />
