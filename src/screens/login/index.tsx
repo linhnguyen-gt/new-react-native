@@ -1,13 +1,15 @@
+import { useFormik } from "formik";
 import React from "react";
-import { Keyboard, Pressable, TextInput } from "react-native";
+import { Keyboard } from "react-native";
+import { object, string } from "yup";
 
-import { Box, ScrollView, Text, VStack } from "@/components";
+import { Box, Input, MyTouchable, ScrollView, Text, VStack } from "@/components";
 
 import { RootNavigator } from "@/services";
 
 import { getColor } from "@/hooks";
 
-import { RouteName } from "@/enums";
+import { Errors, RouteName } from "@/enums";
 
 const RNLogo = () => (
     <Box width={80} height={80} backgroundColor="black" borderRadius={16} alignItems="center" justifyContent="center">
@@ -18,13 +20,27 @@ const RNLogo = () => (
 );
 
 const Login = () => {
-    const [email, setEmail] = React.useState("");
-    const [password, setPassword] = React.useState("");
+    const formik = useFormik({
+        initialValues: {
+            email: "test@test.com",
+            password: "123456"
+        },
+        validationSchema: object().shape({
+            email: string()
+                .email(Errors.EMAIL_INVALID)
+                .required(Errors.REQUIRED_EMAIL_INPUT)
+                .test("is-com-email", Errors.IS_NOT_EMAIL, (value) => (value ? value.endsWith(".com") : true)),
+            password: string().required(Errors.REQUIRED_PASSWORD_INPUT)
+        }),
+        onSubmit: () => {
+            RootNavigator.navigate(RouteName.Main);
+        }
+    });
 
     const handleLogin = React.useCallback(() => {
         Keyboard.dismiss();
-        RootNavigator.navigate(RouteName.Main);
-    }, []);
+        formik.handleSubmit();
+    }, [formik]);
 
     return (
         <Box flex={1} safeArea>
@@ -41,40 +57,34 @@ const Login = () => {
                     </VStack>
 
                     <VStack space="lg" marginTop={6}>
-                        <Box className="bg-gray-50 rounded-xl px-4 py-4 border border-gray-100">
-                            <TextInput
-                                placeholder="Email"
-                                value={email}
-                                onChangeText={setEmail}
-                                keyboardType="email-address"
-                                autoCapitalize="none"
-                                className="text-gray-800 text-base"
-                                placeholderTextColor="#9CA3AF"
-                            />
-                        </Box>
+                        <Input
+                            placeholder="Email"
+                            fieldName="email"
+                            error={formik.touched.email && formik.errors.email}
+                            value={formik.values.email}
+                            onChangeValue={formik.setFieldValue}
+                        />
 
-                        <Box className="bg-gray-50 rounded-xl px-4 py-4 border border-gray-100">
-                            <TextInput
-                                placeholder="Password"
-                                value={password}
-                                onChangeText={setPassword}
-                                secureTextEntry
-                                className="text-gray-800 text-base"
-                                placeholderTextColor="#9CA3AF"
-                            />
-                        </Box>
+                        <Input
+                            placeholder="Password"
+                            isPassword
+                            fieldName="password"
+                            error={formik.touched.password && formik.errors.password}
+                            value={formik.values.password}
+                            onChangeValue={formik.setFieldValue}
+                        />
 
                         <Text fontSize={14} color={getColor("primary.600")} fontWeight="medium" textAlign="right">
                             Forgot Password?
                         </Text>
 
-                        <Pressable
+                        <MyTouchable
                             onPress={handleLogin}
                             className="bg-primary-600 rounded-xl py-4 items-center mt-4 shadow-sm">
                             <Text fontWeight="bold" size="lg" color="white">
                                 Sign In
                             </Text>
-                        </Pressable>
+                        </MyTouchable>
                     </VStack>
                 </Box>
             </ScrollView>

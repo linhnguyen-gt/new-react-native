@@ -167,7 +167,8 @@ module.exports = {
                     primary: "rgb(var(--color-indicator-primary)/<alpha-value>)",
                     info: "rgb(var(--color-indicator-info)/<alpha-value>)",
                     error: "rgb(var(--color-indicator-error)/<alpha-value>)"
-                }
+                },
+                red: "#F75555"
             },
             fontFamily: {
                 heading: undefined,

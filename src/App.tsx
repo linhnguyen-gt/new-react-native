@@ -35,12 +35,12 @@ const AppStack = () => {
     );
 };
 
-function App(): React.JSX.Element {
+const App = () => {
     return (
         <GluestackUIProvider>
             <AppStack />
         </GluestackUIProvider>
     );
-}
+};
 
 export default App;

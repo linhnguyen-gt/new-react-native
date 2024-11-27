@@ -1,13 +1,21 @@
-apply plugin: "com.android.application"
-apply plugin: "org.jetbrains.kotlin.android"
-apply plugin: "com.facebook.react"
+apply plugin: 'com.android.application'
+apply plugin: 'org.jetbrains.kotlin.android'
+apply plugin: 'com.facebook.react'
 
-apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
+apply from: project(':react-native-config').projectDir.getPath() + '/dotenv.gradle'
+apply from: file('../../node_modules/react-native-vector-icons/fonts.gradle')
 
-project.ext.envConfigFiles = [debug      : ".env",
-                              development: ".env.development",
-                              staging    : ".env.staging",
-                              production : ".env.production",]
+project.ext.envConfigFiles = [debug      : '.env',
+                              development: '.env.development',
+                              staging    : '.env.staging',
+                              production : '.env.production',]
+
+project.ext.vectoricons = [
+        iconFontNames: ['AntDesign.ttf', 'Entypo.ttf', 'EvilIcons.ttf', 'Feather.ttf',
+                        'FontAwesome.ttf', '>FontAwesome5_Brands.ttf', 'FontAwesome5_Regular.ttf', 'FontAwesome5_Solid.ttf', 'Foundation.ttf',
+                        'Ionicons.ttf', 'MaterialIcons.ttf', 'MaterialCommunityIcons.ttf', 'SimpleLineIcons.ttf', 'Octicons.ttf',
+                        'Zocial.ttf', 'Fontisto.ttf'] // Specify font files
+]
 
 /**
  * This is the configuration block to customize your React Native Android app.
@@ -81,13 +89,13 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.newreactnative"
+    namespace 'com.newreactnative'
     defaultConfig {
-        applicationId "com.newreactnative"
+        applicationId 'com.newreactnative'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode project.env.get("APP_VERSION_CODE").toInteger()
-        versionName project.env.get("APP_VERSION_NAME")
+        versionCode project.env.get('APP_VERSION_CODE').toInteger()
+        versionName project.env.get('APP_VERSION_NAME')
     }
     signingConfigs {
         debug {
@@ -106,38 +114,39 @@ android {
             // see https://reactnative.dev/docs/signed-apk-android.
             signingConfig signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
-            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 
-    flavorDimensions "default"
+    flavorDimensions 'default'
     productFlavors {
         development {
             dimension 'default'
-            applicationId "com.newreactnative.dev"
-            resValue "string", "build_config_package", 'com.newreactnative'
+            applicationId 'com.newreactnative.dev'
+            resValue 'string', 'build_config_package', 'com.newreactnative'
         }
         staging {
             dimension 'default'
-            applicationId "com.newreactnative.stg"
-            resValue "string", "build_config_package", 'com.newreactnative'
+            applicationId 'com.newreactnative.stg'
+            resValue 'string', 'build_config_package', 'com.newreactnative'
         }
         production {
             dimension 'default'
-            applicationId "com.newreactnative.production"
-            resValue "string", "build_config_package", 'com.newreactnative'
+            applicationId 'com.newreactnative.production'
+            resValue 'string', 'build_config_package', 'com.newreactnative'
         }
     }
-
 }
 
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
-    implementation("com.facebook.react:react-android")
+    implementation('com.facebook.react:react-android')
     // React Native Config
     implementation project(':react-native-config')
+    // React Native Vector Icons
+    implementation project(':react-native-vector-icons')
     if (hermesEnabled.toBoolean()) {
-        implementation("com.facebook.react:hermes-android")
+        implementation('com.facebook.react:hermes-android')
     } else {
         implementation jscFlavor
     }
