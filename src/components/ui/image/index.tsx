@@ -3,9 +3,11 @@ import { createImage } from "@gluestack-ui/image";
 import { tva } from "@gluestack-ui/nativewind-utils/tva";
 import { cssInterop } from "nativewind";
 import React from "react";
-import { Image as RNImage, Platform } from "react-native";
+import { ImageStyle, Platform, Image as RNImage } from "react-native";
 
 import type { VariantProps } from "@gluestack-ui/nativewind-utils";
+
+type StyleProps = Omit<ImageStyle, "transform">;
 
 const imageStyle = tva({
     base: "max-w-full",
@@ -26,17 +28,33 @@ const imageStyle = tva({
 const UIImage = createImage({ Root: RNImage });
 cssInterop(UIImage, { className: "style" });
 
-type ImageProps = VariantProps<typeof imageStyle> & React.ComponentProps<typeof UIImage>;
-const Image = React.forwardRef<React.ElementRef<typeof UIImage>, ImageProps & { className?: string }>(
-    ({ size = "md", className, ...props }, ref) => {
+export type ImageProps = Omit<React.ComponentProps<typeof UIImage>, keyof StyleProps> &
+    StyleProps &
+    VariantProps<typeof imageStyle> & {
+        className?: string;
+    };
+
+const createStyleFromProps = (props: StyleProps): ImageStyle => {
+    const styleKeys = Object.keys(props).filter((key) => props[key as keyof StyleProps] !== undefined);
+    return Object.fromEntries(styleKeys.map((key) => [key, props[key as keyof StyleProps]])) as ImageStyle;
+};
+
+const Image = React.forwardRef<React.ElementRef<typeof UIImage>, ImageProps>(
+    ({ size = "md", className, style, ...props }, ref) => {
+        const styleProps = createStyleFromProps(props as StyleProps);
+
         return (
             <UIImage
                 className={imageStyle({ size, class: className })}
+                style={[
+                    styleProps,
+                    //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    //@ts-expect-error
+                    Platform.OS === "web" ? { height: "revert-layer", width: "revert-layer" } : undefined,
+                    style
+                ]}
                 {...props}
                 ref={ref}
-                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                //@ts-expect-error
-                style={Platform.OS === "web" ? { height: "revert-layer", width: "revert-layer" } : undefined}
             />
         );
     }

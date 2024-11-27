@@ -1,4 +1,4 @@
-import { ApiMethod, apiProblem, HttpClient } from "@/httpClient";
+import { ApiMethod, apiProblem, HttpClient } from "@/services";
 
 export const responseApi = async (): Promise<BaseResponse<ResponseData[]>> => {
     const response = await HttpClient.request<

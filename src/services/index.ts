@@ -1,2 +1,3 @@
-export { default as RootNavigator } from "./RootNavigator";
+export * from "./httpClient";
+export { RootNavigator } from "./navigation";
 export { reactotron } from "./reactotron";
