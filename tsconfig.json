@@ -35,6 +35,8 @@
     "tailwind.config.js",
     "nativewind-env.d.ts",
     "react-native-config.d.ts",
-    "gesture-handler.native.js"
+    "gesture-handler.native.js",
+    "jest.setup.js",
+    "jest.config.js",
   ]
 }

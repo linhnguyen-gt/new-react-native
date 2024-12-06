@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const gluestackPlugin = require("@gluestack-ui/nativewind-utils/tailwind-plugin");
 
 /** @type {import('tailwindcss').Config} */
