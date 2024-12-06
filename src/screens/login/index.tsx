@@ -63,6 +63,7 @@ const Login = () => {
                             error={formik.touched.email && formik.errors.email}
                             value={formik.values.email}
                             onChangeValue={formik.setFieldValue}
+                            testID="email-input"
                         />
 
                         <Input
@@ -72,6 +73,7 @@ const Login = () => {
                             error={formik.touched.password && formik.errors.password}
                             value={formik.values.password}
                             onChangeValue={formik.setFieldValue}
+                            testID="password-input"
                         />
 
                         <Text fontSize={14} color={getColor("primary.600")} fontWeight="medium" textAlign="right">
@@ -80,7 +82,8 @@ const Login = () => {
 
                         <MyTouchable
                             onPress={handleLogin}
-                            className="bg-primary-600 rounded-xl py-4 items-center mt-4 shadow-sm">
+                            className="bg-primary-600 rounded-xl py-4 items-center mt-4 shadow-sm"
+                            testID="login-button">
                             <Text fontWeight="bold" size="lg" color="white">
                                 Sign In
                             </Text>

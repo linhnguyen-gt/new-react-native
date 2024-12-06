@@ -22,9 +22,10 @@ export interface ReactotronConfig {
 /**
  * The default Reactotron configuration.
  */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
-const host = TurboModuleRegistry.getEnforcing("SourceCode").getConstants()?.scriptURL.split("://")[1].split(":")[0];
+const host =
+    (TurboModuleRegistry.getEnforcing("SourceCode")?.getConstants?.() as { scriptURL?: string })?.scriptURL
+        ?.split("://")[1]
+        ?.split(":")[0] ?? "localhost";
 export const DEFAULT_REACTOTRON_CONFIG: ReactotronConfig = {
     clearOnLoad: true,
     host,

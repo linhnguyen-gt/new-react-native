@@ -20,6 +20,7 @@ export type InputProps = TextInputProps & {
     error?: string | boolean | undefined;
     isLoading?: boolean;
     height?: number;
+    testID?: string;
 };
 
 const Input = React.forwardRef<TextInput, InputProps>(
@@ -35,6 +36,7 @@ const Input = React.forwardRef<TextInput, InputProps>(
             height = 50,
             title,
             error,
+            testID,
             ...rest
         },
         ref
@@ -74,6 +76,7 @@ const Input = React.forwardRef<TextInput, InputProps>(
                     <HStack className="items-center flex-1 h-full" space="md">
                         {prefixIcon}
                         <TextInput
+                            testID={testID}
                             ref={ref}
                             {...rest}
                             className="font-semibold w-full font-body mt-1 h-full"
@@ -100,7 +103,8 @@ const Input = React.forwardRef<TextInput, InputProps>(
             prefixIcon,
             ref,
             rest,
-            suffixIcon
+            suffixIcon,
+            testID
         ]);
 
         return (
@@ -110,7 +114,9 @@ const Input = React.forwardRef<TextInput, InputProps>(
                     <Animated.View style={shake}>{_renderInput}</Animated.View>
                     {!!error && (
                         <Box>
-                            <Text className="text-red text-sm">{error}</Text>
+                            <Text testID={`${testID}-error`} className="text-red text-sm">
+                                {error}
+                            </Text>
                         </Box>
                     )}
                 </VStack>
