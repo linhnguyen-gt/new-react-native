@@ -12,8 +12,10 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		60E777D89406EDD5FC6BB958 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2471A01BA1FA82001225A896 /* ExpoModulesProvider.swift */; };
 		7699B88040F8A987B510C191 /* libPods-NewReactNative-NewReactNativeTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-NewReactNative-NewReactNativeTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		A56777D7E0B9C90D24DA78DA /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A201ABB65DB49DF06D90E72 /* ExpoModulesProvider.swift */; };
 		B689FF93250ADDA2E3B39691 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = D454619FF9CC1C74F8E62063 /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
 
@@ -40,10 +42,12 @@
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = NewReactNative/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		13ED58E3A85607BBD2A02DFD /* Pods-NewReactNative-NewReactNativeTests.dev.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewReactNative-NewReactNativeTests.dev.release.xcconfig"; path = "Target Support Files/Pods-NewReactNative-NewReactNativeTests/Pods-NewReactNative-NewReactNativeTests.dev.release.xcconfig"; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-NewReactNative-NewReactNativeTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NewReactNative-NewReactNativeTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2471A01BA1FA82001225A896 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-NewReactNative/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		2C61611A98D2380B0B2780DB /* Pods-NewReactNative.staging.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewReactNative.staging.release.xcconfig"; path = "Target Support Files/Pods-NewReactNative/Pods-NewReactNative.staging.release.xcconfig"; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-NewReactNative.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewReactNative.debug.xcconfig"; path = "Target Support Files/Pods-NewReactNative/Pods-NewReactNative.debug.xcconfig"; sourceTree = "<group>"; };
 		4203309D7C78A7CA666ED08E /* Pods-NewReactNative.dev.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewReactNative.dev.debug.xcconfig"; path = "Target Support Files/Pods-NewReactNative/Pods-NewReactNative.dev.debug.xcconfig"; sourceTree = "<group>"; };
 		4295D96F4115ACB37FF33423 /* Pods-NewReactNative-NewReactNativeTests.dev.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewReactNative-NewReactNativeTests.dev.debug.xcconfig"; path = "Target Support Files/Pods-NewReactNative-NewReactNativeTests/Pods-NewReactNative-NewReactNativeTests.dev.debug.xcconfig"; sourceTree = "<group>"; };
+		4A201ABB65DB49DF06D90E72 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-NewReactNative-NewReactNativeTests/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-NewReactNative.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewReactNative.release.xcconfig"; path = "Target Support Files/Pods-NewReactNative/Pods-NewReactNative.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-NewReactNative-NewReactNativeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewReactNative-NewReactNativeTests.debug.xcconfig"; path = "Target Support Files/Pods-NewReactNative-NewReactNativeTests/Pods-NewReactNative-NewReactNativeTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-NewReactNative.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NewReactNative.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -95,6 +99,15 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		0161059CD02A3DB248C6EBC4 /* ExpoModulesProviders */ = {
+			isa = PBXGroup;
+			children = (
+				89BE9D647E9E64FAB18F000F /* NewReactNative */,
+				92FA7141C052980C35BA4FEB /* NewReactNativeTests */,
+			);
+			name = ExpoModulesProviders;
+			sourceTree = "<group>";
+		};
 		13B07FAE1A68108700A75B9A /* NewReactNative */ = {
 			isa = PBXGroup;
 			children = (
@@ -137,6 +150,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				0161059CD02A3DB248C6EBC4 /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -150,6 +164,22 @@
 				00E356EE1AD99517003FC87E /* NewReactNativeTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		89BE9D647E9E64FAB18F000F /* NewReactNative */ = {
+			isa = PBXGroup;
+			children = (
+				2471A01BA1FA82001225A896 /* ExpoModulesProvider.swift */,
+			);
+			name = NewReactNative;
+			sourceTree = "<group>";
+		};
+		92FA7141C052980C35BA4FEB /* NewReactNativeTests */ = {
+			isa = PBXGroup;
+			children = (
+				4A201ABB65DB49DF06D90E72 /* ExpoModulesProvider.swift */,
+			);
+			name = NewReactNativeTests;
 			sourceTree = "<group>";
 		};
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
@@ -179,6 +209,7 @@
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "NewReactNativeTests" */;
 			buildPhases = (
 				A55EABD7B0C7F3A422A6CC61 /* [CP] Check Pods Manifest.lock */,
+				2912132F496EC0E6AF9765EF /* [Expo] Configure project */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
@@ -200,6 +231,7 @@
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "NewReactNative" */;
 			buildPhases = (
 				C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */,
+				8DEA5119A6CD98BD353931B4 /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
@@ -306,6 +338,44 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NewReactNative/Pods-NewReactNative-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		2912132F496EC0E6AF9765EF /* [Expo] Configure project */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "[Expo] Configure project";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-NewReactNative-NewReactNativeTests/expo-configure-project.sh\"\n";
+		};
+		8DEA5119A6CD98BD353931B4 /* [Expo] Configure project */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "[Expo] Configure project";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-NewReactNative/expo-configure-project.sh\"\n";
 		};
 		A55EABD7B0C7F3A422A6CC61 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -427,6 +497,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				00E356F31AD99517003FC87E /* NewReactNativeTests.m in Sources */,
+				A56777D7E0B9C90D24DA78DA /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -436,6 +507,7 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				60E777D89406EDD5FC6BB958 /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -471,8 +543,10 @@
 					"-lc++",
 					"$(inherited)",
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NewReactNative.app/NewReactNative";
 			};
 			name = Debug;
@@ -495,8 +569,10 @@
 					"-lc++",
 					"$(inherited)",
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NewReactNative.app/NewReactNative";
 			};
 			name = Release;
@@ -520,6 +596,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.NewReactNative.dev;
 				PRODUCT_NAME = NewReactNative;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -546,6 +623,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.NewReactNative.product;
 				PRODUCT_NAME = NewReactNative;
 				SWIFT_VERSION = 5.0;
@@ -634,6 +712,7 @@
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				SWIFT_VERSION = 5.0;
 				USE_HERMES = true;
 			};
 			name = Debug;
@@ -710,6 +789,7 @@
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
 				USE_HERMES = true;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -796,6 +876,7 @@
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				SWIFT_VERSION = 5.0;
 				USE_HERMES = true;
 			};
 			name = Staging.Debug;
@@ -820,6 +901,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.NewReactNative.staging;
 				PRODUCT_NAME = NewReactNative;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -849,8 +931,10 @@
 					"-lc++",
 					"$(inherited)",
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NewReactNative.app/NewReactNative";
 			};
 			name = Staging.Debug;
@@ -936,6 +1020,7 @@
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				SWIFT_VERSION = 5.0;
 				USE_HERMES = true;
 			};
 			name = Dev.Debug;
@@ -960,6 +1045,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.NewReactNative.dev;
 				PRODUCT_NAME = NewReactNative;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -989,8 +1075,10 @@
 					"-lc++",
 					"$(inherited)",
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NewReactNative.app/NewReactNative";
 			};
 			name = Dev.Debug;
@@ -1067,6 +1155,7 @@
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
 				USE_HERMES = true;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1091,6 +1180,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.NewReactNative.staging;
 				PRODUCT_NAME = NewReactNative;
 				SWIFT_VERSION = 5.0;
@@ -1116,8 +1206,10 @@
 					"-lc++",
 					"$(inherited)",
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NewReactNative.app/NewReactNative";
 			};
 			name = Staging.Release;
@@ -1194,6 +1286,7 @@
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
 				USE_HERMES = true;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1218,6 +1311,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.NewReactNative.dev;
 				PRODUCT_NAME = NewReactNative;
 				SWIFT_VERSION = 5.0;
@@ -1243,8 +1337,10 @@
 					"-lc++",
 					"$(inherited)",
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NewReactNative.app/NewReactNative";
 			};
 			name = Dev.Release;

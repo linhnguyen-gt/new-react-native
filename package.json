@@ -28,6 +28,7 @@
         "@react-navigation/stack": "^7.0.6",
         "@reduxjs/toolkit": "^2.3.0",
         "axios": "1.7.7",
+        "expo": "^52.0.0",
         "formik": "^2.4.6",
         "lodash": "^4.17.21",
         "nativewind": "^4.1.23",
