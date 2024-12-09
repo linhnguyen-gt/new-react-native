@@ -22,6 +22,7 @@ module.exports = {
             "|@gluestack-ui/image" +
             "|@gluestack-ui/nativewind-utils" +
             "|nativewind" +
+            "|expo-constants" +
             ")/)"
     ],
     moduleNameMapper: {

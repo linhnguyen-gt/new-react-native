@@ -38,5 +38,6 @@
     "gesture-handler.native.js",
     "jest.setup.js",
     "jest.config.js",
+    "app.config.ts"
   ]
 }

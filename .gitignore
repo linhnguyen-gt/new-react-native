@@ -72,3 +72,11 @@ yarn-error.log
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# Ignore private environment files
+.env.*.local
+.env.local
+.env.local.*
+# Don't ignore shared environment files
+!.env.*.shared
+!.env.shared

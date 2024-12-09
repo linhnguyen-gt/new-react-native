@@ -9,7 +9,7 @@ require Pod::Executable.execute_command('node', ['-p',
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
-# configuration name
+# configuration name environment
 project 'NewReactNative',{
         'Debug' => :debug,
         'Dev.Debug' => :debug,
@@ -17,6 +17,8 @@ project 'NewReactNative',{
         'Release' => :release,
         'Staging.Debug' => :debug,
         'Staging.Release' => :release,
+        'Product.Debug' => :debug,
+        'Product.Release' => :release,
 }
 
 linkage = ENV['USE_FRAMEWORKS']

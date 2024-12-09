@@ -111,22 +111,355 @@ src/
 
 ```
 
-## ⚙️ Environment Configuration
+## 🔧 Environment Configuration
 
-The project uses `react-native-config` for environment management. Create the following files:
+### Setup Structure
 
-```bash
-.env.development   # Development environment variables
-.env.staging      # Staging environment variables
-.env.production   # Production environment variables
+1. **App Config (app.config.ts)**
+
+```typescript
+import * as dotenv from "dotenv";
+
+const getEnvConfig = () => {
+    try {
+        const mode = process.env.APP_ENV || "development";
+        const envPath = `.env.local.${mode.toLowerCase()}`;
+        const localEnv = dotenv.config({path: envPath}).parsed;
+
+        if (localEnv) {
+            return localEnv;
+        }
+
+        const defaultEnv = dotenv.config({path: ".env.local"}).parsed;
+        if (defaultEnv) {
+            return defaultEnv;
+        }
+
+        throw new Error("No environment file found");
+    } catch (error) {
+        console.warn("Error loading environment:", error);
+        return {};
+    }
+};
+
+const envConfig = getEnvConfig();
+
+export default {
+    name: "NewReactNative",
+    version: envConfig.VERSION_NAME || "1.0.0",
+    extra: {
+        ...envConfig
+    },
+    ios: {
+        buildNumber: envConfig.VERSION_CODE || "1"
+    },
+    android: {
+        versionCode: parseInt(envConfig.VERSION_CODE || "1", 10)
+    }
+};
 ```
 
-Required environment variables:
+2. **Environment Config (src/config/env.ts)**
 
-- APP_FLAVOR=development|staging|production
-- APP_VERSION_CODE=1
-- APP_VERSION_NAME=1.0.0
-- API_BASE_URL=your_api_url
+```typescript
+import Constants from 'expo-constants';
+
+export const ENV = {
+    API_BASE_URL: Constants.expoConfig?.extra?.API_BASE_URL,
+    VERSION_NAME: Constants.expoConfig?.version,
+    VERSION_CODE: Constants.expoConfig?.ios?.buildNumber || Constants.expoConfig?.android?.versionCode,
+    APP_ENV: Constants.expoConfig?.extra?.APP_FLAVOR
+};
+```
+
+### Why dotenv + expo-constants over react-native-config
+
+#### Previous Issues with react-native-config:
+
+- Required manual native code setup in both iOS and Android
+- Complex configuration for multiple environments
+- Build issues after React Native upgrades
+- No direct TypeScript support
+- Required manual linking
+
+#### Benefits of Current Approach:
+
+1. **Centralized Configuration**
+
+- Single source of truth in app.config.ts
+- Type-safe access through src/config/env.ts
+- Automatic environment switching based on APP_ENV
+
+2. **Better Developer Experience**
+
+- No native code configuration needed
+- Automatic type inference
+- Easier debugging with expo-constants
+
+3. **Usage Example**
+
+```typescript
+import {ENV} from '@config';
+
+// Type-safe environment variables
+const apiUrl = ENV.API_BASE_URL;
+const version = ENV.VERSION_NAME;
+```
+
+### Environment Files
+
+```bash
+.env.local.development  # Development environment
+.env.local.staging     # Staging environment 
+.env.local.production  # Production environment
+```
+
+### Required Environment Variables
+
+```bash
+APP_FLAVOR=development|staging|production
+VERSION_CODE=1
+VERSION_NAME=1.0.0
+API_BASE_URL=https://your-api.com
+```
+
+### iOS Configuration
+
+1. **Podfile Configuration**
+   Add this configuration block to your Podfile:
+
+```ruby
+# Configuration name environment mapping
+project 'NewReactNative', {
+    'Debug' => :debug,
+    'Dev.Debug' => :debug,
+    'Dev.Release' => :release,
+    'Release' => :release,
+    'Staging.Debug' => :debug,
+    'Staging.Release' => :release,
+    'Product.Debug' => :debug,
+    'Product.Release' => :release
+}
+```
+
+This configuration:
+
+- Maps each build configuration to its corresponding mode (:debug or :release)
+- Supports all environments (Dev, Staging, Product)
+- Enables both Debug and Release builds for each environment
+
+2. **Build Configurations**
+   Xcode should have these configurations set up:
+
+- Dev.Debug/Release (Development)
+- Staging.Debug/Release (Staging)
+- Product.Debug/Release (Production)
+- Debug/Release (Default)
+
+3. **Version Management Script**
+   Add this script to Build Phase in Xcode:
+
+```bash
+# Get the environment from configuration name
+if [[ "${CONFIGURATION}" == *"Staging"* ]]; then
+  ENV_FILE="${PROJECT_DIR}/../.env.local.staging"
+elif [[ "${CONFIGURATION}" == *"Dev"* ]]; then
+  ENV_FILE="${PROJECT_DIR}/../.env.local.development"
+elif [[ "${CONFIGURATION}" == *"Product"* ]]; then
+  ENV_FILE="${PROJECT_DIR}/../.env.local.production"
+else
+  ENV_FILE="${PROJECT_DIR}/../.env.local"
+fi
+
+echo "=== Environment Setup ==="
+echo "CONFIGURATION: ${CONFIGURATION}"
+echo "Using env file: ${ENV_FILE}"
+
+if [ -f "$ENV_FILE" ]; then
+  VERSION_CODE=$(grep "VERSION_CODE" "$ENV_FILE" | cut -d '=' -f2 | tr -d '"' | tr -d ' ')
+  VERSION_NAME=$(grep "VERSION_NAME" "$ENV_FILE" | cut -d '=' -f2 | tr -d '"' | tr -d ' ')
+  
+  if [ ! -z "$VERSION_CODE" ] && [ ! -z "$VERSION_NAME" ]; then
+    # Update build settings
+    xcrun agvtool new-version -all $VERSION_CODE
+    xcrun agvtool new-marketing-version $VERSION_NAME
+    
+    # Also update Info.plist directly as backup
+    /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $VERSION_CODE" "${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}"
+    /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $VERSION_NAME" "${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}"
+    
+    echo "Updated version to $VERSION_NAME ($VERSION_CODE)"
+    
+    # Verify the update
+    CURRENT_VERSION=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}")
+    echo "Verified version: $CURRENT_VERSION"
+  else
+    echo "Error: VERSION_CODE or VERSION_NAME not found in $ENV_FILE"
+  fi
+else
+  echo "Error: Environment file not found at $ENV_FILE"
+fi
+```
+
+4. **Setup Steps for iOS**
+
+- Copy the configuration block to your Podfile
+- Run `pod install` to apply configurations
+- Set up corresponding Build Configurations in Xcode
+- Add the version management script to Build Phases
+- Configure schemes to use appropriate configurations
+
+### Android Configuration
+
+1. **Product Flavors**
+   Add to app/build.gradle:
+
+```gradle
+    flavorDimensions 'default'
+    productFlavors {
+        development {
+            dimension 'default'
+            applicationId 'com.newreactnative.dev'
+            resValue 'string', 'build_config_package', 'com.newreactnative'
+
+            def envFile = new File("${project.rootDir.parentFile}/.env.local.development")
+            if (envFile.exists()) {
+                def versionProps = getVersionFromEnv(envFile)
+                versionCode versionProps.code.toInteger()
+                versionName versionProps.name
+            }
+        }
+        staging {
+            dimension 'default'
+            applicationId 'com.newreactnative.stg'
+            resValue 'string', 'build_config_package', 'com.newreactnative'
+
+            def envFile = new File("${project.rootDir.parentFile}/.env.local.staging")
+            if (envFile.exists()) {
+                def versionProps = getVersionFromEnv(envFile)
+                versionCode versionProps.code.toInteger()
+                versionName versionProps.name
+            }
+        }
+        production {
+            dimension 'default'
+            applicationId 'com.newreactnative.production'
+            resValue 'string', 'build_config_package', 'com.newreactnative'
+
+            def envFile = new File("${project.rootDir.parentFile}/.env.local.production")
+            if (envFile.exists()) {
+                def versionProps = getVersionFromEnv(envFile)
+                versionCode versionProps.code.toInteger()
+                versionName versionProps.name
+            }
+        }
+    }
+
+def getVersionFromEnv(File envFile) {
+    def versionCode = "1"
+    def versionName = "1.0.0"
+    
+    envFile.eachLine { line ->
+        if (line.contains('=')) {
+            def (key, value) = line.split('=', 2)
+            if (key == "VERSION_CODE") versionCode = value?.trim()?.replaceAll('"', '')
+            if (key == "VERSION_NAME") versionName = value?.trim()?.replaceAll('"', '')
+        }
+    }
+    
+    println "Reading from ${envFile.path}"
+    println "VERSION_CODE: ${versionCode}"
+    println "VERSION_NAME: ${versionName}"
+    
+    return [code: versionCode, name: versionName]
+}
+```
+
+### Setup Steps for New Project
+
+1. **Create Environment Files**
+
+```bash
+# Create and configure environment files
+touch .env.local.development
+touch .env.local.staging
+touch .env.local.production
+```
+
+2. **iOS Setup**
+
+- Add Build Phase Script in Xcode
+- Add Build Configurations (Dev/Staging/Product)
+- Update Schemes per environment
+- Configure Info.plist for version management
+
+3. **Android Setup**
+
+- Copy Product Flavors configuration to build.gradle
+- Copy getVersionFromEnv helper function
+- Add applicationId for each flavor
+- Configure app/build.gradle for version management
+
+4. **Update package.json Scripts**
+
+```json
+{
+  "scripts": {
+    "android": "react-native run-android --mode developmentDebug",
+    "android:stg": "cd android && ./gradlew clean && cd .. && react-native run-android --mode stagingDebug",
+    "android:dev": "cd android && ./gradlew clean && cd .. && react-native run-android --mode developmentDebug",
+    "android:pro": "cd android && ./gradlew clean && cd .. && react-native run-android --mode productionDebug",
+    "ios": "react-native run-ios",
+    "ios:stg": "APP_ENV=staging react-native run-ios --scheme Staging --mode Staging.Debug",
+    "ios:dev": "APP_ENV=development react-native run-ios --scheme Dev --mode Dev.Debug",
+    "ios:pro": "APP_ENV=production react-native run-ios --scheme Pro --mode Product.Debug"
+  }
+}
+```
+
+5. **Update .gitignore**
+
+```bash
+# Ignore private environment files
+.env.*.local
+.env.local
+.env.local.*
+# Don't ignore shared environment files
+!.env.*.shared
+!.env.shared
+```
+
+### Running Different Environments
+
+**iOS Commands**
+
+```bash
+yarn ios:dev     # Development build
+yarn ios:stg     # Staging build
+yarn ios:pro     # Production build
+```
+
+**Android Commands**
+
+```bash
+yarn android:dev # Development build
+yarn android:stg # Staging build
+yarn android:pro # Production build
+```
+
+### Version Management
+
+The setup automatically manages app versions based on environment files:
+
+- VERSION_CODE: Used for internal build numbering
+- VERSION_NAME: Used for display version in stores
+
+### Notes
+
+- Always create .env.local.example as a template
+- Keep sensitive data out of version control
+- Test all environments before deployment
+- Update versions in environment files before releases
 
 ## 🛠️ Development Tools
 

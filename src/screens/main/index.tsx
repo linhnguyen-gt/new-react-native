@@ -1,7 +1,6 @@
 import React from "react";
 import { Button, StatusBar, useColorScheme } from "react-native";
 import { Colors, Header } from "react-native/Libraries/NewAppScreen";
-import Config from "react-native-config";
 import { useSelector } from "react-redux";
 
 import { Box, HStack, Loading, ScrollView, Text, VStack } from "@/components";
@@ -9,6 +8,8 @@ import { Box, HStack, Loading, ScrollView, Text, VStack } from "@/components";
 import { actions, selectors } from "@/redux";
 
 import { useActions, useLoading } from "@/hooks";
+
+import { ENV } from "@/config";
 
 const MainPage = () => {
     const isLoading = useLoading([
@@ -50,7 +51,7 @@ const MainPage = () => {
 
                 <VStack space="sm" alignItems="center">
                     <Text size="2xl" fontWeight="bold">
-                        Environment: {Config.APP_FLAVOR}
+                        Environment: {ENV.APP_FLAVOR}
                     </Text>
                     <Text size="2xl" fontWeight="bold">
                         Response: {response.length}

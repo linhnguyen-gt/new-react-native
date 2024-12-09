@@ -1,10 +1,11 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from "axios";
-import Config from "react-native-config";
+
+import { ENV } from "@/config";
 
 import ApiMethod from "./ApiMethod";
 
 const DEFAULT_API_CONFIG = {
-    baseURL: Config.API_BASE_URL
+    baseURL: ENV.API_BASE_URL
 } as const;
 
 const _methodRes = [ApiMethod.GET, ApiMethod.DELETE];

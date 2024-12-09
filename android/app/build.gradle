@@ -2,13 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'org.jetbrains.kotlin.android'
 apply plugin: 'com.facebook.react'
 
-apply from: project(':react-native-config').projectDir.getPath() + '/dotenv.gradle'
 apply from: file('../../node_modules/react-native-vector-icons/fonts.gradle')
-
-project.ext.envConfigFiles = [debug      : '.env',
-                              development: '.env.development',
-                              staging    : '.env.staging',
-                              production : '.env.production',]
 
 project.ext.vectoricons = [
         iconFontNames: ['AntDesign.ttf', 'Entypo.ttf', 'EvilIcons.ttf', 'Feather.ttf',
@@ -94,8 +88,26 @@ android {
         applicationId 'com.newreactnative'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode project.env.get('APP_VERSION_CODE').toInteger()
-        versionName project.env.get('APP_VERSION_NAME')
+
+        def envFile = new File("${project.rootDir.parentFile}/.env.local")
+        def versionCode = "1"
+        def versionName = "1.0.0"
+        
+        if (envFile.exists()) {
+            envFile.eachLine { line ->
+                if (line.contains('=')) {
+                    def (key, value) = line.split('=', 2)
+                    if (key == "VERSION_CODE") versionCode = value?.trim()
+                    if (key == "VERSION_NAME") versionName = value?.trim()?.replaceAll('"', '')
+                }
+            }
+        }
+        
+        println "Read VERSION_CODE: ${versionCode}"
+        println "Read VERSION_NAME: ${versionName}"
+        
+        setVersionCode(versionCode.toInteger())
+        setVersionName(versionName)
     }
     signingConfigs {
         debug {
@@ -124,25 +136,63 @@ android {
             dimension 'default'
             applicationId 'com.newreactnative.dev'
             resValue 'string', 'build_config_package', 'com.newreactnative'
+
+            def envFile = new File("${project.rootDir.parentFile}/.env.local.development")
+            if (envFile.exists()) {
+                def versionProps = getVersionFromEnv(envFile)
+                versionCode versionProps.code.toInteger()
+                versionName versionProps.name
+            }
         }
         staging {
             dimension 'default'
             applicationId 'com.newreactnative.stg'
             resValue 'string', 'build_config_package', 'com.newreactnative'
+
+            def envFile = new File("${project.rootDir.parentFile}/.env.local.staging")
+            if (envFile.exists()) {
+                def versionProps = getVersionFromEnv(envFile)
+                versionCode versionProps.code.toInteger()
+                versionName versionProps.name
+            }
         }
         production {
             dimension 'default'
             applicationId 'com.newreactnative.production'
             resValue 'string', 'build_config_package', 'com.newreactnative'
+
+            def envFile = new File("${project.rootDir.parentFile}/.env.local.production")
+            if (envFile.exists()) {
+                def versionProps = getVersionFromEnv(envFile)
+                versionCode versionProps.code.toInteger()
+                versionName versionProps.name
+            }
         }
     }
+}
+
+def getVersionFromEnv(File envFile) {
+    def versionCode = "1"
+    def versionName = "1.0.0"
+    
+    envFile.eachLine { line ->
+        if (line.contains('=')) {
+            def (key, value) = line.split('=', 2)
+            if (key == "VERSION_CODE") versionCode = value?.trim()?.replaceAll('"', '')
+            if (key == "VERSION_NAME") versionName = value?.trim()?.replaceAll('"', '')
+        }
+    }
+    
+    println "Reading from ${envFile.path}"
+    println "VERSION_CODE: ${versionCode}"
+    println "VERSION_NAME: ${versionName}"
+    
+    return [code: versionCode, name: versionName]
 }
 
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation('com.facebook.react:react-android')
-    // React Native Config
-    implementation project(':react-native-config')
     // React Native Vector Icons
     implementation project(':react-native-vector-icons')
     if (hermesEnabled.toBoolean()) {
