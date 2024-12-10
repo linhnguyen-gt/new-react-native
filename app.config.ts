@@ -1,6 +1,8 @@
 import * as dotenv from "dotenv";
 import { ConfigContext, ExpoConfig } from "expo/config";
 
+import { name } from "./package.json";
+
 const getEnvPath = (env: string | undefined): string => {
     switch (env?.toLowerCase()) {
         case "production":
@@ -48,8 +50,8 @@ export default ({ config }: ConfigContext): ExpoConfig => {
 
     return {
         ...config,
-        name: "NewReactNative",
-        slug: "newreactnative",
+        name,
+        slug: name.toLowerCase(),
         version: validatedConfig.VERSION_NAME,
         extra: {
             ...validatedConfig
