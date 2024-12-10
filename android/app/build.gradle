@@ -90,24 +90,11 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
 
         def envFile = new File("${project.rootDir.parentFile}/.env.local")
-        def versionCode = "1"
-        def versionName = "1.0.0"
-        
         if (envFile.exists()) {
-            envFile.eachLine { line ->
-                if (line.contains('=')) {
-                    def (key, value) = line.split('=', 2)
-                    if (key == "VERSION_CODE") versionCode = value?.trim()
-                    if (key == "VERSION_NAME") versionName = value?.trim()?.replaceAll('"', '')
-                }
-            }
+            def versionProps = getVersionFromEnv(envFile)
+            versionCode versionProps.code.toInteger()
+            versionName versionProps.name
         }
-        
-        println "Read VERSION_CODE: ${versionCode}"
-        println "Read VERSION_NAME: ${versionName}"
-        
-        setVersionCode(versionCode.toInteger())
-        setVersionName(versionName)
     }
     signingConfigs {
         debug {
@@ -132,6 +119,19 @@ android {
 
     flavorDimensions 'default'
     productFlavors {
+        prod {  
+            dimension 'default'
+            applicationId 'com.newreactnative'
+            resValue 'string', 'build_config_package', 'com.newreactnative'
+
+            def envFile = new File("${project.rootDir.parentFile}/.env.local")
+            if (envFile.exists()) {
+                def versionProps = getVersionFromEnv(envFile)
+                versionCode versionProps.code.toInteger()
+                versionName versionProps.name
+            }
+        }
+        
         development {
             dimension 'default'
             applicationId 'com.newreactnative.dev'
@@ -167,6 +167,16 @@ android {
                 versionCode versionProps.code.toInteger()
                 versionName versionProps.name
             }
+        }
+    }
+
+    // Split APKs per ABI
+    splits {
+        abi {
+            reset()
+            enable true
+            universalApk false
+            include "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
         }
     }
 }

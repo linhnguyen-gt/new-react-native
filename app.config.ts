@@ -1,25 +1,31 @@
 import * as dotenv from "dotenv";
 
-const getEnvConfig = () => {
+const loadEnvFile = (path: string) => {
     try {
-        const mode = process.env.APP_ENV || "development";
-        const envPath = `.env.local.${mode.toLowerCase()}`;
-        const localEnv = dotenv.config({ path: envPath }).parsed;
-
-        if (localEnv) {
-            return localEnv;
+        const env = dotenv.config({ path }).parsed;
+        if (env) {
+            return env;
         }
-
-        const defaultEnv = dotenv.config({ path: ".env.local" }).parsed;
-        if (defaultEnv) {
-            return defaultEnv;
-        }
-
-        throw new Error("No environment file found");
+        return null;
     } catch (error) {
-        console.warn("Error loading environment:", error);
-        return {};
+        console.warn(`Failed to load ${path}:`, error);
+        return null;
     }
+};
+
+const getEnvConfig = () => {
+    const mode = process.env.APP_ENV;
+    if (mode) {
+        const envPath = `.env.local.${mode.toLowerCase()}`;
+        const modeEnv = loadEnvFile(envPath);
+        if (modeEnv) return modeEnv;
+    }
+
+    const defaultEnv = loadEnvFile(".env.local");
+    if (defaultEnv) return defaultEnv;
+
+    console.warn("No environment file found");
+    return {};
 };
 
 const envConfig = getEnvConfig();

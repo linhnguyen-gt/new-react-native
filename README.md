@@ -224,6 +224,19 @@ fi
 ```gradle
     flavorDimensions 'default'
     productFlavors {
+        prod {  
+            dimension 'default'
+            applicationId 'com.newreactnative'
+            resValue 'string', 'build_config_package', 'com.newreactnative'
+
+            def envFile = new File("${project.rootDir.parentFile}/.env.local")
+            if (envFile.exists()) {
+                def versionProps = getVersionFromEnv(envFile)
+                versionCode versionProps.code.toInteger()
+                versionName versionProps.name
+            }
+        }
+        
         development {
             dimension 'default'
             applicationId 'com.newreactnative.dev'
@@ -312,10 +325,10 @@ touch .env.local.production
 ```json
 {
   "scripts": {
-    "android": "react-native run-android --mode developmentDebug",
-    "android:stg": "cd android && ./gradlew clean && cd .. && react-native run-android --mode stagingDebug",
-    "android:dev": "cd android && ./gradlew clean && cd .. && react-native run-android --mode developmentDebug",
-    "android:pro": "cd android && ./gradlew clean && cd .. && react-native run-android --mode productionDebug",
+    "android": "cd android && ENVFILE=.env.local && ./gradlew clean && cd .. && react-native run-android --mode=prodDebug --appId=com.newreactnative",
+    "android:stg": "APP_ENV=staging && cd android && ENVFILE=.env.local.staging && ./gradlew clean && cd .. && react-native run-android --mode=stagingDebug --appId=com.newreactnative.stg",
+    "android:dev": "APP_ENV=development && cd android && ENVFILE=.env.local.development && ./gradlew clean && cd .. && react-native run-android --mode=developmentDebug --appId=com.newreactnative.dev",
+    "android:pro": "APP_ENV=production && cd android && ENVFILE=.env.local.production && ./gradlew clean && cd .. && react-native run-android --mode=productionDebug --appId=com.newreactnative.production",
     "ios": "react-native run-ios",
     "ios:stg": "APP_ENV=staging react-native run-ios --scheme Staging --mode Staging.Debug",
     "ios:dev": "APP_ENV=development react-native run-ios --scheme Dev --mode Dev.Debug",
