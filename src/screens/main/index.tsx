@@ -7,9 +7,9 @@ import { Box, HStack, Loading, ScrollView, Text, VStack } from "@/components";
 
 import { actions, selectors } from "@/redux";
 
-import { useActions, useLoading } from "@/hooks";
+import { environment } from "@/services";
 
-import { ENV } from "@/config";
+import { useActions, useLoading } from "@/hooks";
 
 const MainPage = () => {
     const isLoading = useLoading([
@@ -51,7 +51,7 @@ const MainPage = () => {
 
                 <VStack space="sm" alignItems="center">
                     <Text size="2xl" fontWeight="bold">
-                        Environment: {ENV.APP_FLAVOR}
+                        Environment: {environment.appFlavor}
                     </Text>
                     <Text size="2xl" fontWeight="bold">
                         Response: {response.length}

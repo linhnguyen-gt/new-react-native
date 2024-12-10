@@ -1,16 +1,16 @@
-import Constants from "expo-constants";
+import { environment } from "@/services";
 
-export const getEnvVar = (name: string): string => {
-    const value = Constants.expoConfig?.extra?.[name];
-
-    if (!value) {
-        throw new Error(`Missing environment variable: ${name}`);
-    }
-    return value as string;
-};
 export const ENV = {
-    APP_FLAVOR: getEnvVar("APP_FLAVOR"),
-    VERSION_CODE: getEnvVar("VERSION_CODE"),
-    VERSION_NAME: getEnvVar("VERSION_NAME"),
-    API_BASE_URL: getEnvVar("API_BASE_URL")
-};
+    get API_BASE_URL() {
+        return environment.apiBaseUrl;
+    },
+    get APP_FLAVOR() {
+        return environment.appFlavor;
+    },
+    get VERSION_CODE() {
+        return environment.versionCode;
+    },
+    get VERSION_NAME() {
+        return environment.versionName;
+    }
+} as const;

@@ -73,12 +73,6 @@ yarn-error.log
 !.yarn/sdks
 !.yarn/versions
 
-# Ignore private environment files
-.env.*.local
-.env.local
-.env.local.development
-.env.local.staging
-.env.local.production
-# Don't ignore shared environment files
-!.env.*.shared
-!.env.shared
+# Environment files
+.env.local*
+!.env.local.example

@@ -1,11 +1,11 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from "axios";
 
-import { ENV } from "@/config";
+import { environment } from "../environment";
 
 import ApiMethod from "./ApiMethod";
 
 const DEFAULT_API_CONFIG = {
-    baseURL: ENV.API_BASE_URL
+    baseURL: environment.apiBaseUrl
 } as const;
 
 const _methodRes = [ApiMethod.GET, ApiMethod.DELETE];
