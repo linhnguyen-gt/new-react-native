@@ -1,4 +1,4 @@
-import { ApiMethod, apiProblem, HttpClient } from "@/services";
+import { ApiMethod, HttpClient } from "@/services";
 
 export const responseApi = async (): Promise<BaseResponse<ResponseData[]>> => {
     const response = await HttpClient.request<
@@ -15,7 +15,7 @@ export const responseApi = async (): Promise<BaseResponse<ResponseData[]>> => {
         }
     });
 
-    if (!response.ok) return apiProblem(response);
+    if (!response?.ok) return;
 
     return { ok: response.ok, data: response.data.data };
 };

@@ -8,7 +8,7 @@ import { handleApiCall } from "@/redux/saga/ApiSagaHelper";
 function* getResponse() {
     yield* handleApiCall(actions.ResponseActions.getResponse.type, function* () {
         const response: ThenArg<ReturnType<typeof ResponseApi.responseApi>> = yield ResponseApi.responseApi();
-        if (response.ok) {
+        if (response?.ok) {
             yield put(actions.ResponseActions.setResponse(response.data));
         }
     });

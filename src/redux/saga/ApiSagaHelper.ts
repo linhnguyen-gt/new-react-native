@@ -5,11 +5,7 @@ import { startLoading, stopLoading } from "../reducers";
 type Saga = (
     ...args: any[]
 ) => Generator<
-    | CallEffect
-    | PutEffect
-    | SelectEffect
-    | Promise<SuccessfulResponse<Record<string, any>> | ErrorResponse<Record<string, any>>>
-    | Promise<void>,
+    CallEffect | PutEffect | SelectEffect | Promise<BaseResponse<Record<string, any>>> | Promise<void>,
     void,
     any
 >;

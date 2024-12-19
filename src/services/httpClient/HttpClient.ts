@@ -1,8 +1,16 @@
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from "axios";
+import axios, {
+    AxiosError,
+    AxiosInstance,
+    AxiosRequestConfig,
+    AxiosResponse,
+    HttpStatusCode,
+    InternalAxiosRequestConfig
+} from "axios";
 
 import { environment } from "../environment";
 
 import ApiMethod from "./ApiMethod";
+import { apiProblem } from "./HttpProblem";
 
 const DEFAULT_API_CONFIG = {
     baseURL: environment.apiBaseUrl
@@ -58,12 +66,7 @@ class HttpClient {
                 status: res.status
             };
         } catch (e) {
-            const error = e as AxiosError;
-            return {
-                ok: false,
-                data: error.response?.data,
-                status: error.response?.status
-            };
+            return;
         }
     }
 
@@ -110,11 +113,13 @@ class HttpClient {
         return Promise.reject(this.extractErrorData(error));
     }
 
-    private extractErrorData(error: unknown): unknown {
-        if (error instanceof AxiosError) {
-            return error.response?.data || error;
-        }
-        return error;
+    private extractErrorData(error: AxiosError): ErrorResponse<Data> {
+        const errorResponse: ErrorResponse<Data> = {
+            ok: false,
+            data: error.response?.data,
+            status: error.response?.status || HttpStatusCode.InternalServerError
+        };
+        return apiProblem(errorResponse);
     }
 
     private async refreshToken(): Promise<void> {

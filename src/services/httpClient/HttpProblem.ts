@@ -71,5 +71,5 @@ declare global {
         data: D | unknown;
         status?: S;
     };
-    type BaseResponse<D extends Data> = SuccessfulResponse<D> | ErrorResponse<D>;
+    type BaseResponse<D extends Data> = SuccessfulResponse<D> | ErrorResponse<D> | undefined;
 }
