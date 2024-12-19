@@ -421,7 +421,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Get the environment from configuration name\nif [[ \"${CONFIGURATION}\" == *\"Staging\"* ]]; then\n  ENV_FILE=\"${PROJECT_DIR}/../.env.local.staging\"\nelif [[ \"${CONFIGURATION}\" == *\"Dev\"* ]]; then\n  ENV_FILE=\"${PROJECT_DIR}/../.env.local.development\"\nelif [[ \"${CONFIGURATION}\" == *\"Product\"* ]]; then\n  ENV_FILE=\"${PROJECT_DIR}/../.env.local.production\"\nelse\n  ENV_FILE=\"${PROJECT_DIR}/../.env.local\"\nfi\n\necho \"=== Environment Setup ===\"\necho \"CONFIGURATION: ${CONFIGURATION}\"\necho \"Using env file: ${ENV_FILE}\"\n\nif [ -f \"$ENV_FILE\" ]; then\n  VERSION_CODE=$(grep \"VERSION_CODE\" \"$ENV_FILE\" | cut -d '=' -f2 | tr -d '\"' | tr -d ' ')\n  VERSION_NAME=$(grep \"VERSION_NAME\" \"$ENV_FILE\" | cut -d '=' -f2 | tr -d '\"' | tr -d ' ')\n  \n  if [ ! -z \"$VERSION_CODE\" ] && [ ! -z \"$VERSION_NAME\" ]; then\n    # Update build settings\n    xcrun agvtool new-version -all $VERSION_CODE\n    xcrun agvtool new-marketing-version $VERSION_NAME\n    \n    # Also update Info.plist directly as backup\n    /usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $VERSION_CODE\" \"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}\"\n    /usr/libexec/PlistBuddy -c \"Set :CFBundleShortVersionString $VERSION_NAME\" \"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}\"\n    \n    echo \"Updated version to $VERSION_NAME ($VERSION_CODE)\"\n    \n    # Verify the update\n    CURRENT_VERSION=$(/usr/libexec/PlistBuddy -c \"Print :CFBundleShortVersionString\" \"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}\")\n    echo \"Verified version: $CURRENT_VERSION\"\n  else\n    echo \"Error: VERSION_CODE or VERSION_NAME not found in $ENV_FILE\"\n  fi\nelse\n  echo \"Error: Environment file not found at $ENV_FILE\"\nfi\n";
+			shellScript = "# Get the environment from configuration name\necho \"Debug: Raw CONFIGURATION value: ${CONFIGURATION}\"\n\nif [[ \"${CONFIGURATION}\" == *\"Product\"* ]]; then\n  ENV_FILE=\"${SRCROOT}/../.env.local.production\"\n  echo \"Debug: Matched Product configuration\"\nelif [[ \"${CONFIGURATION}\" == *\"Staging\"* ]]; then\n  ENV_FILE=\"${SRCROOT}/../.env.local.staging\"\n  echo \"Debug: Matched Staging configuration\"\nelif [[ \"${CONFIGURATION}\" == *\"Dev\"* ]]; then\n  ENV_FILE=\"${SRCROOT}/../.env.local.development\"\n  echo \"Debug: Matched Dev configuration\"\nelse\n  ENV_FILE=\"${SRCROOT}/../.env.local\"\n  echo \"Debug: Using default configuration\"\nfi\n\n# Ensure INFOPLIST_FILE is set\nif [ -z \"$INFOPLIST_FILE\" ]; then\n    echo \"Error: INFOPLIST_FILE not set\"\n    exit 0\nfi\n\nINFO_PLIST=\"${SRCROOT}/${INFOPLIST_FILE}\"\n\necho \"=== Environment Setup ===\"\necho \"CONFIGURATION: ${CONFIGURATION}\"\necho \"Using env file: ${ENV_FILE}\"\necho \"Info.plist path: ${INFO_PLIST}\"\n\n# Default values in case env file is missing\nVERSION_CODE=\"1\"\nVERSION_NAME=\"1.0.0\"\n\n# Try to read from env file if it exists\nif [ -f \"$ENV_FILE\" ]; then\n    echo \"Reading from env file...\"\n    \n    # Read VERSION_CODE\n    VERSION_CODE_LINE=$(grep \"^VERSION_CODE=\" \"$ENV_FILE\" || echo \"\")\n    if [ ! -z \"$VERSION_CODE_LINE\" ]; then\n        VERSION_CODE=$(echo \"$VERSION_CODE_LINE\" | cut -d'=' -f2 | tr -d '\"' | tr -d ' ')\n    fi\n    \n    # Read VERSION_NAME\n    VERSION_NAME_LINE=$(grep \"^VERSION_NAME=\" \"$ENV_FILE\" || echo \"\")\n    if [ ! -z \"$VERSION_NAME_LINE\" ]; then\n        VERSION_NAME=$(echo \"$VERSION_NAME_LINE\" | cut -d'=' -f2 | tr -d '\"' | tr -d ' ')\n    fi\nelse\n    echo \"Warning: Environment file not found, using default values\"\nfi\n\necho \"Using versions - Code: $VERSION_CODE, Name: $VERSION_NAME\"\n\n# Update Info.plist if it exists\nif [ -f \"$INFO_PLIST\" ]; then\n    echo \"Updating Info.plist...\"\n    /usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $VERSION_CODE\" \"$INFO_PLIST\" || true\n    /usr/libexec/PlistBuddy -c \"Set :CFBundleShortVersionString $VERSION_NAME\" \"$INFO_PLIST\" || true\n    echo \"Info.plist update completed\"\nelse\n    echo \"Warning: Info.plist not found at $INFO_PLIST\"\nfi\n";
 		};
 		C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -709,10 +709,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -786,10 +783,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
@@ -871,10 +865,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -1005,10 +996,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
@@ -1142,10 +1130,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -1284,10 +1269,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -1418,10 +1400,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
@@ -1547,10 +1526,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;

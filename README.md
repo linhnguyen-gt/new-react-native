@@ -166,45 +166,83 @@ This configuration:
 3. **Version Management Script**
    Add this script to Build Phase in Xcode:
 
+.xcode.env.
+
+```bash
+# Determine APP_ENV based on CONFIGURATION
+if [[ "${CONFIGURATION}" == *"Product"* ]]; then
+    export APP_ENV="production"
+elif [[ "${CONFIGURATION}" == *"Staging"* ]]; then
+    export APP_ENV="staging"
+elif [[ "${CONFIGURATION}" == *"Dev"* ]]; then
+    export APP_ENV="development"
+fi
+```
+
 ```bash
 # Get the environment from configuration name
-if [[ "${CONFIGURATION}" == *"Staging"* ]]; then
-  ENV_FILE="${PROJECT_DIR}/../.env.local.staging"
+echo "Debug: Raw CONFIGURATION value: ${CONFIGURATION}"
+
+if [[ "${CONFIGURATION}" == *"Product"* ]]; then
+  ENV_FILE="${SRCROOT}/../.env.local.production"
+  echo "Debug: Matched Product configuration"
+elif [[ "${CONFIGURATION}" == *"Staging"* ]]; then
+  ENV_FILE="${SRCROOT}/../.env.local.staging"
+  echo "Debug: Matched Staging configuration"
 elif [[ "${CONFIGURATION}" == *"Dev"* ]]; then
-  ENV_FILE="${PROJECT_DIR}/../.env.local.development"
-elif [[ "${CONFIGURATION}" == *"Product"* ]]; then
-  ENV_FILE="${PROJECT_DIR}/../.env.local.production"
+  ENV_FILE="${SRCROOT}/../.env.local.development"
+  echo "Debug: Matched Dev configuration"
 else
-  ENV_FILE="${PROJECT_DIR}/../.env.local"
+  ENV_FILE="${SRCROOT}/../.env.local"
+  echo "Debug: Using default configuration"
 fi
+
+# Ensure INFOPLIST_FILE is set
+if [ -z "$INFOPLIST_FILE" ]; then
+    echo "Error: INFOPLIST_FILE not set"
+    exit 0
+fi
+
+INFO_PLIST="${SRCROOT}/${INFOPLIST_FILE}"
 
 echo "=== Environment Setup ==="
 echo "CONFIGURATION: ${CONFIGURATION}"
 echo "Using env file: ${ENV_FILE}"
+echo "Info.plist path: ${INFO_PLIST}"
 
+# Default values in case env file is missing
+VERSION_CODE="1"
+VERSION_NAME="1.0.0"
+
+# Try to read from env file if it exists
 if [ -f "$ENV_FILE" ]; then
-  VERSION_CODE=$(grep "VERSION_CODE" "$ENV_FILE" | cut -d '=' -f2 | tr -d '"' | tr -d ' ')
-  VERSION_NAME=$(grep "VERSION_NAME" "$ENV_FILE" | cut -d '=' -f2 | tr -d '"' | tr -d ' ')
-  
-  if [ ! -z "$VERSION_CODE" ] && [ ! -z "$VERSION_NAME" ]; then
-    # Update build settings
-    xcrun agvtool new-version -all $VERSION_CODE
-    xcrun agvtool new-marketing-version $VERSION_NAME
+    echo "Reading from env file..."
     
-    # Also update Info.plist directly as backup
-    /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $VERSION_CODE" "${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}"
-    /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $VERSION_NAME" "${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}"
+    # Read VERSION_CODE
+    VERSION_CODE_LINE=$(grep "^VERSION_CODE=" "$ENV_FILE" || echo "")
+    if [ ! -z "$VERSION_CODE_LINE" ]; then
+        VERSION_CODE=$(echo "$VERSION_CODE_LINE" | cut -d'=' -f2 | tr -d '"' | tr -d ' ')
+    fi
     
-    echo "Updated version to $VERSION_NAME ($VERSION_CODE)"
-    
-    # Verify the update
-    CURRENT_VERSION=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}")
-    echo "Verified version: $CURRENT_VERSION"
-  else
-    echo "Error: VERSION_CODE or VERSION_NAME not found in $ENV_FILE"
-  fi
+    # Read VERSION_NAME
+    VERSION_NAME_LINE=$(grep "^VERSION_NAME=" "$ENV_FILE" || echo "")
+    if [ ! -z "$VERSION_NAME_LINE" ]; then
+        VERSION_NAME=$(echo "$VERSION_NAME_LINE" | cut -d'=' -f2 | tr -d '"' | tr -d ' ')
+    fi
 else
-  echo "Error: Environment file not found at $ENV_FILE"
+    echo "Warning: Environment file not found, using default values"
+fi
+
+echo "Using versions - Code: $VERSION_CODE, Name: $VERSION_NAME"
+
+# Update Info.plist if it exists
+if [ -f "$INFO_PLIST" ]; then
+    echo "Updating Info.plist..."
+    /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $VERSION_CODE" "$INFO_PLIST" || true
+    /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $VERSION_NAME" "$INFO_PLIST" || true
+    echo "Info.plist update completed"
+else
+    echo "Warning: Info.plist not found at $INFO_PLIST"
 fi
 ```
 
