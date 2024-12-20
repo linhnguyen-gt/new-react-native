@@ -178,7 +178,7 @@ elif [[ "${CONFIGURATION}" == *"Dev"* ]]; then
     export APP_ENV="development"
 fi
 ```
-
+Build Phases -> Add Run Script -> Paste
 ```bash
 # Get the environment from configuration name
 echo "Debug: Raw CONFIGURATION value: ${CONFIGURATION}"
