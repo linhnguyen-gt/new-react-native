@@ -15,6 +15,10 @@
         "start": "react-native start",
         "lint:fix": "eslint . --fix --ext .ts,.tsx,.js",
         "test": "jest",
+        "env:push": "dotenv-vault push",
+        "env:pull": "dotenv-vault pull",
+        "env:build": "dotenv-vault build",
+        "env:setup": "node scripts/setup-env.js",
         "adb:reactotron": "adb reverse tcp:9090 tcp:9090"
     },
     "dependencies": {
