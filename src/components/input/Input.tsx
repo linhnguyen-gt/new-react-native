@@ -1,6 +1,6 @@
+import Icon from "@react-native-vector-icons/entypo";
 import React from "react";
 import { Animated, TextInput, TextInputProps } from "react-native";
-import Icon from "react-native-vector-icons/Entypo";
 
 import { Box, HStack, MyTouchable, Text, VStack } from "@/components";
 
