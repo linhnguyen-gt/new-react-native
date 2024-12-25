@@ -2,10 +2,10 @@ import React from "react";
 import { Provider } from "react-redux";
 
 import App from "@/App";
-import { ConfigStore } from "@/store";
+import { Store } from "@/store";
 
 const Root = () => (
-    <Provider store={ConfigStore.store}>
+    <Provider store={Store}>
         <App />
     </Provider>
 );

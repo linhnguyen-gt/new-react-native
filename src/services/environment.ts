@@ -5,7 +5,7 @@ const envSchema = z.object({
     APP_FLAVOR: z.string(),
     VERSION_CODE: z.string(),
     VERSION_NAME: z.string(),
-    API_BASE_URL: z.string().url()
+    API_URL: z.string().url()
 });
 
 type EnvConfig = z.infer<typeof envSchema>;
@@ -39,7 +39,7 @@ class EnvironmentService {
     }
 
     get apiBaseUrl(): string {
-        return this.config.API_BASE_URL;
+        return this.config.API_URL;
     }
 
     get appFlavor(): string {

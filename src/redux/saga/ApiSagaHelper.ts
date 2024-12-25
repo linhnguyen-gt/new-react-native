@@ -1,14 +1,10 @@
-import { ActionPattern, CallEffect, put, PutEffect, SelectEffect } from "redux-saga/effects";
+import { Effect, put } from "redux-saga/effects";
 
 import { startLoading, stopLoading } from "../reducers";
 
-type Saga = (
-    ...args: any[]
-) => Generator<
-    CallEffect | PutEffect | SelectEffect | Promise<BaseResponse<Record<string, any>>> | Promise<void>,
-    void,
-    any
->;
+type EffectType = Effect | Promise<any>;
+type SagaGenerator = Generator<EffectType, any, any>;
+type SagaFunction = (...args: unknown[]) => SagaGenerator;
 
 type LoadingOptions = {
     isLoading?: boolean;
@@ -19,16 +15,16 @@ function isLoadingOptions(obj: any): obj is LoadingOptions {
 }
 
 export function* handleApiCall(
-    optionsOrActionType: LoadingOptions | ActionPattern,
-    actionTypeOrSaga: ActionPattern | Saga,
-    apiSaga?: Saga,
-    ...args: any[]
+    optionsOrActionType: LoadingOptions | string,
+    actionTypeOrSaga: string | SagaFunction,
+    apiSaga?: SagaFunction,
+    ...args: unknown[]
 ): Generator {
     const options = isLoadingOptions(optionsOrActionType) ? optionsOrActionType : { isLoading: true };
     const actionType = isLoadingOptions(optionsOrActionType)
-        ? (actionTypeOrSaga as ActionPattern)
-        : (optionsOrActionType as ActionPattern);
-    const saga = isLoadingOptions(optionsOrActionType) ? apiSaga! : (actionTypeOrSaga as Saga);
+        ? (actionTypeOrSaga as string)
+        : (optionsOrActionType as string);
+    const saga = isLoadingOptions(optionsOrActionType) ? apiSaga! : (actionTypeOrSaga as SagaFunction);
 
     const isLoading = options.isLoading ?? true;
 

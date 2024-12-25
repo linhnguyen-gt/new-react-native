@@ -2,8 +2,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'org.jetbrains.kotlin.android'
 apply plugin: 'com.facebook.react'
 
-apply from: file('../../node_modules/react-native-vector-icons/fonts.gradle')
-
 project.ext.vectoricons = [
         iconFontNames: ['AntDesign.ttf', 'Entypo.ttf', 'EvilIcons.ttf', 'Feather.ttf',
                         'FontAwesome.ttf', '>FontAwesome5_Brands.ttf', 'FontAwesome5_Regular.ttf', 'FontAwesome5_Solid.ttf', 'Foundation.ttf',
@@ -89,7 +87,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
 
-        def envFile = new File("${project.rootDir.parentFile}/.env.local")
+        def envFile = new File("${project.rootDir.parentFile}/.env")
         if (envFile.exists()) {
             def versionProps = getVersionFromEnv(envFile)
             versionCode versionProps.code.toInteger()
@@ -124,7 +122,7 @@ android {
             applicationId 'com.newreactnative'
             resValue 'string', 'build_config_package', 'com.newreactnative'
 
-            def envFile = new File("${project.rootDir.parentFile}/.env.local")
+            def envFile = new File("${project.rootDir.parentFile}/.env")
             if (envFile.exists()) {
                 def versionProps = getVersionFromEnv(envFile)
                 versionCode versionProps.code.toInteger()
@@ -132,24 +130,12 @@ android {
             }
         }
 
-        development {
-            dimension 'default'
-            applicationId 'com.newreactnative.dev'
-            resValue 'string', 'build_config_package', 'com.newreactnative'
-
-            def envFile = new File("${project.rootDir.parentFile}/.env.local.development")
-            if (envFile.exists()) {
-                def versionProps = getVersionFromEnv(envFile)
-                versionCode versionProps.code.toInteger()
-                versionName versionProps.name
-            }
-        }
         staging {
             dimension 'default'
             applicationId 'com.newreactnative.stg'
             resValue 'string', 'build_config_package', 'com.newreactnative'
 
-            def envFile = new File("${project.rootDir.parentFile}/.env.local.staging")
+            def envFile = new File("${project.rootDir.parentFile}/.env.staging")
             if (envFile.exists()) {
                 def versionProps = getVersionFromEnv(envFile)
                 versionCode versionProps.code.toInteger()
@@ -161,7 +147,7 @@ android {
             applicationId 'com.newreactnative.production'
             resValue 'string', 'build_config_package', 'com.newreactnative'
 
-            def envFile = new File("${project.rootDir.parentFile}/.env.local.production")
+            def envFile = new File("${project.rootDir.parentFile}/.env.production")
             if (envFile.exists()) {
                 def versionProps = getVersionFromEnv(envFile)
                 versionCode versionProps.code.toInteger()
@@ -203,8 +189,6 @@ def getVersionFromEnv(File envFile) {
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation('com.facebook.react:react-android')
-    // React Native Vector Icons
-    implementation project(':react-native-vector-icons')
     if (hermesEnabled.toBoolean()) {
         implementation('com.facebook.react:hermes-android')
     } else {

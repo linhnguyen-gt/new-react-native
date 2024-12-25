@@ -73,6 +73,13 @@ yarn-error.log
 !.yarn/sdks
 !.yarn/versions
 
+
+.env*
+.flaskenv*
+!.env.project
+!.env.vault
 # Environment files
-.env.local*
-!.env.local.example
+.env
+.env.*
+!.env.example
+!.env.vault

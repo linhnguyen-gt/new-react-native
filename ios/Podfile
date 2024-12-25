@@ -12,8 +12,6 @@ prepare_react_native_project!
 # configuration name environment
 project 'NewReactNative',{
         'Debug' => :debug,
-        'Dev.Debug' => :debug,
-        'Dev.Release' => :release,
         'Release' => :release,
         'Staging.Debug' => :debug,
         'Staging.Release' => :release,
