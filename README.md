@@ -1,12 +1,76 @@
 <div align="center">
   <h1>🚀 New React Native Project</h1>
   <p>A powerful React Native boilerplate with production-ready configurations and best practices</p>
-</div>
 
-<div align="center">
-  <img alt="React Native" src="https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" />
-  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" />
-  <img alt="Redux" src="https://img.shields.io/badge/Redux-593D88?style=for-the-badge&logo=redux&logoColor=white" />
+  <p align="center">
+    <a href="https://reactnative.dev/" target="_blank">
+      <img src="https://img.shields.io/badge/React_Native-v0.76.5-blue?style=for-the-badge&logo=react&logoColor=white" alt="react-native" />
+    </a>
+    <a href="https://www.typescriptlang.org/" target="_blank">
+      <img src="https://img.shields.io/badge/TypeScript-v5.5.3-blue?style=for-the-badge&logo=typescript&logoColor=white" alt="typescript" />
+    </a>
+  </p>
+
+### Core Libraries
+
+  <p align="center">
+    <img src="https://img.shields.io/badge/Expo-v52.0.17-000020?style=for-the-badge&logo=expo&logoColor=white" alt="expo" />
+    <img src="https://img.shields.io/badge/Gluestack_UI-v1.1.62-1B1B1F?style=for-the-badge" alt="gluestack" />
+    <img src="https://img.shields.io/badge/React_Navigation-v7.0.13-6B52AE?style=for-the-badge&logo=react&logoColor=white" alt="react-navigation" />
+  </p>
+
+### State Management & API
+
+  <p align="center">
+    <img src="https://img.shields.io/badge/Redux_Toolkit-v2.4.0-764ABC?style=for-the-badge&logo=redux&logoColor=white" alt="redux" />
+    <img src="https://img.shields.io/badge/Redux_Saga-v1.3.0-89D96D?style=for-the-badge&logo=redux-saga&logoColor=white" alt="redux-saga" />
+    <img src="https://img.shields.io/badge/Axios-v1.7.9-5A29E4?style=for-the-badge&logo=axios&logoColor=white" alt="axios" />
+  </p>
+
+### UI & Styling
+
+  <p align="center">
+    <img src="https://img.shields.io/badge/NativeWind-v4.1.23-38BDF8?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="nativewind" />
+    <img src="https://img.shields.io/badge/Tailwind_CSS-v3.4.16-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="tailwindcss" />
+    <img src="https://img.shields.io/badge/React_Native_Vector_Icons-v10.2.0-4B32C3?style=for-the-badge" alt="vector-icons" />
+  </p>
+
+### Form & Validation
+
+  <p align="center">
+    <img src="https://img.shields.io/badge/Formik-v2.4.6-0744AE?style=for-the-badge" alt="formik" />
+    <img src="https://img.shields.io/badge/Yup-v1.5.0-32CD32?style=for-the-badge" alt="yup" />
+    <img src="https://img.shields.io/badge/Zod-v3.23.8-3068B7?style=for-the-badge" alt="zod" />
+  </p>
+
+### Development & Testing
+
+  <p align="center">
+    <img src="https://img.shields.io/badge/ESLint-v8.19.0-4B32C3?style=for-the-badge&logo=eslint&logoColor=white" alt="eslint" />
+    <img src="https://img.shields.io/badge/Prettier-v3.3.3-F7B93E?style=for-the-badge&logo=prettier&logoColor=black" alt="prettier" />
+    <img src="https://img.shields.io/badge/Jest-v29.7.0-C21325?style=for-the-badge&logo=jest&logoColor=white" alt="jest" />
+  </p>
+
+### Environment & Storage
+
+  <p align="center">
+    <img src="https://img.shields.io/badge/Dotenv-v16.4.7-ECD53F?style=for-the-badge&logo=dotenv&logoColor=black" alt="dotenv" />
+    <img src="https://img.shields.io/badge/Async_Storage-v2.1.0-3B82F6?style=for-the-badge" alt="async-storage" />
+  </p>
+
+### Development Tools
+
+  <p align="center">
+    <img src="https://img.shields.io/badge/Reactotron-v5.1.10-7B61FF?style=for-the-badge" alt="reactotron" />
+    <img src="https://img.shields.io/badge/React_Native_Reanimated-v3.16.4-FF4154?style=for-the-badge" alt="reanimated" />
+  </p>
+
+### Environment Support
+
+  <p align="center">
+    <img src="https://img.shields.io/badge/iOS-000000?style=for-the-badge&logo=apple&logoColor=white" alt="ios" />
+    <img src="https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="android" />
+  </p>
 </div>
 
 ## ✨ Features
@@ -113,22 +177,61 @@ src/
 
 ## 🔧 Environment Configuration
 
-### Environment Files
+### Setup Environment
+
+First, you need to run the environment setup script:
 
 ```bash
-.env.local.development  # Development environment
-.env.local.staging     # Staging environment 
-.env.local.production  # Production environment
+# Using npm
+npm run env:setup
+
+# Using yarn
+yarn env:setup
 ```
 
-### Required Environment Variables
+This script will:
+
+1. Set up dotenv-vault (optional)
+2. Create environment files for all environments:
+    - `.env` (Development environment)
+    - `.env.staging` (Staging environment)
+    - `.env.production` (Production environment)
+3. Configure necessary environment variables
+
+### Environment Files Structure
+
+Each environment file contains:
 
 ```bash
+# Required Variables
 APP_FLAVOR=development|staging|production
 VERSION_CODE=1
 VERSION_NAME=1.0.0
-API_BASE_URL=https://your-api.com
+API_URL=https://api.example.com
+
+# Optional Variables (configured during setup)
+GOOGLE_API_KEY=
+FACEBOOK_APP_ID=
+# ... other variables
 ```
+
+### Using Different Environments
+
+```bash
+# Development (default)
+yarn android
+yarn ios
+
+# Staging
+yarn android:stg
+yarn ios:stg
+
+# Production
+yarn android:pro
+yarn ios:pro
+```
+
+### Setup Steps for New Project
 
 ### iOS Configuration
 
@@ -158,7 +261,6 @@ This configuration:
 2. **Build Configurations**
    Xcode should have these configurations set up:
 
-- Dev.Debug/Release (Development)
 - Staging.Debug/Release (Staging)
 - Product.Debug/Release (Production)
 - Debug/Release (Default)
@@ -174,26 +276,23 @@ if [[ "${CONFIGURATION}" == *"Product"* ]]; then
     export APP_ENV="production"
 elif [[ "${CONFIGURATION}" == *"Staging"* ]]; then
     export APP_ENV="staging"
-elif [[ "${CONFIGURATION}" == *"Dev"* ]]; then
-    export APP_ENV="development"
 fi
 ```
+
 Build Phases -> Add Run Script -> Paste
+
 ```bash
 # Get the environment from configuration name
 echo "Debug: Raw CONFIGURATION value: ${CONFIGURATION}"
 
 if [[ "${CONFIGURATION}" == *"Product"* ]]; then
-  ENV_FILE="${SRCROOT}/../.env.local.production"
+  ENV_FILE="${SRCROOT}/../.env.production"
   echo "Debug: Matched Product configuration"
 elif [[ "${CONFIGURATION}" == *"Staging"* ]]; then
-  ENV_FILE="${SRCROOT}/../.env.local.staging"
+  ENV_FILE="${SRCROOT}/../.env.staging"
   echo "Debug: Matched Staging configuration"
-elif [[ "${CONFIGURATION}" == *"Dev"* ]]; then
-  ENV_FILE="${SRCROOT}/../.env.local.development"
-  echo "Debug: Matched Dev configuration"
 else
-  ENV_FILE="${SRCROOT}/../.env.local"
+  ENV_FILE="${SRCROOT}/../.env"
   echo "Debug: Using default configuration"
 fi
 
@@ -262,37 +361,25 @@ fi
 ```gradle
     flavorDimensions 'default'
     productFlavors {
-        prod {  
+        prod {
             dimension 'default'
             applicationId 'com.newreactnative'
             resValue 'string', 'build_config_package', 'com.newreactnative'
 
-            def envFile = new File("${project.rootDir.parentFile}/.env.local")
+            def envFile = new File("${project.rootDir.parentFile}/.env")
             if (envFile.exists()) {
                 def versionProps = getVersionFromEnv(envFile)
                 versionCode versionProps.code.toInteger()
                 versionName versionProps.name
             }
         }
-        
-        development {
-            dimension 'default'
-            applicationId 'com.newreactnative.dev'
-            resValue 'string', 'build_config_package', 'com.newreactnative'
 
-            def envFile = new File("${project.rootDir.parentFile}/.env.local.development")
-            if (envFile.exists()) {
-                def versionProps = getVersionFromEnv(envFile)
-                versionCode versionProps.code.toInteger()
-                versionName versionProps.name
-            }
-        }
         staging {
             dimension 'default'
             applicationId 'com.newreactnative.stg'
             resValue 'string', 'build_config_package', 'com.newreactnative'
 
-            def envFile = new File("${project.rootDir.parentFile}/.env.local.staging")
+            def envFile = new File("${project.rootDir.parentFile}/.env.staging")
             if (envFile.exists()) {
                 def versionProps = getVersionFromEnv(envFile)
                 versionCode versionProps.code.toInteger()
@@ -304,7 +391,7 @@ fi
             applicationId 'com.newreactnative.production'
             resValue 'string', 'build_config_package', 'com.newreactnative'
 
-            def envFile = new File("${project.rootDir.parentFile}/.env.local.production")
+            def envFile = new File("${project.rootDir.parentFile}/.env.production")
             if (envFile.exists()) {
                 def versionProps = getVersionFromEnv(envFile)
                 versionCode versionProps.code.toInteger()
@@ -333,76 +420,33 @@ def getVersionFromEnv(File envFile) {
 }
 ```
 
-### Setup Steps for New Project
-
-1. **Create Environment Files**
-
-```bash
-# Create and configure environment files
-touch .env.local.development
-touch .env.local.staging
-touch .env.local.production
-```
-
-2. **iOS Setup**
-
-- Add Build Phase Script in Xcode
-- Add Build Configurations (Dev/Staging/Product)
-- Update Schemes per environment
-- Configure Info.plist for version management
-
-3. **Android Setup**
-
-- Copy Product Flavors configuration to build.gradle
-- Copy getVersionFromEnv helper function
-- Add applicationId for each flavor
-- Configure app/build.gradle for version management
-
-4. **Update package.json Scripts**
+### Update package.json Scripts
 
 ```json
 {
   "scripts": {
-    "android": "cd android && ENVFILE=.env.local && ./gradlew clean && cd .. && react-native run-android --mode=prodDebug --appId=com.newreactnative",
-    "android:stg": "APP_ENV=staging && cd android && ENVFILE=.env.local.staging && ./gradlew clean && cd .. && react-native run-android --mode=stagingDebug --appId=com.newreactnative.stg",
-    "android:dev": "APP_ENV=development && cd android && ENVFILE=.env.local.development && ./gradlew clean && cd .. && react-native run-android --mode=developmentDebug --appId=com.newreactnative.dev",
-    "android:pro": "APP_ENV=production && cd android && ENVFILE=.env.local.production && ./gradlew clean && cd .. && react-native run-android --mode=productionDebug --appId=com.newreactnative.production",
+    "android": "cd android && ENVFILE=.env && ./gradlew clean && cd .. && react-native run-android --mode=prodDebug --appId=com.newreactnative",
+    "android:stg": "APP_ENV=staging && cd android && ENVFILE=.env.staging && ./gradlew clean && cd .. && react-native run-android --mode=stagingDebug --appId=com.newreactnative.stg",
+    "android:pro": "APP_ENV=production && cd android && ENVFILE=.env.production && ./gradlew clean && cd .. && react-native run-android --mode=productionDebug --appId=com.newreactnative.production",
     "ios": "react-native run-ios",
     "ios:stg": "APP_ENV=staging react-native run-ios --scheme Staging --mode Staging.Debug",
-    "ios:dev": "APP_ENV=development react-native run-ios --scheme Dev --mode Dev.Debug",
     "ios:pro": "APP_ENV=production react-native run-ios --scheme Pro --mode Product.Debug"
   }
 }
 ```
 
-5. **Update .gitignore**
+### Update .gitignore
 
 ```bash
-# Ignore private environment files
-.env.*.local
-.env.local
-.env.local.*
-# Don't ignore shared environment files
-!.env.*.shared
-!.env.shared
-```
-
-### Running Different Environments
-
-**iOS Commands**
-
-```bash
-yarn ios:dev     # Development build
-yarn ios:stg     # Staging build
-yarn ios:pro     # Production build
-```
-
-**Android Commands**
-
-```bash
-yarn android:dev # Development build
-yarn android:stg # Staging build
-yarn android:pro # Production build
+.env*
+.flaskenv*
+!.env.project
+!.env.vault
+# Environment files
+.env
+.env.*
+!.env.example
+!.env.vault
 ```
 
 ### Version Management
@@ -412,12 +456,11 @@ The setup automatically manages app versions based on environment files:
 - VERSION_CODE: Used for internal build numbering
 - VERSION_NAME: Used for display version in stores
 
-### Notes
+### Important Notes
 
-- Always create .env.local.example as a template
-- Keep sensitive data out of version control
-- Test all environments before deployment
-- Update versions in environment files before releases
+- Never commit `.env` files to git (they are automatically added to .gitignore)
+- Always commit `.env.example` and `.env.vault` (if using dotenv-vault)
+- Share vault credentials with your team members if using dotenv-vault
 
 ## 🛠️ Development Tools
 

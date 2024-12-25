@@ -5,21 +5,13 @@ const readline = require("readline").createInterface({
     output: process.stdout
 });
 
+const ENVIRONMENTS = ["development", "staging", "production"];
+
 const runCommand = (command) => {
     try {
         execSync(command, { stdio: "inherit" });
         return true;
     } catch (error) {
-        if (command.startsWith("yarn")) {
-            const npmCommand = command.replace("yarn", "npx");
-            try {
-                execSync(npmCommand, { stdio: "inherit" });
-                return true;
-            } catch (npmError) {
-                console.error(`Failed to execute ${npmCommand}`, npmError);
-                return false;
-            }
-        }
         console.error(`Failed to execute ${command}`, error);
         return false;
     }
@@ -27,23 +19,29 @@ const runCommand = (command) => {
 
 const question = (query) => new Promise((resolve) => readline.question(query, resolve));
 
-const createEnvFile = async (existingVaultKey = null, envVarsFromVault = {}) => {
-    let envVars = { ...envVarsFromVault }; // Start with values from vault
+const createEnvFiles = async (environment, vaultKey = null, envVarsFromVault = {}) => {
+    let envVars = { ...envVarsFromVault };
+    const envFileName = environment === "development" ? ".env" : `.env.${environment}`;
 
-    console.log("\n📝 Setting up environment variables...");
+    console.log(`\n📝 Setting up ${environment} environment in ${envFileName}...`);
 
-    if (existingVaultKey) {
-        envVars.DOTENV_VAULT = existingVaultKey;
+    let envContent = environment === "development" ? "# development\n" : `# ${environment}\n`;
+
+    envVars.APP_FLAVOR = environment;
+
+    if (vaultKey) {
+        envVars.DOTENV_VAULT = vaultKey;
     }
 
-    console.log("\nCurrent values from vault:");
-    Object.entries(envVarsFromVault).forEach(([key, value]) => {
-        console.log(`${key}=${value}`);
-    });
-
     if (!envVars.API_URL || envVars.API_URL.trim() === "") {
-        const apiUrl = await question("\nEnter API_URL (e.g., https://api.example.com): ");
-        envVars.API_URL = apiUrl;
+        const defaultUrl = {
+            development: "http://localhost:3000",
+            staging: "https://api-staging.example.com",
+            production: "https://api.example.com"
+        }[environment];
+
+        const apiUrl = await question(`Enter API_URL for ${environment} (default: ${defaultUrl}): `);
+        envVars.API_URL = apiUrl || defaultUrl;
     }
 
     if (!envVars.VERSION_CODE) {
@@ -55,60 +53,43 @@ const createEnvFile = async (existingVaultKey = null, envVarsFromVault = {}) => 
 
     let addMore = true;
     while (addMore) {
-        const answer = await question("\nWould you like to add another environment variable? (y/n): ");
+        const answer = await question(
+            `\nWould you like to add another environment variable for ${environment}? (y/n): `
+        );
         if (answer.toLowerCase() === "y") {
-            const newVar = await question("Enter variable name (e.g., GOOGLE_API_KEY): ");
+            const newVar = await question("Enter variable name: ");
             if (newVar && !(newVar in envVars)) {
                 const value = await question(`Enter value for ${newVar}: `);
                 envVars[newVar] = value;
-                console.log(`✅ Added ${newVar}=${value} to environment variables`);
+                console.log(`✅ Added ${newVar}=${value}`);
             }
         } else {
             addMore = false;
         }
     }
 
-    const envContent = Object.entries(envVars)
-        .filter(([key]) => key !== "DOTENV_VAULT") // Exclude DOTENV_VAULT from .env files
+    envContent += Object.entries(envVars)
+        .filter(([key]) => key !== "DOTENV_VAULT")
         .map(([key, value]) => `${key}=${value}`)
         .join("\n");
 
     try {
-        fs.writeFileSync(".env", envContent);
-        console.log("\n✅ Updated .env file");
-
-        const envExample = Object.keys(envVars)
-            .filter((key) => key !== "DOTENV_VAULT")
-            .map((key) => `${key}=${key === "VERSION_CODE" ? "1" : key === "VERSION_NAME" ? "1.0.0" : ""}`)
-            .join("\n");
-
-        if (!fs.existsSync(".env.example")) {
-            fs.writeFileSync(".env.example", envExample);
-            console.log("✅ Created .env.example file");
-        }
-
-        console.log("\n⚠️ Environment files updated with the following variables:");
-        Object.entries(envVars)
-            .filter(([key]) => key !== "DOTENV_VAULT")
-            .forEach(([key, value]) => {
-                console.log(`${key}=${value}`);
-            });
-
-        readline.close();
-        return true;
+        fs.writeFileSync(envFileName, envContent);
+        console.log(`\n✅ Created ${envFileName}`);
+        return envVars;
     } catch (error) {
-        console.error("Failed to create env files:", error);
-        readline.close();
-        return false;
+        console.error(`Failed to create ${envFileName}:`, error);
+        return null;
     }
 };
 
 const updateGitignore = () => {
     const gitignoreContent = `
-# env files
-.env*
-!.env.vault
+# Environment files
+.env
+.env.*
 !.env.example
+!.env.vault
 `;
 
     try {
@@ -117,14 +98,44 @@ const updateGitignore = () => {
             currentContent = fs.readFileSync(".gitignore", "utf8");
         }
 
-        if (!currentContent.includes(".env.vault")) {
+        if (!currentContent.includes(".env.example")) {
             fs.appendFileSync(".gitignore", gitignoreContent);
             console.log("✅ Updated .gitignore");
         }
-
         return true;
     } catch (error) {
         console.error("Failed to update .gitignore:", error);
+        return false;
+    }
+};
+
+const createEnvExample = (envVars) => {
+    const exampleContent = `# This is an example environment file
+# Copy this file to .env, .env.staging, or .env.production and update the values
+
+# Environment
+APP_FLAVOR=development # (development|staging|production)
+
+# Version
+VERSION_CODE=1
+VERSION_NAME=1.0.0
+
+# API Configuration
+API_URL=http://localhost:3000
+
+# Add your other environment variables below
+${Object.keys(envVars)
+    .filter((key) => !["APP_FLAVOR", "VERSION_CODE", "VERSION_NAME", "API_URL", "DOTENV_VAULT"].includes(key))
+    .map((key) => `${key}=`)
+    .join("\n")}
+`;
+
+    try {
+        fs.writeFileSync(".env.example", exampleContent);
+        console.log("✅ Created .env.example file");
+        return true;
+    } catch (error) {
+        console.error("Failed to create .env.example:", error);
         return false;
     }
 };
@@ -137,6 +148,7 @@ const main = async () => {
     let isNewVault = false;
     let envVarsFromVault = {};
 
+    // First, handle vault setup
     if (fs.existsSync(".env.vault")) {
         try {
             const vaultContent = fs.readFileSync(".env.vault", "utf8");
@@ -160,10 +172,6 @@ const main = async () => {
                                 envVarsFromVault[key.trim()] = value.trim();
                             }
                         });
-                        console.log("\nLoaded environment variables from .env:");
-                        Object.entries(envVarsFromVault).forEach(([key, value]) => {
-                            console.log(`${key}=${value}`);
-                        });
                     } catch (error) {
                         console.error("Failed to read .env file:", error);
                     }
@@ -179,8 +187,9 @@ const main = async () => {
         useVault = wantVault.toLowerCase() === "y";
 
         if (useVault) {
-            const vaultKey = await question("\nEnter your DOTENV_VAULT key: ");
-            if (vaultKey) {
+            const inputVaultKey = await question("\nEnter your DOTENV_VAULT key: ");
+            if (inputVaultKey) {
+                vaultKey = inputVaultKey;
                 try {
                     fs.writeFileSync(".env.vault", `DOTENV_VAULT=${vaultKey}`);
                     console.log("✅ Created .env.vault file");
@@ -191,30 +200,20 @@ const main = async () => {
                     }
 
                     if (fs.existsSync(".env")) {
-                        try {
-                            const envContent = fs.readFileSync(".env", "utf8");
-                            envContent.split("\n").forEach((line) => {
-                                const [key, value] = line.split("=");
-                                if (key && value) {
-                                    envVarsFromVault[key.trim()] = value.trim();
-                                }
-                            });
-                            console.log("\nLoaded environment variables from .env:");
-                            Object.entries(envVarsFromVault).forEach(([key, value]) => {
-                                console.log(`${key}=${value}`);
-                            });
-                        } catch (error) {
-                            console.error("Failed to read .env file:", error);
-                        }
+                        const envContent = fs.readFileSync(".env", "utf8");
+                        envContent.split("\n").forEach((line) => {
+                            const [key, value] = line.split("=");
+                            if (key && value) {
+                                envVarsFromVault[key.trim()] = value.trim();
+                            }
+                        });
                     }
                 } catch (error) {
                     console.error("Failed to create .env.vault file:", error);
                     process.exit(1);
                 }
             }
-        }
-
-        if (!useVault) {
+        } else {
             try {
                 console.log("\n📦 Creating new dotenv-vault...");
                 if (!runCommand("npx dotenv-vault@latest new")) {
@@ -222,14 +221,18 @@ const main = async () => {
                 }
                 isNewVault = true;
             } catch (error) {
-                console.error("Failed to check existing project:", error);
+                console.error("Failed to create new vault:", error);
+                process.exit(1);
             }
         }
     }
 
     console.log("\n📝 Creating environment files...");
-    if (!(await createEnvFile(vaultKey, envVarsFromVault))) {
-        process.exit(1);
+    for (const env of ENVIRONMENTS) {
+        const envVars = await createEnvFiles(env, vaultKey, envVarsFromVault);
+        if (!envVars) {
+            process.exit(1);
+        }
     }
 
     if (isNewVault) {
@@ -238,8 +241,20 @@ const main = async () => {
             process.exit(1);
         }
 
-        console.log("\n⬆️ Pushing initial environment...");
+        console.log("\n⬆️ Pushing environments to vault...");
+
+        console.log("\n📤 Pushing development environment...");
         if (!runCommand("npx dotenv-vault@latest push")) {
+            process.exit(1);
+        }
+
+        console.log("\n📤 Pushing staging environment...");
+        if (!runCommand("npx dotenv-vault@latest push staging")) {
+            process.exit(1);
+        }
+
+        console.log("\n📤 Pushing production environment...");
+        if (!runCommand("npx dotenv-vault@latest push production")) {
             process.exit(1);
         }
     }
@@ -248,13 +263,28 @@ const main = async () => {
         process.exit(1);
     }
 
+    if (!createEnvExample(envVarsFromVault)) {
+        process.exit(1);
+    }
+
     console.log("\n✨ Environment setup completed successfully!");
     console.log("\n📝 Next steps:");
-    console.log("1. Review your .env files");
+    console.log("1. Review your environment files:");
+    ENVIRONMENTS.forEach((env) => {
+        const fileName = env === "development" ? ".env" : `.env.${env}`;
+        console.log(`   - ${fileName}`);
+    });
     if (useVault) {
         console.log("2. Commit the .env.vault file");
         console.log("3. Share the .env.vault credentials with your team");
     }
+
+    // Close readline interface
+    readline.close();
 };
 
-main().catch(console.error);
+main().catch((error) => {
+    console.error(error);
+    readline.close();
+    process.exit(1);
+});

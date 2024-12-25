@@ -89,7 +89,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
 
-        def envFile = new File("${project.rootDir.parentFile}/.env.local")
+        def envFile = new File("${project.rootDir.parentFile}/.env")
         if (envFile.exists()) {
             def versionProps = getVersionFromEnv(envFile)
             versionCode versionProps.code.toInteger()
@@ -124,7 +124,7 @@ android {
             applicationId 'com.newreactnative'
             resValue 'string', 'build_config_package', 'com.newreactnative'
 
-            def envFile = new File("${project.rootDir.parentFile}/.env.local")
+            def envFile = new File("${project.rootDir.parentFile}/.env")
             if (envFile.exists()) {
                 def versionProps = getVersionFromEnv(envFile)
                 versionCode versionProps.code.toInteger()
@@ -132,24 +132,12 @@ android {
             }
         }
 
-        development {
-            dimension 'default'
-            applicationId 'com.newreactnative.dev'
-            resValue 'string', 'build_config_package', 'com.newreactnative'
-
-            def envFile = new File("${project.rootDir.parentFile}/.env.local.development")
-            if (envFile.exists()) {
-                def versionProps = getVersionFromEnv(envFile)
-                versionCode versionProps.code.toInteger()
-                versionName versionProps.name
-            }
-        }
         staging {
             dimension 'default'
             applicationId 'com.newreactnative.stg'
             resValue 'string', 'build_config_package', 'com.newreactnative'
 
-            def envFile = new File("${project.rootDir.parentFile}/.env.local.staging")
+            def envFile = new File("${project.rootDir.parentFile}/.env.staging")
             if (envFile.exists()) {
                 def versionProps = getVersionFromEnv(envFile)
                 versionCode versionProps.code.toInteger()
@@ -161,7 +149,7 @@ android {
             applicationId 'com.newreactnative.production'
             resValue 'string', 'build_config_package', 'com.newreactnative'
 
-            def envFile = new File("${project.rootDir.parentFile}/.env.local.production")
+            def envFile = new File("${project.rootDir.parentFile}/.env.production")
             if (envFile.exists()) {
                 def versionProps = getVersionFromEnv(envFile)
                 versionCode versionProps.code.toInteger()

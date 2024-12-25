@@ -6,13 +6,11 @@ import { name } from "./package.json";
 const getEnvPath = (env: string | undefined): string => {
     switch (env?.toLowerCase()) {
         case "production":
-            return ".env.local.production";
+            return ".env.production";
         case "staging":
-            return ".env.local.staging";
-        case "development":
-            return ".env.local.development";
+            return ".env.staging";
         default:
-            return ".env.local";
+            return ".env";
     }
 };
 
@@ -28,11 +26,19 @@ const loadEnvFile = (path: string) => {
 };
 
 const validateEnvConfig = (env: Record<string, any>) => {
-    const requiredVars = ["APP_FLAVOR", "VERSION_CODE", "VERSION_NAME", "API_BASE_URL"];
+    const coreRequiredVars = ["APP_FLAVOR", "VERSION_CODE", "VERSION_NAME", "API_URL"];
 
-    const missingVars = requiredVars.filter((key) => !env[key]);
+    const missingVars = coreRequiredVars.filter((key) => !env[key]);
     if (missingVars.length > 0) {
         throw new Error(`Missing required env variables: ${missingVars.join(", ")}`);
+    }
+
+    const emptyVars = Object.entries(env)
+        .filter(([_, value]) => value === undefined || value === "")
+        .map(([key]) => key);
+
+    if (emptyVars.length > 0) {
+        throw new Error(`Empty values for environment variables: ${emptyVars.join(", ")}`);
     }
 
     return env;

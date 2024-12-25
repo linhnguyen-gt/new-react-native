@@ -38,4 +38,4 @@ class StoreConfig {
     }
 }
 
-export default new StoreConfig();
+export default new StoreConfig().store;
