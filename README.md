@@ -102,79 +102,12 @@ Make sure you have the following installed:
 
 ### Installation
 
-1. **Clone the repository**
+### Clone the repository**
 
 ```bash
 git clone https://github.com/linhnguyen-gt/new-react-native
 cd new-react-native
 ```
-
-2. **Install dependencies**
-
-```bash
-yarn install
-```
-
-3. **iOS Setup**
-
-```bash
-cd ios && pod install && cd ..
-```
-
-### 🏃‍♂️ Running the App
-
-**iOS Development**
-
-```bash
-yarn ios:dev
-```
-
-**iOS Staging**
-
-```bash
-yarn ios:stg
-```
-
-**Android Development**
-
-```bash
-yarn android:dev
-```
-
-**Android Staging**
-
-```bash
-yarn android:stg
-```
-
-## 📁 Project Structure
-
-```
-src/
-├── App.tsx          # Main App component
-├── Root.tsx         # Root component with Redux Provider
-├── apis/            # API integration
-├── components/      # Reusable UI components
-├── constants/       # Constants Keys
-├── enums/           # TypeScript enums
-├── helper/          # Helper functions
-├── hooks/           # Custom React hooks
-├── models/          # Models related to API
-└── redux/           # Redux store configuration
-    ├── actions/     # Redux actions
-    ├── reducers/    # Redux reducers
-    ├── sagas/       # Redux sagas
-    └── selectors/   # Redux selectors
-├── screens/         # Screen components
-├── services/        # Business logic and services
-    └── reactotron/  # Reactotron configuration
-    └── navigation/  # Navigation configuration
-    └── httpClient/  # Base API client configuration
-└── store/           # Redux store configuration
-└── types/           # TypeScript types
-
-```
-
 ## 🔧 Environment Configuration
 
 ### Setup Environment
@@ -230,7 +163,6 @@ yarn ios:stg
 yarn android:pro
 yarn ios:pro
 ```
-
 ### Setup Steps for New Project
 
 ### iOS Configuration
@@ -461,6 +393,36 @@ The setup automatically manages app versions based on environment files:
 - Never commit `.env` files to git (they are automatically added to .gitignore)
 - Always commit `.env.example` and `.env.vault` (if using dotenv-vault)
 - Share vault credentials with your team members if using dotenv-vault
+
+## 📁 Project Structure
+
+```
+src/
+├── App.tsx          # Main App component
+├── Root.tsx         # Root component with Redux Provider
+├── apis/            # API integration
+├── components/      # Reusable UI components
+├── constants/       # Constants Keys
+├── enums/           # TypeScript enums
+├── helper/          # Helper functions
+├── hooks/           # Custom React hooks
+├── models/          # Models related to API
+└── redux/           # Redux store configuration
+    ├── actions/     # Redux actions
+    ├── reducers/    # Redux reducers
+    ├── sagas/       # Redux sagas
+    └── selectors/   # Redux selectors
+├── screens/         # Screen components
+├── services/        # Business logic and services
+    └── reactotron/  # Reactotron configuration
+    └── navigation/  # Navigation configuration
+    └── httpClient/  # Base API client configuration
+└── store/           # Redux store configuration
+└── types/           # TypeScript types
+
+```
+
+
 
 ## 🛠️ Development Tools
 
