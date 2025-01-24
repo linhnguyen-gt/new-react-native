@@ -1,7 +1,7 @@
 import React from "react";
 import { ActivityIndicator } from "react-native";
 
-import { Box } from "@/components";
+import { Box } from "../ui";
 
 type LoadingFooterProps = {
     isLoading?: boolean;

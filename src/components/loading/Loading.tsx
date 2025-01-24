@@ -2,7 +2,7 @@ import { StyledComponentProps } from "@gluestack-style/react/lib/typescript/type
 import React from "react";
 import { ActivityIndicator, StyleProp, View, ViewProps, ViewStyle } from "react-native";
 
-import { Box } from "@/components";
+import { Box } from "../ui";
 
 type LoadingProps = StyledComponentProps<StyleProp<ViewStyle>, unknown, ViewProps, "Box", typeof View> & {
     isLoading?: boolean;

@@ -3,26 +3,11 @@ import { Alert } from "react-native";
 
 export const apiProblem = <T extends Data>(response: ErrorResponse<T>): ErrorResponse<T> => {
     try {
-        let errorResponse: ErrorResponse<Data>;
-        switch (response.status) {
-            case HttpStatusCode.BadRequest:
-            case HttpStatusCode.Unauthorized:
-            case HttpStatusCode.Forbidden:
-            case HttpStatusCode.NotFound:
-            case HttpStatusCode.MethodNotAllowed:
-            case HttpStatusCode.RequestTimeout:
-            case HttpStatusCode.Conflict:
-            case HttpStatusCode.UnprocessableEntity:
-            case HttpStatusCode.TooManyRequests:
-            case HttpStatusCode.InternalServerError:
-            case HttpStatusCode.BadGateway:
-            case HttpStatusCode.ServiceUnavailable:
-            case HttpStatusCode.GatewayTimeout:
-                errorResponse = { ok: false, data: response.data, status: response.status };
-                break;
-            default:
-                errorResponse = { ok: false, data: response.data, status: response.status };
-        }
+        const errorResponse: ErrorResponse<Data> = {
+            ok: false,
+            data: response.data,
+            status: response.status
+        };
         showErrorDialog(errorResponse);
         return errorResponse;
     } catch (error) {
