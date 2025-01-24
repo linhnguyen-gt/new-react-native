@@ -107,19 +107,19 @@ class HttpClient {
                 await this.refreshToken();
                 return this.INSTANCE.request(error.config!);
             } catch (refreshError) {
-                return Promise.reject(this.extractErrorData(refreshError));
+                return Promise.reject(new Error(JSON.stringify(this.extractErrorData(refreshError))));
             }
         }
-        return Promise.reject(this.extractErrorData(error));
+        return Promise.reject(new Error(JSON.stringify(this.extractErrorData(error))));
     }
 
-    private extractErrorData(error: AxiosError): ErrorResponse<Data> {
+    private extractErrorData(error: AxiosError): Error {
         const errorResponse: ErrorResponse<Data> = {
             ok: false,
             data: error.response?.data,
             status: error.response?.status || HttpStatusCode.InternalServerError
         };
-        return apiProblem(errorResponse);
+        return new Error(JSON.stringify(apiProblem(errorResponse)));
     }
 
     private async refreshToken(): Promise<void> {

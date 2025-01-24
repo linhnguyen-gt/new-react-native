@@ -2,9 +2,10 @@ import Icon from "@react-native-vector-icons/entypo";
 import React from "react";
 import { Animated, TextInput, TextInputProps } from "react-native";
 
-import { Box, HStack, MyTouchable, Text, VStack } from "@/components";
-
 import { getColor } from "@/hooks";
+
+import { MyTouchable } from "../touchable";
+import { Box, HStack, Text, VStack } from "../ui";
 
 import useShakeView from "./Input.Hook";
 

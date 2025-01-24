@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { actions } from "@/redux";
+import { CountActions } from "../actions";
 
 const initialState: CountReducers = {
     count: 0
@@ -12,10 +12,10 @@ const CountReducers = createSlice({
     reducers: {},
     extraReducers: (builder) =>
         builder
-            .addCase(actions.CountActions.setIncrement, (state, action) => {
+            .addCase(CountActions.setIncrement, (state, action) => {
                 state.count = action.payload;
             })
-            .addCase(actions.CountActions.setDecrement, (state, action) => {
+            .addCase(CountActions.setDecrement, (state, action) => {
                 state.count = action.payload;
             })
             .addDefaultCase((state) => state)
