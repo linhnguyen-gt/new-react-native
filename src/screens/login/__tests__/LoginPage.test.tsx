@@ -10,9 +10,11 @@ import { LoginPage } from "@/screens";
 
 jest.mock("@/services", () => ({
     RootNavigator: {
-        navigate: jest.fn()
+        replaceName: jest.fn()
     }
 }));
+
+jest.mock("@react-native-vector-icons/entypo", () => "Icon");
 
 describe("<LoginPage />", () => {
     beforeEach(() => {
@@ -35,7 +37,7 @@ describe("<LoginPage />", () => {
         });
 
         await waitFor(() => {
-            expect(RootNavigator.navigate).toHaveBeenCalledWith(RouteName.Main);
+            expect(RootNavigator.replaceName).toHaveBeenCalledWith(RouteName.Main);
         });
     });
 

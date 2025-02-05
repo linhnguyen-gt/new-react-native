@@ -33,7 +33,7 @@ const Login = () => {
             password: string().required(Errors.REQUIRED_PASSWORD_INPUT)
         }),
         onSubmit: () => {
-            RootNavigator.navigate(RouteName.Main);
+            RootNavigator.replaceName(RouteName.Main);
         }
     });
 
