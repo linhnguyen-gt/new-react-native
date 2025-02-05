@@ -20,7 +20,7 @@ import { LoginPage, MainPage } from "@/screens";
 
 import "../global.css";
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<RootStackParamList>();
 
 const AppStack = () => {
     return (
