@@ -18,7 +18,7 @@ export type InputProps = TextInputProps & {
     isPassword?: boolean;
     enable?: boolean;
     title?: string;
-    error?: string | boolean | undefined;
+    error?: string | boolean;
     isLoading?: boolean;
     height?: number;
     testID?: string;
