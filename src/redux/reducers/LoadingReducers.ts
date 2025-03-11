@@ -10,17 +10,9 @@ const LoadingReducers = createSlice({
     initialState,
     reducers: {
         startLoading: (state, action: PayloadAction<ActionPattern>) => {
-            // Resetting state to empty before setting new loading state
-            Object.keys(state).forEach((key) => {
-                delete state[key];
-            });
             state[action.payload as string] = true;
         },
         stopLoading: (state, action: PayloadAction<ActionPattern>) => {
-            // Resetting state to empty before setting new loading state
-            Object.keys(state).forEach((key) => {
-                delete state[key];
-            });
             state[action.payload as string] = false;
         }
     }
