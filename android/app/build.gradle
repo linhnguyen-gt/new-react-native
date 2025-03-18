@@ -117,7 +117,7 @@ android {
 
     flavorDimensions 'default'
     productFlavors {
-        prod {
+        dev {
             dimension 'default'
             applicationId 'com.newreactnative'
             resValue 'string', 'build_config_package', 'com.newreactnative'
