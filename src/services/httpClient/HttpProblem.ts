@@ -47,7 +47,7 @@ declare global {
 
     type SuccessfulResponse<D extends Data, S = HttpStatusCode> = {
         ok: true;
-        data: D;
+        data?: D;
         status?: S;
     };
 

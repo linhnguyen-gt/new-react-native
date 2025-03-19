@@ -7,7 +7,7 @@
       <img src="https://img.shields.io/badge/React_Native-v0.77.0-blue?style=for-the-badge&logo=react&logoColor=white" alt="react-native" />
     </a>
     <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="https://img.shields.io/badge/TypeScript-v5.7.3-blue?style=for-the-badge&logo=typescript&logoColor=white" alt="typescript" />
+      <img src="https://img.shields.io/badge/TypeScript-v5.5.4-blue?style=for-the-badge&logo=typescript&logoColor=white" alt="typescript" />
     </a>
   </p>
 
@@ -111,7 +111,7 @@ cd new-react-native
 
 ## 🔧 Environment Configuration
 
-### Setup Environment
+### Setup New Environment
 
 First, you need to run the environment setup script:
 
@@ -295,7 +295,7 @@ fi
 ```gradle
     flavorDimensions 'default'
     productFlavors {
-        prod {
+        dev {
             dimension 'default'
             applicationId 'com.newreactnative'
             resValue 'string', 'build_config_package', 'com.newreactnative'
@@ -359,12 +359,12 @@ def getVersionFromEnv(File envFile) {
 ```json
 {
     "scripts": {
-        "android": "cd android && ENVFILE=.env && ./gradlew clean && cd .. && react-native run-android --mode=prodDebug --appId=com.newreactnative",
-        "android:stg": "APP_ENV=staging && cd android && ENVFILE=.env.staging && ./gradlew clean && cd .. && react-native run-android --mode=stagingDebug --appId=com.newreactnative.stg",
-        "android:pro": "APP_ENV=production && cd android && ENVFILE=.env.production && ./gradlew clean && cd .. && react-native run-android --mode=productionDebug --appId=com.newreactnative.production",
-        "ios": "react-native run-ios",
-        "ios:stg": "APP_ENV=staging react-native run-ios --scheme Staging --mode Staging.Debug",
-        "ios:pro": "APP_ENV=production react-native run-ios --scheme Pro --mode Product.Debug"
+        "android": "npx expo run:android --variant devDebug --app-id com.newreactnative",
+        "android:stg": "APP_ENV=staging && npx expo run:android --variant stagingDebug --app-id com.newreactnative.stg",
+        "android:pro": "APP_ENV=production && npx expo run:android --variant productionDebug --app-id com.newreactnative.production",
+        "ios": "npx expo run:ios",
+        "ios:stg": "APP_ENV=staging npx expo run:ios --scheme Staging --configuration Staging.Debug",
+        "ios:pro": "APP_ENV=production npx expo run:ios --scheme Pro --configuration Product.Debug"
     }
 }
 ```

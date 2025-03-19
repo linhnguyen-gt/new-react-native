@@ -54,7 +54,7 @@ const MainPage = () => {
                         Environment: {environment.appFlavor}
                     </Text>
                     <Text size="2xl" fontWeight="bold">
-                        Response: {response.length}
+                        Response: {response?.length}
                     </Text>
                     <Text size="lg" color="gray" fontWeight="bold">
                         Counter: {count}
