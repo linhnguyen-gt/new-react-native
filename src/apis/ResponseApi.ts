@@ -1,12 +1,10 @@
 import { ApiMethod, HttpClient } from "@/services";
 
 export const responseApi = async (): Promise<BaseResponse<ResponseData[]>> => {
-    const response = await HttpClient.request<
-        {
-            data: ResponseData[];
-        },
-        ApiMethod.GET
-    >("data", {
+    const response = await HttpClient.request<{
+        data: ResponseData[];
+    }>({
+        endpoint: "data",
         method: ApiMethod.GET,
         params: {
             drilldowns: "State",
@@ -17,5 +15,5 @@ export const responseApi = async (): Promise<BaseResponse<ResponseData[]>> => {
 
     if (!response?.ok) return;
 
-    return { ok: response.ok, data: response.data.data };
+    return { ok: response.ok, data: response.data?.data };
 };

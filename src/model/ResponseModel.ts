@@ -12,6 +12,6 @@ export const ResponseSchema = z.object({
 declare global {
     type ResponseData = z.infer<typeof ResponseSchema>;
     type ResponseReducers = {
-        response: ResponseData[];
+        response: ResponseData[] | undefined;
     };
 }
