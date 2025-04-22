@@ -48,7 +48,7 @@ const ScrollView = React.forwardRef<React.ElementRef<typeof UIScrollView>, IScro
             space &&
                 scrollViewStyle({ space })
                     .split(" ")
-                    .find((cls) => cls.startsWith("gap-"))
+                    .find((cls: string) => cls.startsWith("gap-"))
         ]
             .filter(Boolean)
             .join(" ");

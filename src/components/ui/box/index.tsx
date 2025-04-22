@@ -1,9 +1,11 @@
 import React from "react";
-import { View, ViewStyle, SafeAreaView } from "react-native";
+import { SafeAreaView, View, ViewStyle } from "react-native";
 
 import { boxStyle } from "./styles";
 
 import type { VariantProps } from "@gluestack-ui/nativewind-utils";
+
+import { Loading } from "@/components/loading";
 
 type StyleProps = Omit<ViewStyle, "transform">;
 
@@ -12,6 +14,7 @@ export type IBoxProps = Omit<React.ComponentProps<typeof View>, keyof StyleProps
     VariantProps<typeof boxStyle> & {
         className?: string;
         safeArea?: boolean;
+        isLoading?: boolean;
     };
 
 const createStyleFromProps = (props: StyleProps): ViewStyle => {
@@ -20,12 +23,20 @@ const createStyleFromProps = (props: StyleProps): ViewStyle => {
 };
 
 const Box = React.forwardRef<React.ElementRef<typeof View>, IBoxProps>(
-    ({ className, style, safeArea, ...props }, ref) => {
+    ({ className, style, safeArea, isLoading, ...props }, ref) => {
         const styleProps = createStyleFromProps(props as StyleProps);
         const Component = safeArea ? SafeAreaView : View;
 
         return (
-            <Component className={boxStyle({ class: className })} style={[styleProps, style]} {...props} ref={ref} />
+            <>
+                <Component
+                    className={boxStyle({ class: className })}
+                    style={[styleProps, style]}
+                    {...props}
+                    ref={ref}
+                />
+                <Loading isLoading={isLoading} />
+            </>
         );
     }
 );

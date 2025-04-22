@@ -14,17 +14,17 @@
 ### Core Libraries
 
   <p align="center">
-    <img src="https://img.shields.io/badge/Expo-v52.0.38-000020?style=for-the-badge&logo=expo&logoColor=white" alt="expo" />
-    <img src="https://img.shields.io/badge/Gluestack_UI-v1.1.71-1B1B1F?style=for-the-badge" alt="gluestack" />
-    <img src="https://img.shields.io/badge/React_Navigation-v7.0.15-6B52AE?style=for-the-badge&logo=react&logoColor=white" alt="react-navigation" />
+    <img src="https://img.shields.io/badge/Expo-v52.0.46-000020?style=for-the-badge&logo=expo&logoColor=white" alt="expo" />
+    <img src="https://img.shields.io/badge/Gluestack_UI-v1.1.73-1B1B1F?style=for-the-badge" alt="gluestack" />
+    <img src="https://img.shields.io/badge/React_Navigation-v7.1.6-6B52AE?style=for-the-badge&logo=react&logoColor=white" alt="react-navigation" />
   </p>
 
 ### State Management & API
 
   <p align="center">
-    <img src="https://img.shields.io/badge/Redux_Toolkit-v2.6.1-764ABC?style=for-the-badge&logo=redux&logoColor=white" alt="redux" />
+    <img src="https://img.shields.io/badge/Redux_Toolkit-v2.7.0-764ABC?style=for-the-badge&logo=redux&logoColor=white" alt="redux" />
     <img src="https://img.shields.io/badge/Redux_Saga-v1.3.0-89D96D?style=for-the-badge&logo=redux-saga&logoColor=white" alt="redux-saga" />
-    <img src="https://img.shields.io/badge/Axios-v1.8.3-5A29E4?style=for-the-badge&logo=axios&logoColor=white" alt="axios" />
+    <img src="https://img.shields.io/badge/Axios-v1.8.4-5A29E4?style=for-the-badge&logo=axios&logoColor=white" alt="axios" />
   </p>
 
 ### UI & Styling
@@ -40,7 +40,7 @@
   <p align="center">
     <img src="https://img.shields.io/badge/Formik-v2.4.6-0744AE?style=for-the-badge" alt="formik" />
     <img src="https://img.shields.io/badge/Yup-v1.6.1-32CD32?style=for-the-badge" alt="yup" />
-    <img src="https://img.shields.io/badge/Zod-v3.24.2-3068B7?style=for-the-badge" alt="zod" />
+    <img src="https://img.shields.io/badge/Zod-v3.24.3-3068B7?style=for-the-badge" alt="zod" />
   </p>
 
 ### Development & Testing
@@ -54,7 +54,7 @@
 ### Environment & Storage
 
   <p align="center">
-    <img src="https://img.shields.io/badge/Dotenv-v16.4.7-ECD53F?style=for-the-badge&logo=dotenv&logoColor=black" alt="dotenv" />
+    <img src="https://img.shields.io/badge/Dotenv-v16.5.0-ECD53F?style=for-the-badge&logo=dotenv&logoColor=black" alt="dotenv" />
     <img src="https://img.shields.io/badge/Async_Storage-v2.1.2-3B82F6?style=for-the-badge" alt="async-storage" />
   </p>
 
@@ -62,7 +62,7 @@
 
   <p align="center">
     <img src="https://img.shields.io/badge/Reactotron-v5.1.12-7B61FF?style=for-the-badge" alt="reactotron" />
-    <img src="https://img.shields.io/badge/React_Native_Reanimated-v3.17.1-FF4154?style=for-the-badge" alt="reanimated" />
+    <img src="https://img.shields.io/badge/React_Native_Reanimated-v3.17.4-FF4154?style=for-the-badge" alt="reanimated" />
   </p>
 
 ### Environment Support

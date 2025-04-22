@@ -7,7 +7,7 @@ import type { VariantProps } from "@gluestack-ui/nativewind-utils";
 
 type StyleProps = Omit<ViewStyle, "transform">;
 
-type IVStackProps = Omit<React.ComponentProps<typeof View>, keyof StyleProps> &
+export type IVStackProps = Omit<React.ComponentProps<typeof View>, keyof StyleProps> &
     StyleProps &
     VariantProps<typeof vstackStyle> & {
         className?: string;

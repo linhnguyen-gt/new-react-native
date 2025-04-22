@@ -3,7 +3,7 @@ import { createImage } from "@gluestack-ui/image";
 import { tva } from "@gluestack-ui/nativewind-utils/tva";
 import { cssInterop } from "nativewind";
 import React from "react";
-import { ImageStyle, Platform, Image as RNImage } from "react-native";
+import { ImageStyle, Image as RNImage } from "react-native";
 
 import type { VariantProps } from "@gluestack-ui/nativewind-utils";
 
@@ -46,13 +46,7 @@ const Image = React.forwardRef<React.ElementRef<typeof UIImage>, ImageProps>(
         return (
             <UIImage
                 className={imageStyle({ size, class: className })}
-                style={[
-                    styleProps,
-                    //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    //@ts-expect-error
-                    Platform.OS === "web" ? { height: "revert-layer", width: "revert-layer" } : undefined,
-                    style
-                ]}
+                style={[styleProps, style]}
                 {...props}
                 ref={ref}
             />
