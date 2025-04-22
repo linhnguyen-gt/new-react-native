@@ -81,8 +81,13 @@ android {
         applicationId "com.newreactnative"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        
+        def envFile = new File("${project.rootDir.parentFile}/.env")
+        if (envFile.exists()) {
+            def versionProps = getVersionFromEnv(envFile)
+            versionCode versionProps.code.toInteger()
+            versionName versionProps.name
+        }
     }
     signingConfigs {
         debug {
