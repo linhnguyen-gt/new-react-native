@@ -51,6 +51,11 @@ const createEnvFiles = async (environment, vaultKey = null, envVarsFromVault = {
         envVars.VERSION_NAME = "1.0.0";
     }
 
+    if (!envVars.APP_NAME) {
+        const appName = await question(`Enter APP_NAME (default: MyApp): `);
+        envVars.APP_NAME = appName || "MyApp";
+    }
+
     let addMore = true;
     while (addMore) {
         const answer = await question(
@@ -115,6 +120,9 @@ const createEnvExample = (envVars) => {
 
 # Environment
 APP_FLAVOR=development # (development|staging|production)
+
+# App Configuration
+APP_NAME=MyApp
 
 # Version
 VERSION_CODE=1

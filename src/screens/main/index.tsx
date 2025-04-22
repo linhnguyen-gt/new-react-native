@@ -52,6 +52,9 @@ const MainPage = () => {
 
                 <VStack space="sm" alignItems="center">
                     <Text size="2xl" fontWeight="bold">
+                        App Name: {environment.appName}
+                    </Text>
+                    <Text size="2xl" fontWeight="bold">
                         Environment: {environment.appFlavor}
                     </Text>
                     <Text size="2xl" fontWeight="bold">
