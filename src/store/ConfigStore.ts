@@ -2,7 +2,7 @@ import { configureStore, EnhancedStore, StoreEnhancer } from "@reduxjs/toolkit";
 import { compact } from "lodash";
 import createSagaMiddleware from "redux-saga";
 
-import { reactotron } from "@/services";
+import { reactotron, StoreService } from "@/services";
 
 import RootReducers from "./RootReducers";
 import RootSaga from "./RootSaga";
@@ -32,6 +32,7 @@ class StoreConfig {
     constructor() {
         try {
             this.sagaMiddleware.run(RootSaga.saga);
+            StoreService.getInstance().initialize(this.store);
         } catch (error) {
             console.error("Failed to start saga:", error);
         }

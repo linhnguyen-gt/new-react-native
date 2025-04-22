@@ -3,30 +3,31 @@ import { Button, StatusBar, useColorScheme } from "react-native";
 import { Colors, Header } from "react-native/Libraries/NewAppScreen";
 import { useSelector } from "react-redux";
 
-import { Box, HStack, Loading, ScrollView, Text, VStack } from "@/components";
-
-import { actions, selectors } from "@/redux";
-
 import { environment } from "@/services";
 
 import { useActions, useLoading } from "@/hooks";
 
+import { Loading } from "@/components/loading";
+import { Box, HStack, ScrollView, Text, VStack } from "@/components/ui";
+import { CountActions, ResponseActions } from "@/redux/actions";
+import { CountSelectors, ResponseSelectors } from "@/redux/selectors";
+
 const MainPage = () => {
     const isLoading = useLoading([
-        actions.CountActions.increment.type,
-        actions.CountActions.decrement.type,
-        actions.ResponseActions.getResponse.type
+        CountActions.increment.type,
+        CountActions.decrement.type,
+        ResponseActions.getResponse.type
     ]);
 
     const { increment, decrement } = useActions({
-        increment: actions.CountActions.increment,
-        decrement: actions.CountActions.decrement
+        increment: CountActions.increment,
+        decrement: CountActions.decrement
     });
 
-    const getResponse = useActions(actions.ResponseActions.getResponse);
+    const getResponse = useActions(ResponseActions.getResponse);
 
-    const count = useSelector(selectors.CountSelectors.count);
-    const response = useSelector(selectors.ResponseSelectors.response);
+    const count = useSelector(CountSelectors.count);
+    const response = useSelector(ResponseSelectors.response);
     const isDarkMode = useColorScheme() === "dark";
 
     const backgroundStyle = {

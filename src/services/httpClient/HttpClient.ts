@@ -3,8 +3,8 @@ import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import { environment } from "../environment";
 
 import ApiMethod from "./ApiMethod";
-import { HttpRequestConfig, HttpResponse, IHttpClient, ITokenService } from "./interfaces/IHttpClient";
-import { ErrorHandler, IErrorHandler } from "./services/ErrorHandler";
+import { HttpRequestConfig, HttpResponse, IHttpClient } from "./interfaces/IHttpClient";
+import { ErrorHandler } from "./services/ErrorHandler";
 import { RequestInterceptor } from "./services/RequestInterceptor";
 import { TokenService } from "./services/TokenService";
 
@@ -17,22 +17,20 @@ export class HttpClient implements IHttpClient {
     private static _instance: HttpClient;
     // eslint-disable-next-line @typescript-eslint/naming-convention
     private readonly INSTANCE: AxiosInstance;
-    private readonly tokenService: ITokenService;
-    private readonly errorHandler: IErrorHandler;
+    private readonly tokenService: TokenService;
+    private readonly errorHandler: ErrorHandler;
     private readonly requestInterceptor: RequestInterceptor;
     private timeoutId: NodeJS.Timeout | null = null;
 
     private constructor(
-        tokenService?: ITokenService,
-        errorHandler?: IErrorHandler,
+        tokenService?: TokenService,
+        errorHandler?: ErrorHandler,
         config: Partial<AxiosRequestConfig> = {}
     ) {
         this.INSTANCE = axios.create({
             baseURL: DEFAULT_API_CONFIG.baseURL,
             timeout: DEFAULT_API_CONFIG.timeout,
-            headers: {
-                "Content-Type": "application/json"
-            },
+            withCredentials: true,
             ...config
         });
         this.errorHandler = errorHandler ?? new ErrorHandler();
@@ -41,7 +39,7 @@ export class HttpClient implements IHttpClient {
         this.requestInterceptor.setupInterceptors();
     }
 
-    static getInstance(tokenService?: ITokenService, errorHandler?: IErrorHandler): HttpClient {
+    static getInstance(tokenService?: TokenService, errorHandler?: ErrorHandler): HttpClient {
         if (!HttpClient._instance) {
             HttpClient._instance = new HttpClient(tokenService, errorHandler);
         }
@@ -50,34 +48,37 @@ export class HttpClient implements IHttpClient {
 
     async request<T>(config: HttpRequestConfig): Promise<HttpResponse<T> | undefined> {
         try {
+            const headers = { ...config.headers };
+
             const response = await this.INSTANCE.request<T>({
                 url: config.endpoint,
                 method: config.method.toLowerCase(),
                 params: this.shouldIncludeParams(config.method) ? config.params : undefined,
                 data: this.shouldIncludeBody(config.method) ? config.body : undefined,
-                headers: config.headers,
-                timeout: config.timeout
+                timeout: config.timeout,
+                headers
             });
 
             return {
                 ok: true,
                 data: response.data,
-                status: response.status
+                status: response.status,
+                headers: response.headers
             };
         } catch (e) {
-            return this.errorHandler.handleError(e);
+            this.errorHandler.handleError(e);
+            return;
         }
     }
 
     private shouldIncludeParams(method: ApiMethod): boolean {
-        return [ApiMethod.GET, ApiMethod.DELETE].includes(method);
+        return [ApiMethod.GET].includes(method);
     }
 
     private shouldIncludeBody(method: ApiMethod): boolean {
         return !this.shouldIncludeParams(method);
     }
 
-    // update headers if needed
     updateHeaders(newHeaders: Record<string, string>): void {
         if (this.INSTANCE) {
             this.INSTANCE.defaults.headers = {
@@ -85,11 +86,6 @@ export class HttpClient implements IHttpClient {
                 ...newHeaders
             };
         }
-    }
-
-    setSession(token?: string): void {
-        if (!token) return;
-        this.INSTANCE.defaults.headers.Authorization = `Bearer ${token}`;
     }
 
     clearSession(): void {
@@ -103,31 +99,20 @@ export class HttpClient implements IHttpClient {
         }
     }
 
-    countDownAccessTokenExpired(timeExpired: string): void {
-        try {
-            this.clearRefreshTokenTimeout();
-            const expirationTime = new Date(timeExpired).getTime();
-            const currentTime = Date.now();
-            const timeUntilExpiry = expirationTime - currentTime;
+    setRefreshTokenTimeout(timeoutId: NodeJS.Timeout): void {
+        this.timeoutId = timeoutId;
+    }
 
-            if (isNaN(expirationTime)) {
-                console.error("Invalid expiration time format");
-                return;
-            }
+    public getTokenService(): TokenService {
+        return this.tokenService;
+    }
 
-            if (timeUntilExpiry <= 60 * 1000) {
-                this.tokenService.refreshToken();
-                return;
-            }
+    public setAccessToken(accessToken?: string): void {
+        this.INSTANCE.defaults.headers.Authorization = `Bearer ${accessToken}`;
+    }
 
-            const refreshOffset = 60 * 1000;
-            this.timeoutId = setTimeout(() => {
-                this.tokenService.refreshToken();
-            }, timeUntilExpiry - refreshOffset);
-        } catch (error) {
-            console.error("Error in countDownAccessTokenExpired:", error);
-            this.tokenService.refreshToken();
-        }
+    public getInstance(): AxiosInstance {
+        return this.INSTANCE;
     }
 }
 
