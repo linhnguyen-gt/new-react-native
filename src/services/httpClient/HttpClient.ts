@@ -30,7 +30,8 @@ export class HttpClient implements IHttpClient {
         this.INSTANCE = axios.create({
             baseURL: DEFAULT_API_CONFIG.baseURL,
             timeout: DEFAULT_API_CONFIG.timeout,
-            withCredentials: true,
+            // TODO: Uncomment this when the backend is ready to receive cookies
+            // withCredentials: true,
             ...config
         });
         this.errorHandler = errorHandler ?? new ErrorHandler();
