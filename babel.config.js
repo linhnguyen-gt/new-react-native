@@ -8,8 +8,8 @@ module.exports = {
                 alias: {
                     "@": "./src"
                 }
-            },
-            "react-native-reanimated/plugin"
-        ]
+            }
+        ],
+        "react-native-reanimated/plugin"
     ]
 };
