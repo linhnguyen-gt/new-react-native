@@ -1,6 +1,7 @@
 <div align="center">
   <h1>🚀 New React Native Project</h1>
   <p>A powerful React Native boilerplate with production-ready configurations and best practices</p>
+  <p><strong>Create a new project using our CLI: <a href="https://github.com/linhnguyen-gt/create-rn-with-redux-project">create-rn-with-redux-project</a></strong></p>
 
   <p align="center">
     <a href="https://reactnative.dev/" target="_blank">

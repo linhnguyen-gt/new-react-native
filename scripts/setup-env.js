@@ -156,72 +156,62 @@ const main = async () => {
     let isNewVault = false;
     let envVarsFromVault = {};
 
-    // First, handle vault setup
     if (fs.existsSync(".env.vault")) {
-        try {
-            const vaultContent = fs.readFileSync(".env.vault", "utf8");
-            const match = vaultContent.match(/DOTENV_VAULT=(.*)/);
-            if (match && match[1]) {
-                vaultKey = match[1].trim();
-                useVault = true;
-                console.log("✅ Found existing .env.vault file");
+        const resetVault = await question(
+            "\n⚠️ Found existing .env.vault file. Would you like to create a new vault instead? (y/n): "
+        );
+        if (resetVault.toLowerCase() === "y") {
+            fs.unlinkSync(".env.vault");
+            console.log("✅ Removed existing .env.vault file");
 
-                console.log("\n📥 Pulling from vault...");
-                if (!runCommand("npx dotenv-vault@latest pull")) {
+            try {
+                console.log("\n📦 Creating new dotenv-vault...");
+                if (!runCommand("npx dotenv-vault@latest new")) {
                     process.exit(1);
                 }
-
-                if (fs.existsSync(".env")) {
-                    try {
-                        const envContent = fs.readFileSync(".env", "utf8");
-                        envContent.split("\n").forEach((line) => {
-                            const [key, value] = line.split("=");
-                            if (key && value) {
-                                envVarsFromVault[key.trim()] = value.trim();
-                            }
-                        });
-                    } catch (error) {
-                        console.error("Failed to read .env file:", error);
-                    }
-                }
+                isNewVault = true;
+                useVault = true;
+            } catch (error) {
+                console.error("Failed to create new vault:", error);
+                process.exit(1);
             }
-        } catch (error) {
-            console.error("Failed to read .env.vault file:", error);
-        }
-    }
+        } else {
+            try {
+                const vaultContent = fs.readFileSync(".env.vault", "utf8");
+                const match = vaultContent.match(/DOTENV_VAULT=(.*)/);
+                if (match && match[1]) {
+                    vaultKey = match[1].trim();
+                    useVault = true;
+                    console.log("✅ Using existing .env.vault file");
 
-    if (!useVault) {
-        const wantVault = await question("\nWould you like to use DOTENV_VAULT? (y/n): ");
-        useVault = wantVault.toLowerCase() === "y";
-
-        if (useVault) {
-            const inputVaultKey = await question("\nEnter your DOTENV_VAULT key: ");
-            if (inputVaultKey) {
-                vaultKey = inputVaultKey;
-                try {
-                    fs.writeFileSync(".env.vault", `DOTENV_VAULT=${vaultKey}`);
-                    console.log("✅ Created .env.vault file");
-
-                    console.log("\n📥 Pulling existing environment variables...");
+                    console.log("\n📥 Pulling from vault...");
                     if (!runCommand("npx dotenv-vault@latest pull")) {
                         process.exit(1);
                     }
 
                     if (fs.existsSync(".env")) {
-                        const envContent = fs.readFileSync(".env", "utf8");
-                        envContent.split("\n").forEach((line) => {
-                            const [key, value] = line.split("=");
-                            if (key && value) {
-                                envVarsFromVault[key.trim()] = value.trim();
-                            }
-                        });
+                        try {
+                            const envContent = fs.readFileSync(".env", "utf8");
+                            envContent.split("\n").forEach((line) => {
+                                const [key, value] = line.split("=");
+                                if (key && value) {
+                                    envVarsFromVault[key.trim()] = value.trim();
+                                }
+                            });
+                        } catch (error) {
+                            console.error("Failed to read .env file:", error);
+                        }
                     }
-                } catch (error) {
-                    console.error("Failed to create .env.vault file:", error);
-                    process.exit(1);
                 }
+            } catch (error) {
+                console.error("Failed to read .env.vault file:", error);
             }
-        } else {
+        }
+    } else {
+        const wantVault = await question("\nWould you like to use DOTENV_VAULT? (y/n): ");
+        useVault = wantVault.toLowerCase() === "y";
+
+        if (useVault) {
             try {
                 console.log("\n📦 Creating new dotenv-vault...");
                 if (!runCommand("npx dotenv-vault@latest new")) {
@@ -287,7 +277,6 @@ const main = async () => {
         console.log("3. Share the .env.vault credentials with your team");
     }
 
-    // Close readline interface
     readline.close();
 };
 

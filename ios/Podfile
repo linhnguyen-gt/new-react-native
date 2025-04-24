@@ -67,7 +67,7 @@ target 'NewReactNative' do
     installer.pods_project.targets.each do |target|
       if target.name == 'NewReactNative'
         phase = target.new_shell_script_build_phase('Set Version')
-        phase.shell_script = "\"${SRCROOT}/scripts/set_version.sh\""
+        phase.shell_script = "\"#{Pod::Config.instance.installation_root}/scripts/set_version.sh\""
       end
     end
   end

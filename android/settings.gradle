@@ -16,5 +16,3 @@ rootProject.name = 'NewReactNative'
 include ':app'
 includeBuild('../node_modules/@react-native/gradle-plugin')
 expoAutolinking.useExpoModules()
-expoAutolinking.useExpoVersionCatalog()
-includeBuild(expoAutolinking.reactNativeGradlePlugin)
