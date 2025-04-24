@@ -258,6 +258,10 @@ let chalk;
                     execSync("rm -rf .env.vault", { stdio: "inherit" });
                     console.log(chalk.yellow("Removed template .env.vault file"));
                 }
+                if (fs.existsSync("create-rn-with-redux-project")) {
+                    execSync("rm -rf create-rn-with-redux-project", { stdio: "inherit" });
+                    console.log(chalk.yellow("Removed create-rn-with-redux-project directory"));
+                }
 
                 console.log(chalk.yellow("\n🔄 Configuring project..."));
 
