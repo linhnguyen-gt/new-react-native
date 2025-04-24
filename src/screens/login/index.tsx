@@ -3,13 +3,15 @@ import React from "react";
 import { Keyboard } from "react-native";
 import { object, string } from "yup";
 
-import { Box, Input, MyTouchable, ScrollView, Text, VStack } from "@/components";
+import { Errors, RouteName } from "@/constants";
 
 import { RootNavigator } from "@/services";
 
 import { getColor } from "@/hooks";
 
-import { Errors, RouteName } from "@/enums";
+import { Input } from "@/components/input";
+import { MyTouchable } from "@/components/touchable";
+import { Box, ScrollView, Text, VStack } from "@/components/ui";
 
 const RNLogo = () => (
     <Box width={80} height={80} backgroundColor="black" borderRadius={16} alignItems="center" justifyContent="center">

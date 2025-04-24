@@ -3,9 +3,10 @@ import { useFormik } from "formik";
 import React from "react";
 import { object, string } from "yup";
 
+import { Errors, RouteName } from "@/constants";
+
 import { RootNavigator } from "@/services";
 
-import { Errors, RouteName } from "@/enums";
 import { LoginPage } from "@/screens";
 
 jest.mock("@/services", () => ({

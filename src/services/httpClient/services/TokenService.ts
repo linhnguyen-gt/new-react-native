@@ -4,11 +4,7 @@ import ApiMethod from "../ApiMethod";
 import { HttpClient } from "../HttpClient";
 import { ITokenService, Session } from "../interfaces/IHttpClient";
 
-interface LoginResponse {
-    access_token: string;
-    refresh_token: string;
-    access_token_expires_at: string;
-}
+import { StoreService } from "@/services/store";
 
 export class TokenService implements ITokenService {
     private readonly httpClient: HttpClient;
@@ -18,14 +14,24 @@ export class TokenService implements ITokenService {
     }
 
     async setSession(session: Session): Promise<void> {
+        this.httpClient.setAccessToken(session.accessToken);
         await setToken({
-            refreshToken: session.refreshToken
+            refreshToken: session.refreshToken || undefined
         });
-        this.httpClient.setSession(session.accessToken);
 
-        if (session.accessTokenExpiresAt) {
-            this.httpClient.countDownAccessTokenExpired(session.accessTokenExpiresAt);
-        }
+        // TODO: Implement token lifetime expiration here!!!
+        // example:
+        const tokenLifetime = 15 * 60 * 1000;
+        const refreshBuffer = 30 * 1000;
+        const refreshTime = tokenLifetime - refreshBuffer;
+
+        this.httpClient.clearRefreshTokenTimeout();
+
+        const timeoutId = setTimeout(() => {
+            this.refreshToken();
+        }, refreshTime);
+
+        this.httpClient.setRefreshTokenTimeout(timeoutId);
     }
 
     async clearSession(): Promise<void> {
@@ -38,49 +44,43 @@ export class TokenService implements ITokenService {
         return token ?? null;
     }
 
-    async refreshToken(): Promise<void> {
+    async refreshToken(): Promise<boolean> {
         try {
             const refreshToken = await this.getRefreshToken();
-            if (!refreshToken) return;
+            if (!refreshToken) return false;
 
             const response = await this.httpClient.request<{
-                data: LoginResponse;
+                data: {
+                    accessToken: string;
+                    expiredAt: number;
+                };
             }>({
-                endpoint: "auth/refresh-token",
-                method: ApiMethod.POST,
-                body: { refresh_token: refreshToken }
+                endpoint: "refresh-token",
+                method: ApiMethod.GET
             });
 
             if (!response?.ok) {
-                await this.clearSession();
-                return;
+                await this.logout();
+                return false;
             }
 
             const data = response.data?.data;
+
             await this.setSession({
-                accessToken: data?.access_token,
-                refreshToken: data?.refresh_token,
-                accessTokenExpiresAt: data?.access_token_expires_at
+                accessToken: data?.accessToken,
+                expiredAt: data?.expiredAt
             });
+            return true;
         } catch (e) {
             console.error("Error refreshing token:", e);
             await this.clearSession();
+            return false;
         }
     }
 
     async logout(): Promise<void> {
-        try {
-            // TODO: Call logout API
-            // TODO: Clear token from storage
-            // TODO: Add Logic to clear all tokens including refresh token
-            // Clear token from storage
-            await clearToken();
-            // Clear session from HttpClient
-            this.httpClient.clearSession();
-            // Clear any pending token refresh timeouts
-            this.httpClient.clearRefreshTokenTimeout();
-        } catch (error) {
-            console.error("Error during logout:", error);
-        }
+        await clearToken();
+        this.httpClient.clearSession();
+        StoreService.getInstance().logout();
     }
 }

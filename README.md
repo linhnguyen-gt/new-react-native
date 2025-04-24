@@ -4,27 +4,27 @@
 
   <p align="center">
     <a href="https://reactnative.dev/" target="_blank">
-      <img src="https://img.shields.io/badge/React_Native-v0.77.0-blue?style=for-the-badge&logo=react&logoColor=white" alt="react-native" />
+      <img src="https://img.shields.io/badge/React_Native-v0.78.2-blue?style=for-the-badge&logo=react&logoColor=white" alt="react-native" />
     </a>
     <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="https://img.shields.io/badge/TypeScript-v5.5.4-blue?style=for-the-badge&logo=typescript&logoColor=white" alt="typescript" />
+      <img src="https://img.shields.io/badge/TypeScript-v5.8.3-blue?style=for-the-badge&logo=typescript&logoColor=white" alt="typescript" />
     </a>
   </p>
 
 ### Core Libraries
 
   <p align="center">
-    <img src="https://img.shields.io/badge/Expo-v52.0.38-000020?style=for-the-badge&logo=expo&logoColor=white" alt="expo" />
-    <img src="https://img.shields.io/badge/Gluestack_UI-v1.1.71-1B1B1F?style=for-the-badge" alt="gluestack" />
-    <img src="https://img.shields.io/badge/React_Navigation-v7.0.15-6B52AE?style=for-the-badge&logo=react&logoColor=white" alt="react-navigation" />
+    <img src="https://img.shields.io/badge/Expo-v53.0.0-canary-20250306-d9d3e02-canary-20250306-d9d3e02-canary-20250306-d9d3e02-canary-20250306-d9d3e02-canary-20250306-d9d3e02-canary-20250306-d9d3e02-0 <54.0.0-0 <54.0.0-0 <54.0.0-0 <54.0.0-0 <54.0.0-0 <54.0.0-0 <54.0.0-000020?style=for-the-badge&logo=expo&logoColor=white" alt="expo" />
+    <img src="https://img.shields.io/badge/Gluestack_UI-v1.1.73-1B1B1F?style=for-the-badge" alt="gluestack" />
+    <img src="https://img.shields.io/badge/React_Navigation-v7.1.6-6B52AE?style=for-the-badge&logo=react&logoColor=white" alt="react-navigation" />
   </p>
 
 ### State Management & API
 
   <p align="center">
-    <img src="https://img.shields.io/badge/Redux_Toolkit-v2.6.1-764ABC?style=for-the-badge&logo=redux&logoColor=white" alt="redux" />
+    <img src="https://img.shields.io/badge/Redux_Toolkit-v2.7.0-764ABC?style=for-the-badge&logo=redux&logoColor=white" alt="redux" />
     <img src="https://img.shields.io/badge/Redux_Saga-v1.3.0-89D96D?style=for-the-badge&logo=redux-saga&logoColor=white" alt="redux-saga" />
-    <img src="https://img.shields.io/badge/Axios-v1.8.3-5A29E4?style=for-the-badge&logo=axios&logoColor=white" alt="axios" />
+    <img src="https://img.shields.io/badge/Axios-v1.8.4-5A29E4?style=for-the-badge&logo=axios&logoColor=white" alt="axios" />
   </p>
 
 ### UI & Styling
@@ -40,7 +40,7 @@
   <p align="center">
     <img src="https://img.shields.io/badge/Formik-v2.4.6-0744AE?style=for-the-badge" alt="formik" />
     <img src="https://img.shields.io/badge/Yup-v1.6.1-32CD32?style=for-the-badge" alt="yup" />
-    <img src="https://img.shields.io/badge/Zod-v3.24.2-3068B7?style=for-the-badge" alt="zod" />
+    <img src="https://img.shields.io/badge/Zod-v3.24.3-3068B7?style=for-the-badge" alt="zod" />
   </p>
 
 ### Development & Testing
@@ -54,7 +54,7 @@
 ### Environment & Storage
 
   <p align="center">
-    <img src="https://img.shields.io/badge/Dotenv-v16.4.7-ECD53F?style=for-the-badge&logo=dotenv&logoColor=black" alt="dotenv" />
+    <img src="https://img.shields.io/badge/Dotenv-v16.5.0-ECD53F?style=for-the-badge&logo=dotenv&logoColor=black" alt="dotenv" />
     <img src="https://img.shields.io/badge/Async_Storage-v2.1.2-3B82F6?style=for-the-badge" alt="async-storage" />
   </p>
 
@@ -62,7 +62,7 @@
 
   <p align="center">
     <img src="https://img.shields.io/badge/Reactotron-v5.1.12-7B61FF?style=for-the-badge" alt="reactotron" />
-    <img src="https://img.shields.io/badge/React_Native_Reanimated-v3.17.1-FF4154?style=for-the-badge" alt="reanimated" />
+    <img src="https://img.shields.io/badge/React_Native_Reanimated-v3.17.4-FF4154?style=for-the-badge" alt="reanimated" />
   </p>
 
 ### Environment Support
@@ -142,6 +142,7 @@ APP_FLAVOR=development|staging|production
 VERSION_CODE=1
 VERSION_NAME=1.0.0
 API_URL=https://api.example.com
+APP_NAME=""
 
 # Optional Variables (configured during setup)
 GOOGLE_API_KEY=
@@ -246,6 +247,7 @@ echo "Info.plist path: ${INFO_PLIST}"
 # Default values in case env file is missing
 VERSION_CODE="1"
 VERSION_NAME="1.0.0"
+APP_NAME=""
 
 # Try to read from env file if it exists
 if [ -f "$ENV_FILE" ]; then
@@ -262,17 +264,27 @@ if [ -f "$ENV_FILE" ]; then
     if [ ! -z "$VERSION_NAME_LINE" ]; then
         VERSION_NAME=$(echo "$VERSION_NAME_LINE" | cut -d'=' -f2 | tr -d '"' | tr -d ' ')
     fi
+
+    # Read APP_NAME
+    APP_NAME_LINE=$(grep "^APP_NAME=" "$ENV_FILE" || echo "")
+    if [ ! -z "$APP_NAME_LINE" ]; then
+        APP_NAME=$(echo "$APP_NAME_LINE" | sed 's/^APP_NAME=//' | sed 's/^"//' | sed 's/"$//')
+    fi
+
 else
     echo "Warning: Environment file not found, using default values"
 fi
 
-echo "Using versions - Code: $VERSION_CODE, Name: $VERSION_NAME"
+echo "Using versions - Code: $VERSION_CODE, Name: $VERSION_NAME, App Name: $APP_NAME"
 
 # Update Info.plist if it exists
 if [ -f "$INFO_PLIST" ]; then
     echo "Updating Info.plist..."
     /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $VERSION_CODE" "$INFO_PLIST" || true
     /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $VERSION_NAME" "$INFO_PLIST" || true
+    if [ ! -z "$APP_NAME" ]; then
+        /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName $APP_NAME" "$INFO_PLIST" || true
+    fi
     echo "Info.plist update completed"
 else
     echo "Warning: Info.plist not found at $INFO_PLIST"
@@ -302,9 +314,10 @@ fi
 
             def envFile = new File("${project.rootDir.parentFile}/.env")
             if (envFile.exists()) {
-                def versionProps = getVersionFromEnv(envFile)
-                versionCode versionProps.code.toInteger()
-                versionName versionProps.name
+                def props = getVersionFromEnv(envFile)
+                versionCode props.code.toInteger()
+                versionName props.name
+                resValue "string", "app_name", props.appName
             }
         }
 
@@ -315,9 +328,10 @@ fi
 
             def envFile = new File("${project.rootDir.parentFile}/.env.staging")
             if (envFile.exists()) {
-                def versionProps = getVersionFromEnv(envFile)
-                versionCode versionProps.code.toInteger()
-                versionName versionProps.name
+                def props = getVersionFromEnv(envFile)
+                versionCode props.code.toInteger()
+                versionName props.name
+                resValue "string", "app_name", props.appName
             }
         }
         production {
@@ -327,31 +341,36 @@ fi
 
             def envFile = new File("${project.rootDir.parentFile}/.env.production")
             if (envFile.exists()) {
-                def versionProps = getVersionFromEnv(envFile)
-                versionCode versionProps.code.toInteger()
-                versionName versionProps.name
+                def props = getVersionFromEnv(envFile)
+                versionCode props.code.toInteger()
+                versionName props.name
+                resValue "string", "app_name", props.appName
             }
         }
     }
 
 def getVersionFromEnv(File envFile) {
-    def versionCode = "1"
-    def versionName = "1.0.0"
+    def versionCode = '1'
+    def versionName = '1.0.0'
+    def appName = ''
 
     envFile.eachLine { line ->
         if (line.contains('=')) {
             def (key, value) = line.split('=', 2)
-            if (key == "VERSION_CODE") versionCode = value?.trim()?.replaceAll('"', '')
-            if (key == "VERSION_NAME") versionName = value?.trim()?.replaceAll('"', '')
+            if (key == 'VERSION_CODE') versionCode = value?.trim()?.replaceAll('"', '')
+            if (key == 'VERSION_NAME') versionName = value?.trim()?.replaceAll('"', '')
+            if (key == 'APP_NAME') appName = value?.trim()?.replaceAll('"', '')
         }
     }
 
     println "Reading from ${envFile.path}"
     println "VERSION_CODE: ${versionCode}"
     println "VERSION_NAME: ${versionName}"
+    println "APP_NAME: ${appName}"
 
-    return [code: versionCode, name: versionName]
+    return [code: versionCode, name: versionName, appName: appName]
 }
+
 ```
 
 ### Update package.json Scripts

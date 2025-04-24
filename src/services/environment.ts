@@ -5,7 +5,8 @@ const envSchema = z.object({
     APP_FLAVOR: z.string(),
     VERSION_CODE: z.string(),
     VERSION_NAME: z.string(),
-    API_URL: z.string().url()
+    API_URL: z.string().url(),
+    APP_NAME: z.string()
 });
 
 type EnvConfig = z.infer<typeof envSchema>;
@@ -64,6 +65,10 @@ class EnvironmentService {
 
     isProduction(): boolean {
         return this.config.APP_FLAVOR === "production";
+    }
+
+    get appName(): string {
+        return this.config.APP_NAME;
     }
 }
 

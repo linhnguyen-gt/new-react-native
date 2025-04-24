@@ -10,12 +10,12 @@ const ResponseReducers = createSlice({
     name: "response",
     initialState,
     reducers: {},
-    extraReducers: (builder) =>
-        builder
-            .addCase(ResponseActions.setResponse, (state, action) => {
-                state.response = action.payload;
-            })
-            .addDefaultCase((state) => state)
+    extraReducers: (builder) => {
+        builder.addCase(ResponseActions.setResponse, (state, action) => {
+            state.response = action.payload;
+        });
+        builder.addDefaultCase((state) => state);
+    }
 });
 
 export default ResponseReducers.reducer;
