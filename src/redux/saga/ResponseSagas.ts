@@ -1,10 +1,10 @@
 import { put, takeEvery } from "redux-saga/effects";
 
+import { ResponseApi } from "@/apis";
+
 import { ResponseActions } from "../actions";
 
 import { handleApiCall } from "./ApiSagaHelper";
-
-import { ResponseApi } from "@/apis";
 
 function* getResponse() {
     yield* handleApiCall(ResponseActions.getResponse.type, function* () {

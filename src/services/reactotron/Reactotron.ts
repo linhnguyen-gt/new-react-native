@@ -17,6 +17,7 @@ if (__DEV__) {
 
 export default class Reactotron {
     config: ReactotronConfig;
+
     tron!: typeof Tron & {
         createEnhancer?: (skipSettingStore?: boolean) => (createStore: any) => (reducer: any, ...args: any[]) => any;
     };

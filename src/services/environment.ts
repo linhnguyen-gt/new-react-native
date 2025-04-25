@@ -13,6 +13,7 @@ type EnvConfig = z.infer<typeof envSchema>;
 
 class EnvironmentService {
     private static instance: EnvironmentService;
+
     private config: EnvConfig;
 
     private constructor() {

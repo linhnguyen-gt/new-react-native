@@ -138,7 +138,7 @@ function ListView<T extends Data>(
         ]
     );
 
-    return <React.Fragment>{_renderList}</React.Fragment>;
+    return <>{_renderList}</>;
 }
 
 const ForwardedListView = React.memo(React.forwardRef(ListView)) as unknown as <T extends Data>(

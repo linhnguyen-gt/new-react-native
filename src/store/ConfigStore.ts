@@ -7,12 +7,17 @@ import { reactotron, StoreService } from "@/services";
 import RootReducers from "./RootReducers";
 import RootSaga from "./RootSaga";
 
+import Logger from "@/helper/logger";
+
 class StoreConfig {
     private sagaMiddleware = createSagaMiddleware({
         sagaMonitor: reactotron?.createSagaMonitor?.(),
-        onError: (error) => {
-            console.error("Saga error:", error);
-        }
+        onError: (error, { sagaStack }) =>
+            Logger.error("SagaMiddleware", {
+                error: error.message,
+                stack: error.stack,
+                sagaStack
+            })
     });
 
     private enhancers: StoreEnhancer[] = compact([reactotron?.createEnhancer?.()]);

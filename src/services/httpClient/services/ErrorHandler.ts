@@ -21,7 +21,7 @@ export class ErrorHandler implements IErrorHandler {
                 headers: error.config?.headers
             }
         });
-        return Promise.reject(errorData);
+        return Promise.reject(new Error(JSON.stringify(errorData)));
     }
 
     extractErrorData(error: AxiosError): Error {
