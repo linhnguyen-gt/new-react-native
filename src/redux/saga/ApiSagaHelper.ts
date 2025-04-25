@@ -34,8 +34,7 @@ export function* handleApiCall(
         }
         yield* saga(...args);
     } catch (error) {
-        console.error(error);
-        throw error;
+        console.error(`Error in saga ${actionType}:`, error);
     } finally {
         if (isLoading) {
             yield put(stopLoading(actionType));

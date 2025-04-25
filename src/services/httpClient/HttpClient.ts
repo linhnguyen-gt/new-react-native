@@ -15,11 +15,16 @@ const DEFAULT_API_CONFIG = {
 
 export class HttpClient implements IHttpClient {
     private static _instance: HttpClient;
+
     // eslint-disable-next-line @typescript-eslint/naming-convention
     private readonly INSTANCE: AxiosInstance;
+
     private readonly tokenService: TokenService;
+
     private readonly errorHandler: ErrorHandler;
+
     private readonly requestInterceptor: RequestInterceptor;
+
     private timeoutId: NodeJS.Timeout | null = null;
 
     private constructor(
@@ -56,7 +61,6 @@ export class HttpClient implements IHttpClient {
                 method: config.method.toLowerCase(),
                 params: this.shouldIncludeParams(config.method) ? config.params : undefined,
                 data: this.shouldIncludeBody(config.method) ? config.body : undefined,
-                timeout: config.timeout,
                 headers
             });
 

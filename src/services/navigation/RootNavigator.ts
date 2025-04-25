@@ -2,10 +2,10 @@ import { CommonActions, createNavigationContainerRef } from "@react-navigation/n
 
 import { RouteName } from "@/constants";
 
-import { NavigatorParamsType } from "@/model";
-
 import { INavigationService } from "./INavigationService";
 import { NavigationLogger } from "./NavigationLogger";
+
+export interface NavigatorParamsType {}
 
 class RootNavigator implements INavigationService {
     public readonly navigationRef = createNavigationContainerRef();
@@ -18,12 +18,7 @@ class RootNavigator implements INavigationService {
 
         NavigationLogger.logNavigation(route as string);
 
-        return this.navigationRef.current?.dispatch(
-            CommonActions.navigate({
-                name: route,
-                params: params
-            })
-        );
+        return this.navigationRef.current?.dispatch(CommonActions.navigate(route, params));
     }
 
     goBack(): void {

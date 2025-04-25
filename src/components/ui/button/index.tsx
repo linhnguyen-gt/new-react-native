@@ -1,4 +1,5 @@
 "use client";
+
 import { createButton } from "@gluestack-ui/button";
 import { PrimitiveIcon, UIIcon } from "@gluestack-ui/icon";
 import { tva } from "@gluestack-ui/nativewind-utils/tva";
@@ -14,7 +15,7 @@ const SCOPE = "BUTTON";
 const Root = withStyleContext(Pressable, SCOPE);
 
 const UIButton = createButton({
-    Root: Root,
+    Root,
     Text,
     Group: View,
     Spinner: ActivityIndicator,
@@ -322,7 +323,8 @@ const ButtonIcon = React.forwardRef<React.ComponentRef<typeof UIButton.Icon>, IB
 
     if (typeof size === "number") {
         return <UIButton.Icon ref={ref} {...props} className={buttonIconStyle({ class: className })} size={size} />;
-    } else if ((props.height !== undefined || props.width !== undefined) && size === undefined) {
+    }
+    if ((props.height !== undefined || props.width !== undefined) && size === undefined) {
         return <UIButton.Icon ref={ref} {...props} className={buttonIconStyle({ class: className })} />;
     }
     return (

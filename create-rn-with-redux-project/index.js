@@ -66,12 +66,25 @@ let chalk;
 
                 fs.writeFileSync(newSchemeFilePath, content);
 
-                if (schemeFile !== newSchemeFileName) {
+                if (fs.existsSync(schemeFilePath)) {
                     fs.unlinkSync(schemeFilePath);
+                    console.log(chalk.green(`✅ Removed old scheme: ${schemeFile}`));
                 }
 
                 console.log(chalk.green(`✅ Updated scheme: ${newSchemeFileName}`));
             });
+
+            if (fs.existsSync(schemesDir)) {
+                const remainingOldSchemes = fs
+                    .readdirSync(schemesDir)
+                    .filter((file) => file.includes(oldName) && file.endsWith(".xcscheme"));
+
+                remainingOldSchemes.forEach((oldScheme) => {
+                    const oldSchemeFilePath = path.join(schemesDir, oldScheme);
+                    fs.unlinkSync(oldSchemeFilePath);
+                    console.log(chalk.green(`✅ Removed leftover scheme: ${oldScheme}`));
+                });
+            }
         } else {
             console.log(chalk.yellow(`⚠️ Schemes directory not found: ${schemesDir}`));
         }

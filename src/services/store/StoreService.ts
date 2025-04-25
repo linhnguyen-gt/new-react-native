@@ -4,6 +4,7 @@ import { ResetActions } from "@/redux/actions";
 
 export class StoreService {
     private static instance: StoreService;
+
     private store!: EnhancedStore<AppState>;
 
     private constructor() {}
@@ -21,7 +22,7 @@ export class StoreService {
 
     public logout() {
         // TODO: Implement logout
-        //logic logout here!!!
+        // logic logout here!!!
 
         if (this.store) {
             this.store.dispatch(ResetActions.resetState());
