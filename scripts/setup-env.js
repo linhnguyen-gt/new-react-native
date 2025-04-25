@@ -23,6 +23,21 @@ const createEnvFiles = async (environment, vaultKey = null, envVarsFromVault = {
     let envVars = { ...envVarsFromVault };
     const envFileName = environment === "development" ? ".env" : `.env.${environment}`;
 
+    let fileExists = false;
+    if (fs.existsSync(envFileName)) {
+        try {
+            const content = fs.readFileSync(envFileName, "utf8");
+            if (content.trim().length > 0) {
+                console.log(`\n📝 ${envFileName} already exists and has content.`);
+                const overwrite = await question(`Do you want to overwrite ${envFileName}? (y/n): `);
+                if (overwrite.toLowerCase() !== "y") {
+                    console.log(`✅ Keeping existing ${envFileName}`);
+                    return envVars;
+                }
+            }
+        } catch (error) {}
+    }
+
     console.log(`\n📝 Setting up ${environment} environment in ${envFileName}...`);
 
     let envContent = environment === "development" ? "# development\n" : `# ${environment}\n`;
@@ -55,6 +70,13 @@ const createEnvFiles = async (environment, vaultKey = null, envVarsFromVault = {
         const appName = await question(`Enter APP_NAME (default: MyApp): `);
         envVars.APP_NAME = appName || "MyApp";
     }
+
+    console.log("\nCurrent environment variables:");
+    Object.entries(envVars)
+        .filter(([key]) => key !== "DOTENV_VAULT")
+        .forEach(([key, value]) => {
+            console.log(`${key}=${value}`);
+        });
 
     let addMore = true;
     while (addMore) {
@@ -302,19 +324,38 @@ const main = async () => {
             console.log("\n📥 Pulling from vault...");
             if (!runCommand("npx dotenv-vault@latest pull")) {
                 console.log("⚠️ Failed to pull from vault. Will continue with manual setup.");
+                useVault = false;
             } else {
+                console.log("✅ Successfully pulled environment variables from vault");
                 if (fs.existsSync(".env")) {
                     try {
                         const envContent = fs.readFileSync(".env", "utf8");
                         envContent.split("\n").forEach((line) => {
-                            const [key, value] = line.split("=");
-                            if (key && value) {
-                                envVarsFromVault[key.trim()] = value.trim();
+                            if (line && !line.startsWith("#")) {
+                                const parts = line.split("=");
+                                if (parts.length >= 2) {
+                                    const key = parts[0].trim();
+                                    const value = parts.slice(1).join("=").trim();
+                                    if (key && value) {
+                                        envVarsFromVault[key] = value;
+                                    }
+                                }
                             }
                         });
+                        console.log(`✅ Loaded ${Object.keys(envVarsFromVault).length} variables from vault`);
                     } catch (error) {
                         console.error("Failed to read .env file:", error);
                     }
+                }
+
+                if (!fs.existsSync(".env.staging")) {
+                    console.log("\n📥 Pulling staging environment from vault...");
+                    runCommand("npx dotenv-vault@latest pull staging");
+                }
+
+                if (!fs.existsSync(".env.production")) {
+                    console.log("\n📥 Pulling production environment from vault...");
+                    runCommand("npx dotenv-vault@latest pull production");
                 }
             }
         } else if (vaultResponse.toLowerCase() === "y") {
