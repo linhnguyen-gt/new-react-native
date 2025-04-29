@@ -380,7 +380,6 @@ let chalk;
 
                 const appJson = JSON.parse(fs.readFileSync("app.json", "utf8"));
                 appJson.name = projectName;
-                appJson.displayName = projectName;
                 fs.writeFileSync("app.json", JSON.stringify(appJson, null, 2));
 
                 console.log(chalk.yellow("\n🔄 Renaming project comprehensively..."));

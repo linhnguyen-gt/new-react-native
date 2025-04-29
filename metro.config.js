@@ -1,4 +1,4 @@
-const { getDefaultConfig, mergeConfig } = require("@react-native/metro-config");
+const { getDefaultConfig } = require("@expo/metro-config");
 const { withNativeWind } = require("nativewind/metro");
 const { wrapWithReanimatedMetroConfig } = require("react-native-reanimated/metro-config");
 /**
@@ -7,6 +7,6 @@ const { wrapWithReanimatedMetroConfig } = require("react-native-reanimated/metro
  *
  * @type {import('metro-config').MetroConfig}
  */
-const config = mergeConfig(getDefaultConfig(__dirname), {});
+const config = getDefaultConfig(__dirname);
 
 module.exports = wrapWithReanimatedMetroConfig(withNativeWind(config, { input: "./global.css" }));

@@ -6,25 +6,18 @@ import IoniconsIcon from "@react-native-vector-icons/ionicons";
 import MaterialIconsIcon from "@react-native-vector-icons/material-icons";
 import React from "react";
 
-import { getColor } from "@/hooks";
-
 import { MyTouchable } from "@/components/touchable";
-
-export type IconFont = "entypo" | "ant-design" | "ionicons" | "feather" | "material-icons" | "evil-icons";
-type AntDesignIconName = Parameters<typeof AntDesignIcon>[0]["name"];
-type EntypoIconName = Parameters<typeof EntypoIcon>[0]["name"];
-type IoniconsIconName = Parameters<typeof IoniconsIcon>[0]["name"];
-type FeatherIconName = Parameters<typeof FeatherIcon>[0]["name"];
-type MaterialIconsIconName = Parameters<typeof MaterialIconsIcon>[0]["name"];
-type EvilIconsIconName = Parameters<typeof EvilIconsIcon>[0]["name"];
-export type IconName =
-    | AntDesignIconName
-    | EntypoIconName
-    | IoniconsIconName
-    | FeatherIconName
-    | MaterialIconsIconName
-    | EvilIconsIconName
-    | "";
+import { getColor } from "@/hooks/useThemeColor";
+import {
+    type AntDesignIconName,
+    type EntypoIconName,
+    type EvilIconsIconName,
+    type FeatherIconName,
+    type IconFont,
+    type IconName,
+    type IoniconsIconName,
+    type MaterialIconsIconName
+} from "@/types/icon";
 
 interface IconProps {
     name: IconName;

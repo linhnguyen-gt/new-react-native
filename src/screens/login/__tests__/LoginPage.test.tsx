@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen, waitFor } from "@testing-library/react-native";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react-native";
 import { useFormik } from "formik";
 import React from "react";
 import { object, string } from "yup";
@@ -14,8 +14,6 @@ jest.mock("@/services", () => ({
         replaceName: jest.fn()
     }
 }));
-
-jest.mock("@react-native-vector-icons/entypo", () => "Icon");
 
 describe("<LoginPage />", () => {
     beforeEach(() => {
@@ -33,9 +31,7 @@ describe("<LoginPage />", () => {
     it("navigates to Main screen on valid form submission", async () => {
         render(<LoginPage />);
 
-        await act(async () => {
-            fireEvent.press(screen.getByTestId("login-button"));
-        });
+        fireEvent.press(screen.getByTestId("login-button"));
 
         await waitFor(() => {
             expect(RootNavigator.replaceName).toHaveBeenCalledWith(RouteName.Main);
@@ -60,9 +56,10 @@ describe("<LoginPage />", () => {
 
         render(<TestComponent />);
 
-        await act(async () => {
+        await waitFor(async () => {
             formikBag.setFieldTouched("email", true);
             await formikBag.validateForm();
+            expect(formikBag.errors).toBeDefined();
         });
 
         expect(formikBag.errors.email).toBe(Errors.EMAIL_INVALID);
@@ -89,9 +86,10 @@ describe("<LoginPage />", () => {
 
         render(<TestComponent />);
 
-        await act(async () => {
+        await waitFor(async () => {
             formikBag.setFieldTouched("email", true);
             await formikBag.validateForm();
+            expect(formikBag.errors).toBeDefined();
         });
 
         expect(formikBag.errors.email).toBe(Errors.IS_NOT_EMAIL);
@@ -118,9 +116,10 @@ describe("<LoginPage />", () => {
 
         render(<TestComponent />);
 
-        await act(async () => {
+        await waitFor(async () => {
             formikBag.setFieldTouched("password", true);
             await formikBag.validateForm();
+            expect(formikBag.errors).toBeDefined();
         });
 
         expect(formikBag.errors.password).toBe(Errors.REQUIRED_PASSWORD_INPUT);

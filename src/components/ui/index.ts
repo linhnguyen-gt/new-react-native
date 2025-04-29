@@ -1,12 +1,12 @@
 export { default as Box } from "./box";
+export { default as LoadingBox } from "./box/LoadingBox";
 export * from "./button";
 export { default as Container } from "./container";
 export * from "./gluestack-ui-provider";
 export { default as HStack } from "./hStack";
-export { default as IconComponent, type IconFont, type IconName } from "./icon";
+export { default as IconComponent } from "./icon";
 export { default as Image } from "./image";
 export { default as ScrollView } from "./scrollView";
 export { default as Text } from "./text";
 export * from "./toast";
-export { default as Touchable } from "./touch";
 export { default as VStack } from "./vStack";

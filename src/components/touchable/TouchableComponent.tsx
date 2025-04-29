@@ -1,15 +1,16 @@
+import { tva } from "@gluestack-ui/nativewind-utils/tva";
 import React from "react";
-import { View, ViewStyle } from "react-native";
-
-import { hstackStyle } from "./styles";
+import { TouchableOpacity, TouchableOpacityProps, ViewStyle } from "react-native";
 
 import type { VariantProps } from "@gluestack-ui/nativewind-utils";
 
+export const touchableStyle = tva({});
+
 type StyleProps = Omit<ViewStyle, "transform">;
 
-type IHStackProps = Omit<React.ComponentProps<typeof View>, keyof StyleProps> &
+export type TouchableComponentProps = Omit<TouchableOpacityProps, keyof StyleProps> &
     StyleProps &
-    VariantProps<typeof hstackStyle> & {
+    VariantProps<typeof touchableStyle> & {
         className?: string;
     };
 
@@ -18,13 +19,13 @@ const createStyleFromProps = (props: StyleProps): ViewStyle => {
     return Object.fromEntries(styleKeys.map((key) => [key, props[key as keyof StyleProps]])) as ViewStyle;
 };
 
-const HStack = React.forwardRef<React.ComponentRef<typeof View>, IHStackProps>(
-    ({ className, space, reversed, style, ...props }, ref) => {
+const TouchableComponent = React.forwardRef<React.ComponentRef<typeof TouchableOpacity>, TouchableComponentProps>(
+    ({ className, style, ...props }, ref) => {
         const styleProps = createStyleFromProps(props as StyleProps);
 
         return (
-            <View
-                className={hstackStyle({ space, reversed, class: className })}
+            <TouchableOpacity
+                className={touchableStyle({ class: className })}
                 style={[styleProps, style]}
                 {...props}
                 ref={ref}
@@ -33,6 +34,5 @@ const HStack = React.forwardRef<React.ComponentRef<typeof View>, IHStackProps>(
     }
 );
 
-HStack.displayName = "HStack";
-
-export default HStack;
+TouchableComponent.displayName = "TouchableComponent";
+export default TouchableComponent;

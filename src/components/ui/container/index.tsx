@@ -1,30 +1,20 @@
 import React from "react";
 import { View } from "react-native";
 
-import Box, { IBoxProps } from "../box";
+import ContainerBox from "./ContainerBox";
 
-import { Loading } from "@/components/loading";
+import type { BaseBoxProps } from "../box/BaseBox";
 
-type ContainerProps = IBoxProps & {
+type ContainerProps = BaseBoxProps & {
     isLoading?: boolean;
     safeAreaTop?: boolean;
     safeAreaBottom?: boolean;
     safeArea?: boolean;
 };
 
-const Container = React.forwardRef<React.ElementRef<typeof View>, ContainerProps>(
-    ({ backgroundColor = "white", isLoading = false, safeAreaTop, safeAreaBottom, safeArea, ...props }, ref) => {
-        return (
-            <Box
-                className={`${safeAreaTop ? "mt-safe" : ""} ${safeAreaBottom ? "mb-safe" : ""} ${safeArea ? "mt-safe mb-safe" : ""}`}
-                flex={1}>
-                <Box flex={1} backgroundColor={backgroundColor} {...props} ref={ref}>
-                    {props.children}
-                </Box>
-                <Loading isLoading={isLoading} />
-            </Box>
-        );
-    }
-);
+const Container = React.forwardRef<React.ComponentRef<typeof View>, ContainerProps>((props, ref) => {
+    return <ContainerBox {...props} ref={ref} />;
+});
 
+Container.displayName = "Container";
 export default Container;

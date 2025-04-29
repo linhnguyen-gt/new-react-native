@@ -4,7 +4,7 @@
 </div>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/React_Native-Latest-blue?style=for-the-badge&logo=react&logoColor=white" alt="react-native" />
+  <img src="https://img.shields.io/badge/React_Native-v0.78.2-blue?style=for-the-badge&logo=react&logoColor=white" alt="react-native" />
   <img src="https://img.shields.io/badge/TypeScript-Integrated-blue?style=for-the-badge&logo=typescript&logoColor=white" alt="typescript" />
   <img src="https://img.shields.io/badge/Redux-Toolkit-764ABC?style=for-the-badge&logo=redux&logoColor=white" alt="redux" />
 </p>
@@ -60,6 +60,8 @@ create-rn-with-redux-project MyApp --bundle-id com.example.myapp --repo https://
 - `-r, --repo <url>`: Specify GitHub repository URL
 - `--skip-install`: Skip installing dependencies
 - `--use-npm`: Use npm instead of yarn for installing dependencies
+- `--skip-env-setup`: Skip environment setup
+- `--skip-git`: Skip git initialization
 - `--help`: Show help information
 
 ### After Creating a Project
@@ -109,7 +111,7 @@ Each environment has its own configuration files and build scripts.
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 👨‍💻 Author
 

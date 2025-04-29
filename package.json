@@ -10,21 +10,18 @@
         "ios:stg": "APP_ENV=staging npx expo run:ios --device --scheme Staging --configuration Staging.Debug",
         "ios:pro": "APP_ENV=production npx expo run:ios --device --scheme Product --configuration Product.Debug",
         "lint": "eslint .",
-        "start": "react-native start",
+        "start": "npx expo start",
         "lint:fix": "eslint . --fix --ext .ts,.tsx,.js",
         "test": "jest",
         "clear:cache": "rm -rf node_modules && yarn cache clean && yarn && watchman watch-del-all && del %localappdata%Temphaste-map-* && del %localappdata%Tempmetro-cache && npx expo start --clear",
         "clear:expo": "npx expo start --clear",
-        "env:push": "dotenv-vault push",
-        "env:push:stg": "dotenv-vault push staging",
-        "env:push:pro": "dotenv-vault push production",
-        "env:pull": "dotenv-vault pull",
+        "env:push": "dotenv-vault push && dotenv-vault push staging && dotenv-vault push production",
+        "env:pull": "dotenv-vault pull && dotenv-vault pull staging && dotenv-vault pull production",
         "env:setup": "node scripts/setup-env.js",
         "adb:reactotron": "adb reverse tcp:9090 tcp:9090",
         "update-versions": "node scripts/update-readme-versions.js",
         "postinstall": "lefthook install && yarn update-versions",
-        "lint-staged": "lint-staged",
-        "prepare": "lefthook install"
+        "doctor": "npx expo-doctor"
     },
     "dependencies": {
         "@gluestack-style/react": "^1.0.57",
@@ -32,7 +29,7 @@
         "@gluestack-ui/image": "^0.1.17",
         "@gluestack-ui/nativewind-utils": "1.0.26",
         "@gluestack-ui/themed": "^1.1.73",
-        "@react-native-async-storage/async-storage": "^2.1.2",
+        "@react-native-async-storage/async-storage": "1.23.1",
         "@react-native-vector-icons/ant-design": "^4.4.2",
         "@react-native-vector-icons/common": "^11.0.0",
         "@react-native-vector-icons/entypo": "^1.0.1",
@@ -43,22 +40,22 @@
         "@react-navigation/native": "^7.1.6",
         "@react-navigation/stack": "^7.2.10",
         "@reduxjs/toolkit": "^2.7.0",
-        "@shopify/flash-list": "^1.8.0",
-        "axios": "1.8.4",
+        "@shopify/flash-list": "1.7.3",
+        "axios": "1.9.0",
         "dotenv": "^16.5.0",
         "expo": "53.0.0-canary-20250306-d9d3e02",
         "formik": "^2.4.6",
         "lodash": "^4.17.21",
         "nativewind": "^4.1.23",
         "react": "19.0.0",
-        "react-native": "0.78.2",
+        "react-native": "0.78.0",
         "react-native-gesture-handler": "~2.24.0",
-        "react-native-reanimated": "^3.17.4",
-        "react-native-safe-area-context": "5.3.0",
-        "react-native-screens": "^4.10.0",
+        "react-native-reanimated": "^3.17.5",
+        "react-native-safe-area-context": "5.2.0",
+        "react-native-screens": "~4.9.1",
         "react-native-svg": "15.11.2",
         "react-redux": "^9.2.0",
-        "reactotron-react-native": "^5.1.12",
+        "reactotron-react-native": "^5.1.13",
         "reactotron-redux": "^3.2.0",
         "reactotron-redux-saga": "^4.2.3",
         "redux-saga": "^1.3.0",
@@ -81,7 +78,7 @@
         "@react-native/typescript-config": "0.78.2",
         "@testing-library/jest-native": "^5.4.3",
         "@testing-library/react-native": "^12.9.0",
-        "@types/jest": "^29.5.13",
+        "@types/jest": "^29.5.14",
         "@types/lodash": "^4.17.16",
         "@types/react": "^19.0.0",
         "@types/react-dom": "^19",
@@ -100,7 +97,7 @@
         "eslint-plugin-react": "^7.37.2",
         "eslint-plugin-react-hooks": "^5.0.0",
         "jest": "^29.7.0",
-        "lefthook": "^1.11.11",
+        "lefthook": "^1.11.12",
         "lint-staged": "^15.5.1",
         "prettier": "^3.3.3",
         "react-dom": "19.0.0",
@@ -109,5 +106,12 @@
     },
     "engines": {
         "node": ">=18"
+    },
+    "expo": {
+        "doctor": {
+            "reactNativeDirectoryCheck": {
+                "listUnknownPackages": false
+            }
+        }
     }
 }
