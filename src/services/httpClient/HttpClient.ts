@@ -25,7 +25,7 @@ export class HttpClient implements IHttpClient {
 
     private readonly requestInterceptor: RequestInterceptor;
 
-    private timeoutId: NodeJS.Timeout | null = null;
+    private timeoutId: number | null = null;
 
     private constructor(
         tokenService?: TokenService,
@@ -104,7 +104,7 @@ export class HttpClient implements IHttpClient {
         }
     }
 
-    setRefreshTokenTimeout(timeoutId: NodeJS.Timeout): void {
+    setRefreshTokenTimeout(timeoutId: number): void {
         this.timeoutId = timeoutId;
     }
 
