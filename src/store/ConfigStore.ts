@@ -1,6 +1,5 @@
-import { configureStore, EnhancedStore, StoreEnhancer } from "@reduxjs/toolkit";
+import { configureStore, EnhancedStore, Middleware, StoreEnhancer } from "@reduxjs/toolkit";
 import { compact } from "lodash";
-import createSagaMiddleware from "redux-saga";
 
 import { reactotron, StoreService } from "@/services";
 
@@ -9,10 +8,13 @@ import RootSaga from "./RootSaga";
 
 import Logger from "@/helper/logger";
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const createSagaMiddleware = require("redux-saga").default;
+
 class StoreConfig {
     private sagaMiddleware = createSagaMiddleware({
         sagaMonitor: reactotron?.createSagaMonitor?.(),
-        onError: (error, { sagaStack }) =>
+        onError: (error: Error, { sagaStack }: { sagaStack: string }) =>
             Logger.error("SagaMiddleware", {
                 error: error.message,
                 stack: error.stack,
@@ -22,7 +24,7 @@ class StoreConfig {
 
     private enhancers: StoreEnhancer[] = compact([reactotron?.createEnhancer?.()]);
 
-    public store: EnhancedStore<AppState> = configureStore({
+    public store: EnhancedStore = configureStore({
         reducer: RootReducers,
         enhancers: (getDefaultEnhancers) => getDefaultEnhancers().concat(this.enhancers),
         middleware: (getDefaultMiddleware) =>
@@ -30,7 +32,7 @@ class StoreConfig {
                 serializableCheck: false,
                 thunk: false,
                 immutableCheck: !__DEV__
-            }).concat(this.sagaMiddleware),
+            }).concat(this.sagaMiddleware as Middleware),
         devTools: __DEV__
     });
 

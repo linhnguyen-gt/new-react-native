@@ -5,7 +5,7 @@
 
   <p align="center">
     <a href="https://reactnative.dev/" target="_blank">
-      <img src="https://img.shields.io/badge/React_Native-v0.78.0-blue?style=for-the-badge&logo=react&logoColor=white" alt="react-native" />
+      <img src="https://img.shields.io/badge/React_Native-v0.79.2-blue?style=for-the-badge&logo=react&logoColor=white" alt="react-native" />
     </a>
     <a href="https://www.typescriptlang.org/" target="_blank">
       <img src="https://img.shields.io/badge/TypeScript-v5.8.3-blue?style=for-the-badge&logo=typescript&logoColor=white" alt="typescript" />
@@ -15,7 +15,7 @@
 ### Core Libraries
 
   <p align="center">
-    <img src="https://img.shields.io/badge/Expo-v53.0.0-canary-20250306-d9d3e02-canary-20250306-d9d3e02-canary-20250306-d9d3e02-canary-20250306-d9d3e02-canary-20250306-d9d3e02-canary-20250306-d9d3e02-canary-20250306-d9d3e02-canary-20250306-d9d3e02-canary-20250306-d9d3e02-canary-20250306-d9d3e02-canary-20250306-d9d3e02-canary-20250306-d9d3e02-canary-20250306-d9d3e02-canary-20250306-d9d3e02-canary-20250306-d9d3e02-0 <54.0.0-0 <54.0.0-0 <54.0.0-0 <54.0.0-0 <54.0.0-0 <54.0.0-0 <54.0.0-000020?style=for-the-badge&logo=expo&logoColor=white" alt="expo" />
+    <img src="https://img.shields.io/badge/Expo-v53.0.0-blue?style=for-the-badge&logo=expo&logoColor=white" alt="expo" />
     <img src="https://img.shields.io/badge/Gluestack_UI-v1.1.73-1B1B1F?style=for-the-badge" alt="gluestack" />
     <img src="https://img.shields.io/badge/React_Navigation-v7.1.6-6B52AE?style=for-the-badge&logo=react&logoColor=white" alt="react-navigation" />
   </p>
@@ -56,14 +56,14 @@
 
   <p align="center">
     <img src="https://img.shields.io/badge/Dotenv-v16.5.0-ECD53F?style=for-the-badge&logo=dotenv&logoColor=black" alt="dotenv" />
-    <img src="https://img.shields.io/badge/Async_Storage-v1.23.1-3B82F6?style=for-the-badge" alt="async-storage" />
+    <img src="https://img.shields.io/badge/Async_Storage-v2.1.2-3B82F6?style=for-the-badge" alt="async-storage" />
   </p>
 
 ### Development Tools
 
   <p align="center">
     <img src="https://img.shields.io/badge/Reactotron-v5.1.13-7B61FF?style=for-the-badge" alt="reactotron" />
-    <img src="https://img.shields.io/badge/React_Native_Reanimated-v3.17.5-FF4154?style=for-the-badge" alt="reanimated" />
+    <img src="https://img.shields.io/badge/React_Native_Reanimated-v3.17.4-FF4154?style=for-the-badge" alt="reanimated" />
   </p>
 
 ### Environment Support

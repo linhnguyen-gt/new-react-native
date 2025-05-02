@@ -484,8 +484,8 @@ let chalk;
                 if (fs.existsSync(appDelegatePath)) {
                     replaceInFile(
                         appDelegatePath,
-                        /self\.moduleName = "NewReactNative"/g,
-                        `self.moduleName = "${projectName}"`
+                        /withModuleName: "NewReactNative"/g,
+                        `withModuleName: "${projectName}"`
                     );
                 }
 
