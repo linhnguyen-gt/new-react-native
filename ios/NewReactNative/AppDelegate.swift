@@ -1,4 +1,5 @@
 import UIKit
+import ExpoModulesCore
 import Expo
 import React
 import React_RCTAppDelegate
