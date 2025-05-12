@@ -12,8 +12,6 @@ export type InputProps = TextInputProps & {
     prefixIcon?: React.ReactNode;
     suffixIcon?: React.ReactNode;
     onChangeFocus?: (name: string, isFocus: boolean) => void;
-    onChangeValue?: (field: string, value: string, shouldValidate?: boolean | undefined) => void;
-    fieldName?: string;
     isPassword?: boolean;
     enable?: boolean;
     title?: string;
@@ -25,20 +23,7 @@ export type InputProps = TextInputProps & {
 
 const Input = React.forwardRef<TextInput, InputProps>(
     (
-        {
-            placeholder,
-            prefixIcon,
-            suffixIcon,
-            fieldName,
-            isPassword,
-            onChangeValue,
-            enable = true,
-            height = 50,
-            title,
-            error,
-            testID,
-            ...rest
-        },
+        { placeholder, prefixIcon, suffixIcon, isPassword, enable = true, height = 50, title, error, testID, ...rest },
         ref
     ) => {
         const shake = useShakeView(error);
@@ -58,16 +43,6 @@ const Input = React.forwardRef<TextInput, InputProps>(
             [_handleSecure, isShowPassword]
         );
 
-        const handleChangeText = React.useCallback(
-            (text: string) => {
-                if (fieldName) {
-                    return onChangeValue?.(fieldName, text);
-                }
-                rest.onChangeText?.(text);
-            },
-            [fieldName, onChangeValue, rest]
-        );
-
         const _renderInput = React.useMemo(() => {
             return (
                 <HStack
@@ -83,7 +58,6 @@ const Input = React.forwardRef<TextInput, InputProps>(
                             style={{ textAlignVertical: "top" }}
                             placeholder={placeholder}
                             secureTextEntry={isShowPassword}
-                            onChangeText={handleChangeText}
                             editable={enable}
                             placeholderTextColor={getColor("iconGrey")}
                         />
@@ -95,7 +69,6 @@ const Input = React.forwardRef<TextInput, InputProps>(
             _renderShowPassword,
             enable,
             error,
-            handleChangeText,
             height,
             isPassword,
             isShowPassword,

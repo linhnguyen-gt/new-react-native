@@ -20,7 +20,6 @@ export class RequestInterceptor {
             if (this.isTokenExpiredError(error)) {
                 try {
                     await this.tokenService.refreshToken();
-                    return this.axiosInstance.request(error.config!);
                 } catch (refreshError) {
                     return Promise.reject({
                         message: "Session expired, please login again",

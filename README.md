@@ -15,7 +15,7 @@
 ### Core Libraries
 
   <p align="center">
-    <img src="https://img.shields.io/badge/Expo-53.0.0--canary--20250306--d9d3e02-black?style=for-the-badge&logo=expo&logoColor=white" alt="expo" />
+    <img src="https://img.shields.io/badge/Expo-v53.0.0-canary-20250306-d9d3e02-canary-20250306-d9d3e02-canary-20250306-d9d3e02-canary-20250306-d9d3e02-blue?style=for-the-badge&logo=expo&logoColor=white" alt="expo" />
     <img src="https://img.shields.io/badge/Gluestack_UI-v1.1.73-1B1B1F?style=for-the-badge" alt="gluestack" />
     <img src="https://img.shields.io/badge/React_Navigation-v7.1.6-6B52AE?style=for-the-badge&logo=react&logoColor=white" alt="react-navigation" />
   </p>
@@ -39,8 +39,7 @@
 ### Form & Validation
 
   <p align="center">
-    <img src="https://img.shields.io/badge/Formik-v2.4.6-0744AE?style=for-the-badge" alt="formik" />
-    <img src="https://img.shields.io/badge/Yup-v1.6.1-32CD32?style=for-the-badge" alt="yup" />
+    <img src="https://img.shields.io/badge/React_Hook_Form-v7.56.3-EC5990?style=for-the-badge&logo=react-hook-form&logoColor=white" alt="react-hook-form" />
     <img src="https://img.shields.io/badge/Zod-v3.24.3-3068B7?style=for-the-badge" alt="zod" />
   </p>
 
@@ -56,14 +55,14 @@
 
   <p align="center">
     <img src="https://img.shields.io/badge/Dotenv-v16.5.0-ECD53F?style=for-the-badge&logo=dotenv&logoColor=black" alt="dotenv" />
-    <img src="https://img.shields.io/badge/Async_Storage-v1.23.1-3B82F6?style=for-the-badge" alt="async-storage" />
+    <img src="https://img.shields.io/badge/Async_Storage-v2.1.2-3B82F6?style=for-the-badge" alt="async-storage" />
   </p>
 
 ### Development Tools
 
   <p align="center">
     <img src="https://img.shields.io/badge/Reactotron-v5.1.13-7B61FF?style=for-the-badge" alt="reactotron" />
-    <img src="https://img.shields.io/badge/React_Native_Reanimated-v3.17.5-FF4154?style=for-the-badge" alt="reanimated" />
+    <img src="https://img.shields.io/badge/React_Native_Reanimated-v3.17.4-FF4154?style=for-the-badge" alt="reanimated" />
   </p>
 
 ### Environment Support
