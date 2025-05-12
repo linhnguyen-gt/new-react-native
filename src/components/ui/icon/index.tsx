@@ -6,17 +6,18 @@ import IoniconsIcon from "@react-native-vector-icons/ionicons";
 import MaterialIconsIcon from "@react-native-vector-icons/material-icons";
 import React from "react";
 
-import { MyTouchable } from "@/components/touchable";
+import { MyTouchable } from "../../touchable";
+
 import { getColor } from "@/hooks/useThemeColor";
 import {
-    type AntDesignIconName,
-    type EntypoIconName,
-    type EvilIconsIconName,
-    type FeatherIconName,
-    type IconFont,
-    type IconName,
-    type IoniconsIconName,
-    type MaterialIconsIconName
+    AntDesignIconName,
+    EntypoIconName,
+    EvilIconsIconName,
+    FeatherIconName,
+    IconFont,
+    IconName,
+    IoniconsIconName,
+    MaterialIconsIconName
 } from "@/types/icon";
 
 interface IconProps {

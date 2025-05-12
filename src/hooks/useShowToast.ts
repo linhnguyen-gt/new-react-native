@@ -2,16 +2,17 @@ import { createToastHook } from "@gluestack-ui/toast";
 import { AnimatePresence, Motion } from "@legendapp/motion";
 import React from "react";
 
+import { IconComponent } from "@/components/ui";
 import Box from "@/components/ui/box";
 import HStack from "@/components/ui/hStack";
-import Icon from "@/components/ui/icon";
 import { Toast, ToastTitle } from "@/components/ui/toast";
+import { IconName } from "@/types/icon";
 
 const MotionView = Motion.View;
 
 export const useToast = createToastHook(MotionView, AnimatePresence);
 
-const getIcon = (type: string) => {
+const getToastIconName = (type: string): IconName => {
     switch (type) {
         case "success":
             return "check-circle";
@@ -24,7 +25,7 @@ const getIcon = (type: string) => {
     }
 };
 
-const getColor = (type: string) => {
+const getToastIconColor = (type: string): string => {
     switch (type) {
         case "success":
             return "success-500";
@@ -45,8 +46,8 @@ const useShowToast = () => {
             placement: "bottom",
             duration,
             render: ({ id }) => {
-                const iconName = getIcon(type);
-                const color = getColor(type);
+                const iconName = getToastIconName(type);
+                const color = getToastIconColor(type);
 
                 return React.createElement(
                     Toast,
@@ -61,11 +62,11 @@ const useShowToast = () => {
                         React.createElement(
                             Box,
                             { className: `p-2 rounded-full bg-${color}/10` },
-                            React.createElement(Icon, {
-                                font: "material-icons",
+                            React.createElement(IconComponent, {
                                 name: iconName,
                                 size: 24,
-                                color: getColor(type)
+                                color: getToastIconColor(type),
+                                font: "material-icons"
                             })
                         ),
                         React.createElement(
