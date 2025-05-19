@@ -1,9 +1,9 @@
-<div align="center">
+<div>
   <h1>🚀 New React Native Project</h1>
   <p>A powerful React Native boilerplate with production-ready configurations and best practices</p>
   <p><strong>Create a new project using our CLI: <a href="https://github.com/linhnguyen-gt/create-rn-project">create-rn-project</a></strong></p>
 
-  <p align="center">
+  <p>
     <a href="https://reactnative.dev/" target="_blank">
       <img src="https://img.shields.io/badge/React_Native-v0.79.2-blue?style=for-the-badge&logo=react&logoColor=white" alt="react-native" />
     </a>
@@ -14,7 +14,7 @@
 
 ### Core Libraries
 
-  <p align="center">
+  <p>
     <img src="https://img.shields.io/badge/Expo-v53.0.0-blue?style=for-the-badge&logo=expo&logoColor=white" alt="expo" />
     <img src="https://img.shields.io/badge/Gluestack_UI-v1.1.73-1B1B1F?style=for-the-badge" alt="gluestack" />
     <img src="https://img.shields.io/badge/React_Navigation-v7.1.6-6B52AE?style=for-the-badge&logo=react&logoColor=white" alt="react-navigation" />
@@ -22,7 +22,7 @@
 
 ### State Management & API
 
-  <p align="center">
+  <p>
     <img src="https://img.shields.io/badge/Redux_Toolkit-v2.7.0-764ABC?style=for-the-badge&logo=redux&logoColor=white" alt="redux" />
     <img src="https://img.shields.io/badge/Redux_Saga-v1.3.0-89D96D?style=for-the-badge&logo=redux-saga&logoColor=white" alt="redux-saga" />
     <img src="https://img.shields.io/badge/Axios-v1.9.0-5A29E4?style=for-the-badge&logo=axios&logoColor=white" alt="axios" />
@@ -30,7 +30,7 @@
 
 ### UI & Styling
 
-  <p align="center">
+  <p>
     <img src="https://img.shields.io/badge/NativeWind-v4.1.23-38BDF8?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="nativewind" />
     <img src="https://img.shields.io/badge/Tailwind_CSS-v3.4.17-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="tailwindcss" />
     <img src="https://img.shields.io/badge/React_Native_Vector_Icons-v10.2.0-4B32C3?style=for-the-badge" alt="vector-icons" />
@@ -38,14 +38,14 @@
 
 ### Form & Validation
 
-  <p align="center">
+  <p>
     <img src="https://img.shields.io/badge/React_Hook_Form-v7.56.3-EC5990?style=for-the-badge&logo=react-hook-form&logoColor=white" alt="react-hook-form" />
     <img src="https://img.shields.io/badge/Zod-v3.24.3-3068B7?style=for-the-badge" alt="zod" />
   </p>
 
 ### Development & Testing
 
-  <p align="center">
+  <p>
     <img src="https://img.shields.io/badge/ESLint-v8.19.0-4B32C3?style=for-the-badge&logo=eslint&logoColor=white" alt="eslint" />
     <img src="https://img.shields.io/badge/Prettier-v3.3.3-F7B93E?style=for-the-badge&logo=prettier&logoColor=black" alt="prettier" />
     <img src="https://img.shields.io/badge/Jest-v29.7.0-C21325?style=for-the-badge&logo=jest&logoColor=white" alt="jest" />
@@ -53,40 +53,40 @@
 
 ### Environment & Storage
 
-  <p align="center">
+  <p>
     <img src="https://img.shields.io/badge/Dotenv-v16.5.0-ECD53F?style=for-the-badge&logo=dotenv&logoColor=black" alt="dotenv" />
     <img src="https://img.shields.io/badge/Async_Storage-v2.1.2-3B82F6?style=for-the-badge" alt="async-storage" />
   </p>
 
 ### Development Tools
 
-  <p align="center">
+  <p>
     <img src="https://img.shields.io/badge/Reactotron-v5.1.13-7B61FF?style=for-the-badge" alt="reactotron" />
     <img src="https://img.shields.io/badge/React_Native_Reanimated-v3.17.4-FF4154?style=for-the-badge" alt="reanimated" />
   </p>
 
 ### Environment Support
 
-  <p align="center">
+  <p>
     <img src="https://img.shields.io/badge/iOS-000000?style=for-the-badge&logo=apple&logoColor=white" alt="ios" />
     <img src="https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="android" />
   </p>
 </div>
 
-## ✨ Features
+## Features
 
-- 🏗️ Built with TypeScript for type safety
-- 📱 Cross-platform (iOS & Android) support
-- 🔄 Redux + Redux Saga for state management
-- 🎨 NativeWind for styling with Tailwind CSS
-- 🛠️ Reactotron integration for debugging
-- 🌐 Multi-environment support (Development, Staging, Production)
-- 📦 Pre-configured folder structure
-- 🔍 ESLint + Prettier for code quality
-- 🎯 Gluestack UI components
-- 🔐 Environment-specific configurations
+- Built with TypeScript for type safety
+- Cross-platform (iOS & Android) support
+- Redux + Redux Saga for state management
+- NativeWind for styling with Tailwind CSS
+- Reactotron integration for debugging
+- Multi-environment support (Development, Staging, Production)
+- Pre-configured folder structure
+- ESLint + Prettier for code quality
+- Gluestack UI components
+- Environment-specific configurations
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -109,7 +109,7 @@ git clone https://github.com/linhnguyen-gt/new-react-native
 cd new-react-native
 ```
 
-## 🔧 Environment Configuration
+## Environment Configuration
 
 ### Setup New Environment
 
@@ -415,7 +415,7 @@ The setup automatically manages app versions based on environment files:
 - Always commit `.env.example` and `.env.vault` (if using dotenv-vault)
 - Share vault credentials with your team members if using dotenv-vault
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 src/
@@ -443,7 +443,7 @@ src/
 
 ```
 
-## 🛠️ Development Tools
+## Development Tools
 
 ### Reactotron
 
@@ -456,7 +456,7 @@ For debugging, the project includes Reactotron integration. To use it:
 yarn adb:reactotron
 ```
 
-## 📝 Code Style
+## Code Style
 
 The project uses ESLint and Prettier for code formatting. Run linting with:
 
