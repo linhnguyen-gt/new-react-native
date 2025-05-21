@@ -15,6 +15,8 @@ import { screenOptions } from "@/helper";
 
 import "../global.css";
 
+import { SafeAreaProvider } from "react-native-safe-area-context";
+
 import { KeyboardViewSpacer } from "./components/keyboardSpace";
 import { GluestackUIProvider } from "./components/ui";
 import { RouteName } from "./constants";
@@ -37,9 +39,11 @@ const AppStack = () => {
 
 const App = () => {
     return (
-        <GluestackUIProvider>
-            <AppStack />
-        </GluestackUIProvider>
+        <SafeAreaProvider>
+            <GluestackUIProvider>
+                <AppStack />
+            </GluestackUIProvider>
+        </SafeAreaProvider>
     );
 };
 
