@@ -1,8 +1,10 @@
 {
     "compilerOptions": {
         "target": "esnext",
-        "module": "commonjs",
-        "lib": ["es2021"],
+        "module": "esnext",
+        "lib": [
+            "es2021"
+        ],
         "allowJs": true,
         "jsx": "react-native",
         "noEmit": true,
@@ -10,13 +12,15 @@
         "resolveJsonModule": true,
         "strict": true,
         "useUnknownInCatchVariables": false,
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
         "baseUrl": ".",
         "paths": {
-            "@/*": ["src/*"]
+            "@/*": [
+                "src/*"
+            ]
         }
     },
     "include": [
@@ -33,7 +37,6 @@
         "react-native-config.d.ts",
         "gesture-handler.native.js",
         "jest.setup.js",
-        "jest.config.js",
         "app.config.ts"
     ],
     "extends": "expo/tsconfig.base"

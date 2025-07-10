@@ -15,6 +15,7 @@ import { screenOptions } from "@/helper";
 
 import "../global.css";
 
+// eslint-disable-next-line import/order
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { KeyboardViewSpacer } from "./components/keyboardSpace";

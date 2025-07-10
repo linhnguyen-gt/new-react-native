@@ -19,10 +19,7 @@ const MainPage = () => {
         ResponseActions.getResponse.type
     ]);
 
-    const { increment, decrement } = useActions({
-        increment: CountActions.increment,
-        decrement: CountActions.decrement
-    });
+    const [increment, decrement] = useActions([CountActions.increment, CountActions.decrement]);
 
     const getResponse = useActions(ResponseActions.getResponse);
 
