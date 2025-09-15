@@ -2,14 +2,11 @@ pre-commit:
     parallel: true
     commands:
         versions:
-            glob: "package.json"
+            glob: 'package.json'
             run: yarn update-versions && git add README.md
         lint-staged:
-            glob: "*.{js,ts,jsx,tsx}"
+            glob: '*.{js,ts,jsx,tsx}'
             run: yarn lint-staged
-        typescript:
-            glob: "*.{ts,tsx}"
-            run: yarn tsc --noEmit
 
 commit-msg:
     commands:

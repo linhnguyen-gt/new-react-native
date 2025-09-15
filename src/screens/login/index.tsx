@@ -6,7 +6,7 @@ import { z } from 'zod';
 
 import { Errors, RouteName } from '@/constants';
 
-import { RootNavigator } from '@/services';
+import { environment, RootNavigator } from '@/services';
 
 import { getColor } from '@/hooks';
 
@@ -26,7 +26,7 @@ const loginSchema = z.object({
     email: z
         .string()
         .min(1, Errors.REQUIRED_EMAIL_INPUT)
-        .email(Errors.EMAIL_INVALID)
+        .pipe(z.email(Errors.EMAIL_INVALID))
         .refine((value) => value.endsWith('.com'), {
             message: Errors.IS_NOT_EMAIL,
         }),
@@ -56,7 +56,7 @@ const Login = () => {
                     <VStack alignItems="center" justifyContent="center" marginTop={20} marginBottom={12} space="sm">
                         <RNLogo />
                         <Text size="2xl" fontWeight="bold" marginTop={6}>
-                            Welcome Back
+                            Welcome Back {environment.appFlavor}
                         </Text>
                         <Text fontSize={14} marginTop={2} color="gray">
                             Please sign in to your account

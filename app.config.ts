@@ -59,14 +59,10 @@ export default ({ config }: ConfigContext): ExpoConfig => {
         name,
         slug: name.toLowerCase(),
         version: validatedConfig.VERSION_NAME,
+        userInterfaceStyle: 'automatic',
+        plugins: [...(config.plugins ?? [])],
         extra: {
             ...validatedConfig,
-        },
-        ios: {
-            buildNumber: validatedConfig.VERSION_CODE,
-        },
-        android: {
-            versionCode: parseInt(validatedConfig.VERSION_CODE, 10),
         },
     };
 };

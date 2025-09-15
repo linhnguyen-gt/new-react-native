@@ -1,3 +1,9 @@
 {
-    "name": "NewReactNative"
+    "name": "NewReactNative",
+    "ios": {
+        "bundleIdentifier": "org.reactjs.native.example.NewReactNative"
+    },
+    "android": {
+        "package": "com.newreactnative"
+    }
 }

@@ -11,6 +11,12 @@ import { RootNavigator } from '@/services';
 import { LoginPage } from '@/screens';
 
 jest.mock('@/services', () => ({
+    environment: {
+        appFlavor: 'test',
+        isDevelopment: () => true,
+        isStaging: () => false,
+        isProduction: () => false,
+    },
     RootNavigator: {
         replaceName: jest.fn(),
     },
@@ -21,7 +27,7 @@ const mockLoginSchema = z.object({
     email: z
         .string()
         .min(1, Errors.REQUIRED_EMAIL_INPUT)
-        .email(Errors.EMAIL_INVALID)
+        .pipe(z.email(Errors.EMAIL_INVALID))
         .refine((value) => value.endsWith('.com'), {
             message: Errors.IS_NOT_EMAIL,
         }),
@@ -38,7 +44,7 @@ describe('<LoginPage />', () => {
         expect(screen.getByTestId('email-input')).toBeTruthy();
         expect(screen.getByTestId('password-input')).toBeTruthy();
         expect(screen.getByTestId('login-button')).toBeTruthy();
-        expect(screen.getByText('Welcome Back')).toBeTruthy();
+        expect(screen.getByText(/Welcome Back/)).toBeTruthy();
     });
 
     it('navigates to Main screen on valid form submission', async () => {

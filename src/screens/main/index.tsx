@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button, StatusBar, useColorScheme } from 'react-native';
-import { Colors, Header } from 'react-native/Libraries/NewAppScreen';
 import { useSelector } from 'react-redux';
 
 import { environment } from '@/services';
@@ -31,7 +30,7 @@ const MainPage = () => {
     const isDarkMode = useColorScheme() === 'dark';
 
     const backgroundStyle = {
-        backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+        backgroundColor: isDarkMode ? '#0c0c0c' : '#f2f2f2',
     };
 
     React.useEffect(() => {
@@ -45,11 +44,7 @@ const MainPage = () => {
                 barStyle={isDarkMode ? 'light-content' : 'dark-content'}
                 backgroundColor={backgroundStyle.backgroundColor}
             />
-            <ScrollView
-                contentInsetAdjustmentBehavior="automatic"
-                backgroundColor={isDarkMode ? Colors.darker : Colors.lighter}>
-                <Header />
-
+            <ScrollView contentInsetAdjustmentBehavior="automatic" backgroundColor={backgroundStyle.backgroundColor}>
                 <VStack space="sm" alignItems="center">
                     <Text size="2xl" fontWeight="bold">
                         App Name: {environment.appName}
