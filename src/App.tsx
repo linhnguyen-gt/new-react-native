@@ -15,6 +15,11 @@ import { screenOptions } from '@/helper';
 
 import '../global.css';
 
+// eslint-disable-next-line import/order
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+// eslint-disable-next-line import/order
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+
 import { KeyboardViewSpacer } from './components/keyboardSpace';
 import { GluestackUIProvider } from './components/ui';
 import { RouteName } from './constants';
@@ -37,9 +42,13 @@ const AppStack = () => {
 
 const App = () => {
     return (
-        <GluestackUIProvider>
-            <AppStack />
-        </GluestackUIProvider>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+            <SafeAreaProvider>
+                <GluestackUIProvider>
+                    <AppStack />
+                </GluestackUIProvider>
+            </SafeAreaProvider>
+        </GestureHandlerRootView>
     );
 };
 
