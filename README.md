@@ -203,17 +203,6 @@ This configuration:
 3. **Version Management Script**
    Add this script to Build Phase in Xcode:
 
-.xcode.env.
-
-```bash
-# Determine APP_ENV based on CONFIGURATION
-if [[ "${CONFIGURATION}" == *"Product"* ]]; then
-    export APP_ENV="production"
-elif [[ "${CONFIGURATION}" == *"Staging"* ]]; then
-    export APP_ENV="staging"
-fi
-```
-
 Build Phases -> Add Run Script -> Paste
 
 ```bash
@@ -378,12 +367,12 @@ def getVersionFromEnv(File envFile) {
 ```json
 {
     "scripts": {
-        "android": "npx expo run:android --variant devDebug --app-id com.newreactnative",
-        "android:stg": "APP_ENV=staging && npx expo run:android --variant stagingDebug --app-id com.newreactnative.stg",
-        "android:pro": "APP_ENV=production && npx expo run:android --variant productionDebug --app-id com.newreactnative.production",
-        "ios": "npx expo run:ios",
-        "ios:stg": "APP_ENV=staging npx expo run:ios --scheme Staging --configuration Staging.Debug",
-        "ios:pro": "APP_ENV=production npx expo run:ios --scheme Pro --configuration Product.Debug"
+        "android": "yarn check:env && npx expo run:android --variant devDebug --device",
+        "android:stg": "yarn check:env && APP_ENV=staging && npx expo run:android --variant stagingDebug --app-id com.newreactnative.stg --device",
+        "android:pro": "yarn check:env && APP_ENV=production && npx expo run:android --variant productionDebug --app-id com.newreactnative.production --device",
+        "ios": "yarn check:env && npx expo run:ios --device",
+        "ios:stg": "yarn check:env && APP_ENV=staging && npx expo run:ios --scheme Staging --configuration Staging.Debug --device",
+        "ios:prod": "yarn check:env && APP_ENV=production && npx expo run:ios --scheme Product --configuration Product.Debug --device",
     }
 }
 ```
