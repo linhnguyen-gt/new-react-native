@@ -1,18 +1,18 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
-import { useForm } from "react-hook-form";
-import { Keyboard } from "react-native";
-import { z } from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { Keyboard } from 'react-native';
+import { z } from 'zod';
 
-import { Errors, RouteName } from "@/constants";
+import { Errors, RouteName } from '@/constants';
 
-import { RootNavigator } from "@/services";
+import { RootNavigator } from '@/services';
 
-import { getColor } from "@/hooks";
+import { getColor } from '@/hooks';
 
-import { ControlledInput } from "@/components/input";
-import { MyTouchable } from "@/components/touchable";
-import { Box, ScrollView, Text, VStack } from "@/components/ui";
+import { ControlledInput } from '@/components/input';
+import { MyTouchable } from '@/components/touchable';
+import { Box, ScrollView, Text, VStack } from '@/components/ui';
 
 const RNLogo = () => (
     <Box width={80} height={80} backgroundColor="black" borderRadius={16} alignItems="center" justifyContent="center">
@@ -27,19 +27,19 @@ const loginSchema = z.object({
         .string()
         .min(1, Errors.REQUIRED_EMAIL_INPUT)
         .email(Errors.EMAIL_INVALID)
-        .refine((value) => value.endsWith(".com"), {
-            message: Errors.IS_NOT_EMAIL
+        .refine((value) => value.endsWith('.com'), {
+            message: Errors.IS_NOT_EMAIL,
         }),
-    password: z.string().min(1, Errors.REQUIRED_PASSWORD_INPUT)
+    password: z.string().min(1, Errors.REQUIRED_PASSWORD_INPUT),
 });
 
 const Login = () => {
     const { control, handleSubmit } = useForm({
         defaultValues: {
-            email: "test@test.com",
-            password: "123456"
+            email: 'test@test.com',
+            password: '123456',
         },
-        resolver: zodResolver(loginSchema)
+        resolver: zodResolver(loginSchema),
     });
 
     const handleLogin = React.useCallback(() => {
@@ -81,13 +81,13 @@ const Login = () => {
                             testID="password-input"
                         />
 
-                        <Text fontSize={14} color={getColor("primary.600")} fontWeight="medium" textAlign="right">
+                        <Text fontSize={14} color={getColor('primary.600')} fontWeight="medium" textAlign="right">
                             Forgot Password?
                         </Text>
 
                         <MyTouchable
                             onPress={handleLogin}
-                            className="bg-primary-600 rounded-xl py-4 items-center mt-4 shadow-sm"
+                            className="mt-4 items-center rounded-xl bg-primary-600 py-4 shadow-sm"
                             testID="login-button">
                             <Text fontWeight="bold" size="lg" color="white">
                                 Sign In

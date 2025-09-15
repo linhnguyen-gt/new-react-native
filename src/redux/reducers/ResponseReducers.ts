@@ -1,13 +1,13 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
-import { ResponseActions } from "../actions";
+import { ResponseActions } from '../actions';
 
 const initialState: ResponseReducers = {
-    response: []
+    response: [],
 };
 
 const ResponseReducers = createSlice({
-    name: "response",
+    name: 'response',
     initialState,
     reducers: {},
     extraReducers: (builder) => {
@@ -15,7 +15,7 @@ const ResponseReducers = createSlice({
             state.response = action.payload;
         });
         builder.addDefaultCase((state) => state);
-    }
+    },
 });
 
 export default ResponseReducers.reducer;

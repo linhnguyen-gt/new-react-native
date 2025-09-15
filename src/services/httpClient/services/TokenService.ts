@@ -1,10 +1,10 @@
-import { clearToken, getToken, setToken } from "@/helper";
+import { clearToken, getToken, setToken } from '@/helper';
 
-import ApiMethod from "../ApiMethod";
-import { HttpClient } from "../HttpClient";
-import { ITokenService, Session } from "../interfaces/IHttpClient";
+import ApiMethod from '../ApiMethod';
+import { HttpClient } from '../HttpClient';
+import { ITokenService, Session } from '../interfaces/IHttpClient';
 
-import { StoreService } from "@/services/store";
+import { StoreService } from '@/services/store';
 
 export class TokenService implements ITokenService {
     private readonly httpClient: HttpClient;
@@ -16,7 +16,7 @@ export class TokenService implements ITokenService {
     async setSession(session: Session): Promise<void> {
         this.httpClient.setAccessToken(session.accessToken);
         await setToken({
-            refreshToken: session.refreshToken || undefined
+            refreshToken: session.refreshToken || undefined,
         });
 
         // TODO: Implement token lifetime expiration here!!!
@@ -55,8 +55,8 @@ export class TokenService implements ITokenService {
                     expiredAt: number;
                 };
             }>({
-                endpoint: "refresh-token",
-                method: ApiMethod.GET
+                endpoint: 'refresh-token',
+                method: ApiMethod.GET,
             });
 
             if (!response?.ok) {
@@ -68,11 +68,11 @@ export class TokenService implements ITokenService {
 
             await this.setSession({
                 accessToken: data?.accessToken,
-                expiredAt: data?.expiredAt
+                expiredAt: data?.expiredAt,
             });
             return true;
         } catch (e) {
-            console.error("Error refreshing token:", e);
+            console.error('Error refreshing token:', e);
             await this.clearSession();
             return false;
         }

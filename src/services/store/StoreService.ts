@@ -1,6 +1,6 @@
-import { EnhancedStore } from "@reduxjs/toolkit";
+import { EnhancedStore } from '@reduxjs/toolkit';
 
-import { ResetActions } from "@/redux/actions";
+import { ResetActions } from '@/redux/actions';
 
 export class StoreService {
     private static instance: StoreService;

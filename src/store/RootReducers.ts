@@ -1,13 +1,13 @@
-import { Action, combineReducers } from "redux";
+import { Action, combineReducers } from 'redux';
 
-import { ActionTypes } from "@/constants";
+import { ActionTypes } from '@/constants';
 
-import { CountReducers, LoadingReducers, ResponseReducers } from "@/redux/reducers";
+import { CountReducers, LoadingReducers, ResponseReducers } from '@/redux/reducers';
 
 const appReducer = combineReducers({
     count: CountReducers,
     response: ResponseReducers,
-    loading: LoadingReducers
+    loading: LoadingReducers,
 });
 
 export type RootState = ReturnType<typeof appReducer>;

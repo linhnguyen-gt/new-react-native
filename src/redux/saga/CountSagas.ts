@@ -1,9 +1,9 @@
-import { delay, put, select, takeEvery } from "redux-saga/effects";
+import { delay, put, select, takeEvery } from 'redux-saga/effects';
 
-import { CountActions } from "../actions";
-import { CountSelectors } from "../selectors";
+import { CountActions } from '../actions';
+import { CountSelectors } from '../selectors';
 
-import { handleApiCall } from "./ApiSagaHelper";
+import { handleApiCall } from './ApiSagaHelper';
 
 function* increment() {
     yield* handleApiCall(CountActions.increment.type, function* () {

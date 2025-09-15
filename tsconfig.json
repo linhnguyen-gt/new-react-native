@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "target": "esnext",
-        "module": "commonjs",
+        "module": "es2022",
         "lib": ["es2021"],
         "allowJs": true,
         "jsx": "react-native",
@@ -10,17 +10,18 @@
         "resolveJsonModule": true,
         "strict": true,
         "useUnknownInCatchVariables": false,
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
+        "skipDefaultLibCheck": true,
         "baseUrl": ".",
         "paths": {
             "@/*": ["src/*"]
         }
     },
     "include": [
-        ".prettierrc.js",
+        ".prettierrc.mjs",
         ".eslintrc.js",
         "babel.config.js",
         "metro.config.js",
@@ -33,8 +34,8 @@
         "react-native-config.d.ts",
         "gesture-handler.native.js",
         "jest.setup.js",
-        "jest.config.js",
         "app.config.ts"
     ],
+    "exclude": ["node_modules"],
     "extends": "expo/tsconfig.base"
 }

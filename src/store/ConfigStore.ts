@@ -1,25 +1,22 @@
-import { configureStore, EnhancedStore, Middleware, StoreEnhancer } from "@reduxjs/toolkit";
-import { compact } from "lodash";
+import { configureStore, EnhancedStore, StoreEnhancer } from '@reduxjs/toolkit';
+import { compact } from 'lodash';
+import createSagaMiddleware from 'redux-saga';
 
-import { reactotron, StoreService } from "@/services";
+import { reactotron, StoreService } from '@/services';
 
-import RootReducers from "./RootReducers";
-import RootSaga from "./RootSaga";
+import RootReducers from './RootReducers';
+import RootSaga from './RootSaga';
 
-import Logger from "@/helper/logger";
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const createSagaMiddleware = require("redux-saga").default;
+import Logger from '@/helper/logger';
 
 class StoreConfig {
     private sagaMiddleware = createSagaMiddleware({
         sagaMonitor: reactotron?.createSagaMonitor?.(),
-        onError: (error: Error, { sagaStack }: { sagaStack: string }) =>
-            Logger.error("SagaMiddleware", {
+        onError: (error) =>
+            Logger.error('SagaMiddleware', {
                 error: error.message,
                 stack: error.stack,
-                sagaStack
-            })
+            }),
     });
 
     private enhancers: StoreEnhancer[] = compact([reactotron?.createEnhancer?.()]);
@@ -31,9 +28,9 @@ class StoreConfig {
             getDefaultMiddleware({
                 serializableCheck: false,
                 thunk: false,
-                immutableCheck: !__DEV__
-            }).concat(this.sagaMiddleware as Middleware),
-        devTools: __DEV__
+                immutableCheck: !__DEV__,
+            }).concat(this.sagaMiddleware),
+        devTools: __DEV__,
     });
 
     constructor() {
@@ -41,7 +38,7 @@ class StoreConfig {
             this.sagaMiddleware.run(RootSaga.saga);
             StoreService.getInstance().initialize(this.store);
         } catch (error) {
-            console.error("Failed to start saga:", error);
+            console.error('Failed to start saga:', error);
         }
     }
 }

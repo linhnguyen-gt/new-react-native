@@ -1,13 +1,13 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
-import { CountActions } from "../actions";
+import { CountActions } from '../actions';
 
 const initialState: CountReducers = {
-    count: 0
+    count: 0,
 };
 
 const CountReducers = createSlice({
-    name: "count",
+    name: 'count',
     initialState,
     reducers: {},
     extraReducers: (builder) => {
@@ -18,7 +18,7 @@ const CountReducers = createSlice({
             state.count = action.payload;
         });
         builder.addDefaultCase((state) => state);
-    }
+    },
 });
 
 export default CountReducers.reducer;

@@ -1,37 +1,37 @@
-import React from "react";
-import { Button, StatusBar, useColorScheme } from "react-native";
-import { Colors, Header } from "react-native/Libraries/NewAppScreen";
-import { useSelector } from "react-redux";
+import React from 'react';
+import { Button, StatusBar, useColorScheme } from 'react-native';
+import { Colors, Header } from 'react-native/Libraries/NewAppScreen';
+import { useSelector } from 'react-redux';
 
-import { environment } from "@/services";
+import { environment } from '@/services';
 
-import { useActions, useLoading } from "@/hooks";
+import { useActions, useLoading } from '@/hooks';
 
-import { Loading } from "@/components/loading";
-import { Box, HStack, ScrollView, Text, VStack } from "@/components/ui";
-import { CountActions, ResponseActions } from "@/redux/actions";
-import { CountSelectors, ResponseSelectors } from "@/redux/selectors";
+import { Loading } from '@/components/loading';
+import { Box, HStack, ScrollView, Text, VStack } from '@/components/ui';
+import { CountActions, ResponseActions } from '@/redux/actions';
+import { CountSelectors, ResponseSelectors } from '@/redux/selectors';
 
 const MainPage = () => {
     const isLoading = useLoading([
         CountActions.increment.type,
         CountActions.decrement.type,
-        ResponseActions.getResponse.type
+        ResponseActions.getResponse.type,
     ]);
 
     const { increment, decrement } = useActions({
         increment: CountActions.increment,
-        decrement: CountActions.decrement
+        decrement: CountActions.decrement,
     });
 
     const getResponse = useActions(ResponseActions.getResponse);
 
     const count = useSelector(CountSelectors.count);
     const response = useSelector(ResponseSelectors.response);
-    const isDarkMode = useColorScheme() === "dark";
+    const isDarkMode = useColorScheme() === 'dark';
 
     const backgroundStyle = {
-        backgroundColor: isDarkMode ? Colors.darker : Colors.lighter
+        backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
     };
 
     React.useEffect(() => {
@@ -42,7 +42,7 @@ const MainPage = () => {
     return (
         <Box flex={1}>
             <StatusBar
-                barStyle={isDarkMode ? "light-content" : "dark-content"}
+                barStyle={isDarkMode ? 'light-content' : 'dark-content'}
                 backgroundColor={backgroundStyle.backgroundColor}
             />
             <ScrollView

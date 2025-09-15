@@ -1,5 +1,5 @@
-import React from "react";
-import { Animated } from "react-native";
+import React from 'react';
+import { Animated } from 'react-native';
 
 function useShakeView(error?: string | boolean | undefined) {
     const anim = React.useRef(new Animated.Value(0));
@@ -10,25 +10,27 @@ function useShakeView(error?: string | boolean | undefined) {
                 Animated.timing(anim.current, {
                     toValue: -2,
                     duration: 10,
-                    useNativeDriver: true
+                    useNativeDriver: true,
                 }),
                 Animated.timing(anim.current, {
                     toValue: 2,
                     duration: 10,
-                    useNativeDriver: true
+                    useNativeDriver: true,
                 }),
                 Animated.timing(anim.current, {
                     toValue: 0,
                     duration: 10,
-                    useNativeDriver: true
-                })
+                    useNativeDriver: true,
+                }),
             ]),
             { iterations: 2 }
         ).start();
     }, []);
 
     React.useEffect(() => {
-        error && shake();
+        if (error) {
+            shake();
+        }
     }, [error, shake]);
 
     return { transform: [{ translateX: anim.current }] };

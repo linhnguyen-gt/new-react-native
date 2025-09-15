@@ -1,4 +1,4 @@
-import Reactotron from "./Reactotron";
+import Reactotron from './Reactotron';
 
 export const reactotron = new Reactotron();
 reactotron.setup();

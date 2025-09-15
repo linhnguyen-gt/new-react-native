@@ -5,20 +5,20 @@
  * @format
  */
 
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import React from "react";
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import React from 'react';
 
-import { RootNavigator } from "@/services";
+import { RootNavigator } from '@/services';
 
-import { screenOptions } from "@/helper";
+import { screenOptions } from '@/helper';
 
-import "../global.css";
+import '../global.css';
 
-import { KeyboardViewSpacer } from "./components/keyboardSpace";
-import { GluestackUIProvider } from "./components/ui";
-import { RouteName } from "./constants";
-import { LoginPage, MainPage } from "./screens";
+import { KeyboardViewSpacer } from './components/keyboardSpace';
+import { GluestackUIProvider } from './components/ui';
+import { RouteName } from './constants';
+import { LoginPage, MainPage } from './screens';
 
 const Stack = createStackNavigator<RootStackParamList>();
 

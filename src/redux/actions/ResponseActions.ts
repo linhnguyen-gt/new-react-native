@@ -1,6 +1,6 @@
-import { createAction } from "@reduxjs/toolkit";
+import { createAction } from '@reduxjs/toolkit';
 
-import { ActionTypes } from "@/constants";
+import { ActionTypes } from '@/constants';
 
 export const getResponse = createAction(ActionTypes.GET_RESPONSE);
 

@@ -1,7 +1,7 @@
-import { ActionCreatorWithPayload, PayloadAction } from "@reduxjs/toolkit";
-import React from "react";
-import { useDispatch } from "react-redux";
-import { Dispatch } from "redux";
+import { ActionCreatorWithPayload, PayloadAction } from '@reduxjs/toolkit';
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { Dispatch } from 'redux';
 
 type BoundActionCreator<TPayload> = {
     (payload: TPayload): PayloadAction<TPayload>;
@@ -29,7 +29,7 @@ function useActions<TPayload, TActionMap extends Record<string, ActionCreatorWit
     const dispatch = useDispatch<Dispatch>();
 
     return React.useMemo(() => {
-        if (typeof actionCreator === "function") {
+        if (typeof actionCreator === 'function') {
             const boundActionCreator = function (this: void, payload?: TPayload) {
                 return dispatch(actionCreator(payload as TPayload));
             } as BoundActionCreator<TPayload>;

@@ -1,7 +1,7 @@
-import React from "react";
-import { View } from "react-native";
+import React from 'react';
+import { View } from 'react-native';
 
-import BaseBox, { type BaseBoxProps } from "./BaseBox";
+import BaseBox, { type BaseBoxProps } from './BaseBox';
 
 export type IBoxProps = BaseBoxProps & {
     isLoading?: boolean;
@@ -11,5 +11,5 @@ const Box = React.forwardRef<React.ComponentRef<typeof View>, IBoxProps>(({ isLo
     return <BaseBox {...props} ref={ref} />;
 });
 
-Box.displayName = "Box";
+Box.displayName = 'Box';
 export default Box;

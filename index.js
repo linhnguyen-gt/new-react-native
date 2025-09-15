@@ -2,10 +2,9 @@
  * @format
  */
 
-import { AppRegistry } from "react-native";
+import { registerRootComponent } from 'expo';
 
-import { name as appName } from "./app.json";
-import "./gesture-handler.native";
-import Root from "./src/Root";
+import './gesture-handler.native';
+import Root from './src/Root';
 
-AppRegistry.registerComponent(appName, () => Root);
+registerRootComponent(Root);

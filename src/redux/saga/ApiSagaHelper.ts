@@ -1,6 +1,6 @@
-import { Effect, put } from "redux-saga/effects";
+import { Effect, put } from 'redux-saga/effects';
 
-import { startLoading, stopLoading } from "../reducers";
+import { startLoading, stopLoading } from '../reducers';
 
 type EffectType = Effect | Promise<any>;
 type SagaGenerator = Generator<EffectType, any, any>;
@@ -11,7 +11,7 @@ type LoadingOptions = {
 };
 
 function isLoadingOptions(obj: any): obj is LoadingOptions {
-    return typeof obj === "object" && !("type" in obj);
+    return typeof obj === 'object' && !('type' in obj);
 }
 
 export function* handleApiCall(

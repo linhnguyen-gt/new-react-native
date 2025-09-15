@@ -1,9 +1,9 @@
-import React from "react";
-import { ActivityIndicator } from "react-native";
+import React from 'react';
+import { ActivityIndicator } from 'react-native';
 
-import { LoadingBox } from "../ui";
+import { LoadingBox } from '../ui';
 
-import type { LoadingBoxProps } from "../ui/box/LoadingBox";
+import type { LoadingBoxProps } from '../ui/box/LoadingBox';
 
 const LoadingFooter: React.FC<LoadingBoxProps> = (props) => {
     return (

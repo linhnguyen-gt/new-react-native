@@ -1,5 +1,5 @@
-import { createSelector } from "@reduxjs/toolkit";
-import { ActionPattern } from "redux-saga/effects";
+import { createSelector } from '@reduxjs/toolkit';
+import { ActionPattern } from 'redux-saga/effects';
 
 const LoadingSelectors = (state: AppState) => state;
 

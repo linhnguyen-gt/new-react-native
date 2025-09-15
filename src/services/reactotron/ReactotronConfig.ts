@@ -1,4 +1,4 @@
-import { TurboModuleRegistry } from "react-native";
+import { TurboModuleRegistry } from 'react-native';
 
 export interface ReactotronConfig {
     /** The name of the app. */
@@ -23,9 +23,9 @@ export interface ReactotronConfig {
  * The default Reactotron configuration.
  */
 const host =
-    (TurboModuleRegistry.getEnforcing("SourceCode")?.getConstants?.() as { scriptURL?: string })?.scriptURL
-        ?.split("://")[1]
-        ?.split(":")[0] ?? "localhost";
+    (TurboModuleRegistry.getEnforcing('SourceCode')?.getConstants?.() as { scriptURL?: string })?.scriptURL
+        ?.split('://')[1]
+        ?.split(':')[0] ?? 'localhost';
 export const DEFAULT_REACTOTRON_CONFIG: ReactotronConfig = {
     clearOnLoad: true,
     host,
@@ -33,7 +33,7 @@ export const DEFAULT_REACTOTRON_CONFIG: ReactotronConfig = {
     ignoreUrls: /(logs|symbolicate)$/,
     state: {
         initial: true,
-        snapshots: false
+        snapshots: false,
     },
-    exceptActions: ["persist/PERSIST", "persist/REHYDRATE"]
+    exceptActions: ['persist/PERSIST', 'persist/REHYDRATE'],
 };

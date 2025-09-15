@@ -1,6 +1,6 @@
-import { all, fork } from "redux-saga/effects";
+import { all, fork } from 'redux-saga/effects';
 
-import { saga } from "@/redux";
+import { saga } from '@/redux';
 
 class RootSaga {
     static *saga() {

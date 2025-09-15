@@ -1,11 +1,11 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import Tron from "reactotron-react-native";
-import { reactotronRedux as reduxPlugin } from "reactotron-redux";
-import sagaPlugin from "reactotron-redux-saga";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Tron from 'reactotron-react-native';
+import { reactotronRedux as reduxPlugin } from 'reactotron-redux';
+import sagaPlugin from 'reactotron-redux-saga';
 
-import { name } from "../../../package.json";
+import { name } from '../../../package.json';
 
-import { DEFAULT_REACTOTRON_CONFIG, ReactotronConfig } from "./ReactotronConfig";
+import { DEFAULT_REACTOTRON_CONFIG, ReactotronConfig } from './ReactotronConfig';
 
 /** Do Nothing. */
 
@@ -30,17 +30,17 @@ export default class Reactotron {
         this.tron = Tron.setAsyncStorageHandler(AsyncStorage).configure({
             name: this.config.name || name,
             host: this.config.host,
-            port: 9090
+            port: 9090,
         });
 
         this.tron.useReactNative({
-            asyncStorage: this.config.useAsyncStorage ? { ignore: ["persist:root"] } : false,
-            networking: { ignoreUrls: this.config.ignoreUrls }
+            asyncStorage: this.config.useAsyncStorage ? { ignore: ['persist:root'] } : false,
+            networking: { ignoreUrls: this.config.ignoreUrls },
         });
 
         this.tron.use(
             reduxPlugin({
-                except: this.config.exceptActions
+                except: this.config.exceptActions,
             })
         );
 

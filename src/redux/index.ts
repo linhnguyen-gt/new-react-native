@@ -1,3 +1,3 @@
-import * as saga from "./saga";
+import * as saga from './saga';
 
 export { saga };

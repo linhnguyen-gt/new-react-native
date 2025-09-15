@@ -1,6 +1,6 @@
 const RouteName = {
-    Login: "Login",
-    Main: "Main"
+    Login: 'Login',
+    Main: 'Main',
 } as const;
 
 export default RouteName;

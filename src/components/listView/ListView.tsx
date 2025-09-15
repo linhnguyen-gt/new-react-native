@@ -1,14 +1,14 @@
-import { FlashList, FlashListProps, ListRenderItem } from "@shopify/flash-list";
-import React from "react";
-import { DimensionValue, RefreshControl } from "react-native";
+import { FlashList, FlashListProps, FlashListRef, ListRenderItem } from '@shopify/flash-list';
+import React from 'react';
+import { DimensionValue, RefreshControl } from 'react-native';
 
-import { useRefresh } from "@/hooks";
+import { useRefresh } from '@/hooks';
 
-import { LoadingFooter } from "../loading";
+import { LoadingFooter } from '../loading';
 
 type Data = Record<string, any>;
 
-export type ListViewRef<T> = FlashList<T>;
+export type ListViewRef<T> = FlashListRef<T>;
 
 type ListViewProps<T> = FlashListProps<T> & {
     data: T[] | undefined;
@@ -68,7 +68,7 @@ function ListView<T extends Data>(
         return Array(skeletonCount)
             .fill(null)
             .map((_, index) => ({
-                [keyList]: `skeleton-${index}-${Math.random().toString(36).substring(2, 9)}`
+                [keyList]: `skeleton-${index}-${Math.random().toString(36).substring(2, 9)}`,
             })) as T[];
     }, [skeletonCount, keyList]);
 
@@ -108,9 +108,8 @@ function ListView<T extends Data>(
                 numColumns={numColumns}
                 contentContainerStyle={{
                     paddingTop: pt,
-                    paddingBottom: pb
+                    paddingBottom: pb,
                 }}
-                estimatedItemSize={200}
                 onEndReachedThreshold={0.1}
                 scrollEnabled={!isLoading}
             />
@@ -134,7 +133,7 @@ function ListView<T extends Data>(
             pt,
             pb,
             keyList,
-            _renderEmpty
+            _renderEmpty,
         ]
     );
 

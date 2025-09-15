@@ -1,11 +1,11 @@
-import { CommonActions, createNavigationContainerRef } from "@react-navigation/native";
+import { CommonActions, createNavigationContainerRef } from '@react-navigation/native';
 
-import { RouteName } from "@/constants";
+import { RouteName } from '@/constants';
 
-import { INavigationService } from "./INavigationService";
-import { NavigationLogger } from "./NavigationLogger";
+import { INavigationService } from './INavigationService';
+import { NavigationLogger } from './NavigationLogger';
 
-export interface NavigatorParamsType {}
+export type NavigatorParamsType = Record<string, never>;
 
 class RootNavigator implements INavigationService {
     public readonly navigationRef = createNavigationContainerRef();
@@ -38,7 +38,7 @@ class RootNavigator implements INavigationService {
         return this.navigationRef.current?.dispatch(
             CommonActions.reset({
                 index: 0,
-                routes: [{ name: route, params: params }]
+                routes: [{ name: route, params: params }],
             })
         );
     }
