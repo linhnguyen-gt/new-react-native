@@ -15,9 +15,9 @@
         "esModuleInterop": true,
         "skipLibCheck": true,
         "skipDefaultLibCheck": true,
-        "baseUrl": ".",
+        "typeRoots": ["./node_modules/@types", "./src/types"],
         "paths": {
-            "@/*": ["src/*"]
+            "@/*": ["./src/*"]
         }
     },
     "include": [
@@ -34,7 +34,9 @@
         "react-native-config.d.ts",
         "gesture-handler.native.js",
         "jest.setup.js",
-        "app.config.ts"
+        "app.config.ts",
+        "global.css",
+        "global.css.d.ts"
     ],
     "exclude": ["node_modules"],
     "extends": "expo/tsconfig.base"
