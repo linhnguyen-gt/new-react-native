@@ -87,3 +87,10 @@ yarn-error.log
 
 .qodo
 .expo/
+
+# AIKit - AI Development Kits
+.cursor/
+.cursorrules
+CURSOR.md
+docs/
+plans/

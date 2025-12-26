@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="thumbnail/thumbnail.jpeg" alt="New React Native Project" width="600" style="border-radius: 12px;" />
+</div>
+
 <div>
   <h1>🚀 New React Native Project</h1>
   <p>A powerful React Native boilerplate with production-ready configurations and best practices</p>
@@ -193,14 +197,14 @@ This configuration:
 - Supports all environments (Dev, Staging, Product)
 - Enables both Debug and Release builds for each environment
 
-2. **Build Configurations**
+1. **Build Configurations**
    Xcode should have these configurations set up:
 
 - Staging.Debug/Release (Staging)
 - Product.Debug/Release (Production)
 - Debug/Release (Default)
 
-3. **Version Management Script**
+1. **Version Management Script**
    Add this script to Build Phase in Xcode:
 
 Build Phases -> Add Run Script -> Paste
@@ -280,7 +284,7 @@ else
 fi
 ```
 
-4. **Setup Steps for iOS**
+1. **Setup Steps for iOS**
 
 - Copy the configuration block to your Podfile
 - Run `pod install` to apply configurations

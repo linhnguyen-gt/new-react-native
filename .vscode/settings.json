@@ -1,2 +1,11 @@
 {
+    "dotrush.roslyn.projectOrSolutionFiles": [
+        "/Users/linh/Documents/GitHub/new-react-native/node_modules/@react-native-async-storage/async-storage/windows/ReactNativeAsyncStorage.sln",
+        "/Users/linh/Documents/GitHub/new-react-native/node_modules/@react-native-async-storage/async-storage/windows/ReactNativeAsyncStorage61.sln",
+        "/Users/linh/Documents/GitHub/new-react-native/node_modules/@react-native-async-storage/async-storage/windows/ReactNativeAsyncStorage62.sln",
+        "/Users/linh/Documents/GitHub/new-react-native/node_modules/react-native-screens/windows/RNScreens62.sln",
+        "/Users/linh/Documents/GitHub/new-react-native/node_modules/react-native-screens/windows/RNScreens63.sln",
+        "/Users/linh/Documents/GitHub/new-react-native/node_modules/react-native-screens/windows/RNScreens65.sln",
+        "/Users/linh/Documents/GitHub/new-react-native/node_modules/react-native-svg/windows/RNSVG.sln"
+    ]
 }
