@@ -22,15 +22,23 @@ const createStyleFromProps = (props: StyleProps): ViewStyle => {
 };
 
 const HStack = React.forwardRef<React.ComponentRef<typeof View>, IHStackProps>(
-    ({ className, space, reversed, style, onPress, ...props }, ref) => {
+    ({ className, space, reversed, style, onPress, onBlur, onFocus, ...props }, ref) => {
         const styleProps = createStyleFromProps(props as StyleProps);
+
+        // Filter out incompatible props (onBlur/onFocus can be null in View but not in TouchableOpacity)
+        // Conditionally include onBlur and onFocus only if they're not null
+        const touchableProps = {
+            ...props,
+            ...(onBlur !== null && onBlur !== undefined && { onBlur }),
+            ...(onFocus !== null && onFocus !== undefined && { onFocus }),
+        };
 
         return (
             <Touchable
                 onPress={onPress}
                 className={hstackStyle({ space, reversed, class: className })}
                 style={[styleProps, style]}
-                {...props}
+                {...touchableProps}
                 ref={ref}
             />
         );

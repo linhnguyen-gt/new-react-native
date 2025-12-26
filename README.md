@@ -19,7 +19,7 @@
 ### Core Libraries
 
   <p>
-    <img src="https://img.shields.io/badge/Expo-v54.0.25-blue?style=for-the-badge&logo=expo&logoColor=white" alt="expo" />
+    <img src="https://img.shields.io/badge/Expo-v54.0.30-blue?style=for-the-badge&logo=expo&logoColor=white" alt="expo" />
     <img src="https://img.shields.io/badge/Gluestack_UI-v1.1.73-1B1B1F?style=for-the-badge" alt="gluestack" />
     <img src="https://img.shields.io/badge/React_Navigation-v7.1.20-6B52AE?style=for-the-badge&logo=react&logoColor=white" alt="react-navigation" />
   </p>
@@ -50,7 +50,7 @@
 ### Development & Testing
 
   <p>
-    <img src="https://img.shields.io/badge/ESLint-v8.57.0-4B32C3?style=for-the-badge&logo=eslint&logoColor=white" alt="eslint" />
+    <img src="https://img.shields.io/badge/ESLint-v8.57.1-4B32C3?style=for-the-badge&logo=eslint&logoColor=white" alt="eslint" />
     <img src="https://img.shields.io/badge/Prettier-v3.3.3-F7B93E?style=for-the-badge&logo=prettier&logoColor=black" alt="prettier" />
     <img src="https://img.shields.io/badge/Jest-v29.7.0-C21325?style=for-the-badge&logo=jest&logoColor=white" alt="jest" />
   </p>
@@ -376,7 +376,7 @@ def getVersionFromEnv(File envFile) {
         "android:pro": "yarn check:env && APP_ENV=production && npx expo run:android --variant productionDebug --app-id com.newreactnative.production --device",
         "ios": "yarn check:env && npx expo run:ios --device",
         "ios:stg": "yarn check:env && APP_ENV=staging && npx expo run:ios --scheme Staging --configuration Staging.Debug --device",
-        "ios:prod": "yarn check:env && APP_ENV=production && npx expo run:ios --scheme Product --configuration Product.Debug --device",
+        "ios:prod": "yarn check:env && APP_ENV=production && npx expo run:ios --scheme Product --configuration Product.Debug --device"
     }
 }
 ```
