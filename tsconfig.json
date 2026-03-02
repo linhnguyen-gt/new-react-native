@@ -11,6 +11,7 @@
         "strict": true,
         "useUnknownInCatchVariables": false,
         "moduleResolution": "bundler",
+        "moduleDetection": "force",
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
@@ -31,6 +32,7 @@
         "__tests__/App.test.tsx",
         "tailwind.config.js",
         "nativewind-env.d.ts",
+        "global.css.d.ts",
         "react-native-config.d.ts",
         "gesture-handler.native.js",
         "jest.setup.js",
@@ -39,5 +41,5 @@
         "global.css.d.ts"
     ],
     "exclude": ["node_modules"],
-    "extends": "expo/tsconfig.base"
+    "extends": "expo/tsconfig.base.json"
 }
