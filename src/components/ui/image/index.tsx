@@ -1,12 +1,11 @@
-'use client';
-
-import { createImage } from '@gluestack-ui/image';
-import { tva } from '@gluestack-ui/nativewind-utils/tva';
 import { cssInterop } from 'nativewind';
 import React from 'react';
 import { ImageStyle, Platform, Image as RNImage } from 'react-native';
 
-import type { VariantProps } from '@gluestack-ui/nativewind-utils';
+import { createStyleFromProps } from '../utils/style-props';
+import { tva } from '../utils/tva';
+
+import type { VariantProps } from '../utils/tva';
 
 type StyleProps = Omit<ImageStyle, 'transform'>;
 
@@ -26,30 +25,24 @@ const imageStyle = tva({
     },
 });
 
-const UIImage = createImage({ Root: RNImage });
-cssInterop(UIImage, { className: 'style' });
+cssInterop(RNImage, { className: 'style' });
 
-export type ImageProps = Omit<React.ComponentProps<typeof UIImage>, keyof StyleProps> &
+export type ImageProps = Omit<React.ComponentProps<typeof RNImage>, keyof StyleProps> &
     StyleProps &
     VariantProps<typeof imageStyle> & {
         className?: string;
     };
 
-const createStyleFromProps = (props: StyleProps): ImageStyle => {
-    const styleKeys = Object.keys(props).filter((key) => props[key as keyof StyleProps] !== undefined);
-    return Object.fromEntries(styleKeys.map((key) => [key, props[key as keyof StyleProps]])) as ImageStyle;
-};
-
-const Image = React.forwardRef<React.ComponentRef<typeof UIImage>, ImageProps>(
+const Image = React.forwardRef<React.ComponentRef<typeof RNImage>, ImageProps>(
     ({ size = 'md', className, style, ...props }, ref) => {
         const styleProps = createStyleFromProps(props as StyleProps);
 
         return (
-            <UIImage
+            <RNImage
                 className={imageStyle({ size, class: className })}
                 style={[
                     styleProps,
-                    // @ts-expect-error : web only
+                    // @ts-expect-error : web-only sizing reset
                     Platform.OS === 'web' ? { height: 'revert-layer', width: 'revert-layer' } : undefined,
                     style,
                 ]}

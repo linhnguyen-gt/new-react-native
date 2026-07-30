@@ -21,7 +21,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { KeyboardViewSpacer } from './components/keyboardSpace';
-import { GluestackUIProvider } from './components/ui';
+import { UIProvider } from './components/ui';
 import { RouteName } from './constants';
 import { LoginPage, MainPage } from './screens';
 
@@ -44,9 +44,9 @@ const App = () => {
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <SafeAreaProvider>
-                <GluestackUIProvider>
+                <UIProvider>
                     <AppStack />
-                </GluestackUIProvider>
+                </UIProvider>
             </SafeAreaProvider>
         </GestureHandlerRootView>
     );

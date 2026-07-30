@@ -1,8 +1,8 @@
-import { OverlayProvider } from '@gluestack-ui/overlay';
-import { ToastProvider } from '@gluestack-ui/toast';
 import { colorScheme as colorSchemeNW } from 'nativewind';
 import React from 'react';
 import { ColorSchemeName, useColorScheme, View, ViewProps } from 'react-native';
+
+import { ToastProvider } from '../toast/toast-provider';
 
 import { config } from './config';
 
@@ -10,16 +10,17 @@ type ModeType = 'light' | 'dark' | 'system';
 
 const getColorSchemeName = (colorScheme: ColorSchemeName, mode: ModeType): 'light' | 'dark' => {
     if (mode === 'system') {
-        return colorScheme ?? 'light';
+        // ColorSchemeName widens to 'unspecified'/null; collapse anything non-dark to light.
+        return colorScheme === 'dark' ? 'dark' : 'light';
     }
     return mode;
 };
 
-export function GluestackUIProvider({
+export function UIProvider({
     mode = 'light',
     ...props
 }: {
-    mode?: 'light' | 'dark' | 'system';
+    mode?: ModeType;
     children?: React.ReactNode;
     style?: ViewProps['style'];
 }) {
@@ -31,9 +32,7 @@ export function GluestackUIProvider({
 
     return (
         <View style={[config[colorSchemeName], { flex: 1, height: '100%', width: '100%' }, props.style]}>
-            <OverlayProvider>
-                <ToastProvider>{props.children}</ToastProvider>
-            </OverlayProvider>
+            <ToastProvider>{props.children}</ToastProvider>
         </View>
     );
 }

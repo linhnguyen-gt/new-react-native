@@ -1,8 +1,9 @@
-import { tva } from '@gluestack-ui/nativewind-utils/tva';
 import React from 'react';
 import { TouchableOpacity, TouchableOpacityProps, ViewStyle } from 'react-native';
 
-import type { VariantProps } from '@gluestack-ui/nativewind-utils';
+import { tva } from '../ui/utils/tva';
+
+import type { VariantProps } from '../ui/utils/tva';
 
 export const touchableStyle = tva({});
 

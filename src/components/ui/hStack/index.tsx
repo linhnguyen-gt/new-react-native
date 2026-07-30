@@ -5,7 +5,7 @@ import Touchable from '../touch';
 
 import { hstackStyle } from './styles';
 
-import type { VariantProps } from '@gluestack-ui/nativewind-utils';
+import type { VariantProps } from '../utils/tva';
 
 type StyleProps = Omit<ViewStyle, 'transform'>;
 

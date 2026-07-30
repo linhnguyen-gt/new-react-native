@@ -3,7 +3,7 @@ import { View, ViewStyle } from 'react-native';
 
 import { vstackStyle } from './styles';
 
-import type { VariantProps } from '@gluestack-ui/nativewind-utils';
+import type { VariantProps } from '../utils/tva';
 
 type StyleProps = Omit<ViewStyle, 'transform'>;
 
