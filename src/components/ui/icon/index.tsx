@@ -41,10 +41,12 @@ const IconComponent: React.FC<IconProps> = ({
     onPress,
     disabled = false,
 }) => {
+    // `color` accepts a design-system token as well as a literal, so it has to go through the
+    // resolver too — passing `success-500` straight to the icon font yields black.
     const getIconColor = () => {
-        if (color) return color;
-        if (focused) return getColor('yellow');
-        return getColor('iconGrey');
+        if (color) return getColor(color) ?? color;
+        if (focused) return getColor('yellow.500');
+        return getColor('typography-500');
     };
 
     const renderIcon = () => {

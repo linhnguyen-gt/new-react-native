@@ -59,7 +59,7 @@ const Input = React.forwardRef<TextInput, InputProps>(
                             placeholder={placeholder}
                             secureTextEntry={isShowPassword}
                             editable={enable}
-                            placeholderTextColor={getColor('iconGrey')}
+                            placeholderTextColor={getColor('typography-500')}
                         />
                     </HStack>
                     <Box className="pl-3">{suffixIcon ?? (isPassword && _renderShowPassword)}</Box>

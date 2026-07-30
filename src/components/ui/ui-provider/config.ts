@@ -2,8 +2,15 @@
 
 import { vars } from 'nativewind';
 
-export const config = {
-    light: vars({
+/**
+ * Raw theme variables, kept outside vars() so both consumers can read them.
+ *
+ * vars() returns an opaque style object at runtime — its keys are not readable back, even
+ * though the Jest mock for nativewind is an identity function and makes it look like they
+ * are. getColor needs the concrete triplets, so they live here and vars() wraps them below.
+ */
+export const themeColors = {
+    light: {
         '--color-primary-0': '179 179 179',
         '--color-primary-50': '153 153 153',
         '--color-primary-100': '128 128 128',
@@ -154,8 +161,8 @@ export const config = {
         '--color-indicator-primary': '55 55 55',
         '--color-indicator-info': '83 153 236',
         '--color-indicator-error': '185 28 28',
-    }),
-    dark: vars({
+    },
+    dark: {
         '--color-primary-0': '130 130 130',
         '--color-primary-50': '148 148 148',
         '--color-primary-100': '158 158 158',
@@ -306,5 +313,10 @@ export const config = {
         '--color-indicator-primary': '247 247 247',
         '--color-indicator-info': '161 199 245',
         '--color-indicator-error': '232 70 69',
-    }),
+    },
+} as const;
+
+export const config = {
+    light: vars(themeColors.light),
+    dark: vars(themeColors.dark),
 };
