@@ -122,8 +122,8 @@ First, you need to run the environment setup script:
 # Using npm
 npm run env:setup
 
-# Using yarn
-yarn env:setup
+# Using pnpm
+pnpm env:setup
 ```
 
 This script will:
@@ -157,16 +157,16 @@ FACEBOOK_APP_ID=
 
 ```bash
 # Development (default)
-yarn android
-yarn ios
+pnpm android
+pnpm ios
 
 # Staging
-yarn android:stg
-yarn ios:stg
+pnpm android:stg
+pnpm ios:stg
 
 # Production
-yarn android:pro
-yarn ios:pro
+pnpm android:pro
+pnpm ios:pro
 ```
 
 ### Setup Steps for New Project
@@ -370,12 +370,12 @@ def getVersionFromEnv(File envFile) {
 ```json
 {
     "scripts": {
-        "android": "yarn check:env && npx expo run:android --variant devDebug --device",
-        "android:stg": "yarn check:env && APP_ENV=staging && npx expo run:android --variant stagingDebug --app-id com.newreactnative.stg --device",
-        "android:pro": "yarn check:env && APP_ENV=production && npx expo run:android --variant productionDebug --app-id com.newreactnative.production --device",
-        "ios": "yarn check:env && npx expo run:ios --device",
-        "ios:stg": "yarn check:env && APP_ENV=staging && npx expo run:ios --scheme Staging --configuration Staging.Debug --device",
-        "ios:prod": "yarn check:env && APP_ENV=production && npx expo run:ios --scheme Product --configuration Product.Debug --device"
+        "android": "pnpm check:env && npx expo run:android --variant devDebug --device",
+        "android:stg": "pnpm check:env && APP_ENV=staging && npx expo run:android --variant stagingDebug --app-id com.newreactnative.stg --device",
+        "android:pro": "pnpm check:env && APP_ENV=production && npx expo run:android --variant productionDebug --app-id com.newreactnative.production --device",
+        "ios": "pnpm check:env && npx expo run:ios --device",
+        "ios:stg": "pnpm check:env && APP_ENV=staging && npx expo run:ios --scheme Staging --configuration Staging.Debug --device",
+        "ios:prod": "pnpm check:env && APP_ENV=production && npx expo run:ios --scheme Product --configuration Product.Debug --device"
     }
 }
 ```
@@ -445,7 +445,7 @@ For debugging, the project includes Reactotron integration. To use it:
 2. Run the following command for Android:
 
 ```bash
-yarn adb:reactotron
+pnpm adb:reactotron
 ```
 
 ## Code Style
@@ -453,11 +453,11 @@ yarn adb:reactotron
 The project uses ESLint and Prettier for code formatting. Run linting with:
 
 ```bash
-yarn lint # Check for issues
+pnpm lint # Check for issues
 ```
 
 To fix linting errors automatically, use:
 
 ```bash
-yarn lint:fix # Fix automatic issues
+pnpm lint:fix # Fix automatic issues
 ```

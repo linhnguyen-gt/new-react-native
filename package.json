@@ -110,14 +110,6 @@
         "test-renderer": "^1.2.0",
         "typescript": "~6.0.3"
     },
-    "resolutions": {
-        "@babel/core": "^7.29.7",
-        "axios": "^1.19.0",
-        "eslint-plugin-ft-flow": "^3.0.11",
-        "lodash": "^4.18.1",
-        "shell-quote": "^1.10.0",
-        "tar": "^7.5.22"
-    },
     "lint-staged": {
         "*.{js,ts,jsx,tsx}": [
             "eslint --fix",
@@ -127,10 +119,5 @@
     "engines": {
         "node": "^22.22.1 || ^24.3.0 || >= 25.0.0"
     },
-    "packageManager": "yarn@4.17.1",
-    "dependenciesMeta": {
-        "lefthook": {
-            "built": true
-        }
-    }
+    "packageManager": "pnpm@11.18.0"
 }

@@ -42,7 +42,7 @@ export default [
             '.opencode/**',
             '.shared/**',
             '.expo/**',
-            '.yarn/**',
+            '.pnpm-store/**',
             // Carried over from the previous .eslintignore: this project lints
             // TS/TSX only. Plain JS (config files, scripts, mocks) is formatted
             // by Prettier via lint-staged but not linted.

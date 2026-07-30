@@ -9,7 +9,7 @@ console.log('🔍 Checking environment configuration...');
 const envPath = path.join(process.cwd(), '.env');
 if (!fs.existsSync(envPath)) {
     console.error('❌ .env file not found!');
-    console.error('Please run "yarn env:setup" to create environment configuration.');
+    console.error('Please run "pnpm env:setup" to create environment configuration.');
     process.exit(1);
 }
 
@@ -17,7 +17,7 @@ if (!fs.existsSync(envPath)) {
 const envContent = fs.readFileSync(envPath, 'utf8').trim();
 if (!envContent) {
     console.error('❌ .env file is empty!');
-    console.error('Please run "yarn env:setup" to configure environment variables.');
+    console.error('Please run "pnpm env:setup" to configure environment variables.');
     process.exit(1);
 }
 
@@ -33,7 +33,7 @@ for (const varName of requiredVars) {
 
 if (missingVars.length > 0) {
     console.error(`❌ Missing required environment variables: ${missingVars.join(', ')}`);
-    console.error('Please run "yarn env:setup" to configure all required variables.');
+    console.error('Please run "pnpm env:setup" to configure all required variables.');
     process.exit(1);
 }
 

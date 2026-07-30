@@ -1,3 +1,29 @@
+// Packages published as untranspiled ESM/Flow that Babel must still process.
+const packagesToTransform = [
+    'react-native',
+    '@react-native',
+    '@react-navigation',
+    'react-native-vector-icons',
+    'react-native-css-interop',
+    'react-native-reanimated',
+    'react-native-worklets',
+    'react-native-safe-area-context',
+    'react-redux',
+    '@react-native-aria',
+    'react-native-config',
+    '@react-native-async-storage',
+    'reactotron-react-native',
+    'reactotron-redux',
+    'reactotron-redux-saga',
+    'reactotron-core-client',
+    'nativewind',
+    'expo',
+    'expo-constants',
+    '@expo',
+    '@reduxjs/toolkit',
+    'immer',
+];
+
 module.exports = {
     preset: 'react-native',
     transform: {
@@ -6,27 +32,10 @@ module.exports = {
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
     setupFiles: ['<rootDir>/jest.setup.js'],
     transformIgnorePatterns: [
-        'node_modules/(?!(react-native' +
-            '|@react-native' +
-            '|@react-navigation' +
-            '|react-native-vector-icons' +
-            '|react-native-css-interop' +
-            '|react-native-reanimated' +
-            '|react-native-worklets' +
-            '|react-native-safe-area-context' +
-            '|react-redux' +
-            '|@react-native-aria' +
-            '|react-native-config' +
-            '|@react-native-async-storage' +
-            '|reactotron-react-native' +
-            '|reactotron-redux' +
-            '|reactotron-redux-saga' +
-            '|reactotron-core-client' +
-            '|nativewind' +
-            '|expo-constants' +
-            '|@reduxjs/toolkit' +
-            '|immer' +
-            ')/)',
+        // pnpm resolves packages to node_modules/.pnpm/<name>@<version>/node_modules/<name>,
+        // so the first `node_modules/` segment must not by itself mark a file as
+        // ignored; the decision belongs to the real package name that follows.
+        `node_modules/(?!\\.pnpm/)(?!(?:${packagesToTransform.join('|')})/)`,
     ],
     moduleNameMapper: {
         '^@/(.*)$': '<rootDir>/src/$1',
