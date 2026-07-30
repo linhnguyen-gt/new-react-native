@@ -37,3 +37,6 @@ minimumReleaseAgeExclude:
   - expo-constants@57.0.8
   - expo-modules-core@57.0.8
   - expo@57.0.9
+
+patchedDependencies:
+  react-native@0.86.2: patches/react-native@0.86.2.patch
