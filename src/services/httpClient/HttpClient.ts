@@ -24,7 +24,7 @@ export class HttpClient implements IHttpClient {
 
     private readonly requestInterceptor: RequestInterceptor;
 
-    private timeoutId: number | null = null;
+    private timeoutId: ReturnType<typeof setTimeout> | null = null;
 
     private constructor(
         tokenService?: TokenService,
@@ -103,7 +103,7 @@ export class HttpClient implements IHttpClient {
         }
     }
 
-    setRefreshTokenTimeout(timeoutId: number): void {
+    setRefreshTokenTimeout(timeoutId: ReturnType<typeof setTimeout>): void {
         this.timeoutId = timeoutId;
     }
 
