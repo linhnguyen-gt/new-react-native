@@ -179,8 +179,11 @@ pnpm env:setup     # create .env, .env.staging, .env.production
 pnpm prebuild      # regenerate ios/ and android/
 ```
 
-`pnpm ios` and `pnpm android` run prebuild themselves, so the second command is only needed
-when you want the native projects without building.
+The run scripts prebuild for you, so `pnpm prebuild` is only needed when you want the native
+projects without building. They do it through `scripts/run-app.js` rather than relying on
+`expo run:<platform>`, which prebuilds **only when the native directory is missing** — with
+`ios/` already on disk, changing `APP_ENV` alone would compile a binary still carrying the
+previous environment's bundle id, display name and version.
 
 There is nothing to set up by hand: no Xcode scheme, no Android product flavor, no build phase
 to paste in. Editing `ios/` or `android/` directly has no lasting effect, because the next
