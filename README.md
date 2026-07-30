@@ -166,233 +166,81 @@ pnpm ios:stg
 
 # Production
 pnpm android:pro
-pnpm ios:pro
+pnpm ios:prod
 ```
 
 ### Setup Steps for New Project
 
-### iOS Configuration
-
-1. **Podfile Configuration**
-   Add this configuration block to your Podfile:
-
-```ruby
-# Configuration name environment mapping
-project 'NewReactNative', {
-    'Debug' => :debug,
-    'Dev.Debug' => :debug,
-    'Dev.Release' => :release,
-    'Release' => :release,
-    'Staging.Debug' => :debug,
-    'Staging.Release' => :release,
-    'Product.Debug' => :debug,
-    'Product.Release' => :release
-}
-```
-
-This configuration:
-
-- Maps each build configuration to its corresponding mode (:debug or :release)
-- Supports all environments (Dev, Staging, Product)
-- Enables both Debug and Release builds for each environment
-
-1. **Build Configurations**
-   Xcode should have these configurations set up:
-
-- Staging.Debug/Release (Staging)
-- Product.Debug/Release (Production)
-- Debug/Release (Default)
-
-1. **Version Management Script**
-   Add this script to Build Phase in Xcode:
-
-Build Phases -> Add Run Script -> Paste
+The native projects are **not** in this repository. `ios/` and `android/` are build output,
+regenerated from `app.config.ts` and `plugins/` by Continuous Native Generation:
 
 ```bash
-# Get the environment from configuration name
-echo "Debug: Raw CONFIGURATION value: ${CONFIGURATION}"
-
-if [[ "${CONFIGURATION}" == *"Product"* ]]; then
-  ENV_FILE="${SRCROOT}/../.env.production"
-  echo "Debug: Matched Product configuration"
-elif [[ "${CONFIGURATION}" == *"Staging"* ]]; then
-  ENV_FILE="${SRCROOT}/../.env.staging"
-  echo "Debug: Matched Staging configuration"
-else
-  ENV_FILE="${SRCROOT}/../.env"
-  echo "Debug: Using default configuration"
-fi
-
-# Ensure INFOPLIST_FILE is set
-if [ -z "$INFOPLIST_FILE" ]; then
-    echo "Error: INFOPLIST_FILE not set"
-    exit 0
-fi
-
-INFO_PLIST="${SRCROOT}/${INFOPLIST_FILE}"
-
-echo "=== Environment Setup ==="
-echo "CONFIGURATION: ${CONFIGURATION}"
-echo "Using env file: ${ENV_FILE}"
-echo "Info.plist path: ${INFO_PLIST}"
-
-# Default values in case env file is missing
-VERSION_CODE="1"
-VERSION_NAME="1.0.0"
-APP_NAME=""
-
-# Try to read from env file if it exists
-if [ -f "$ENV_FILE" ]; then
-    echo "Reading from env file..."
-
-    # Read VERSION_CODE
-    VERSION_CODE_LINE=$(grep "^VERSION_CODE=" "$ENV_FILE" || echo "")
-    if [ ! -z "$VERSION_CODE_LINE" ]; then
-        VERSION_CODE=$(echo "$VERSION_CODE_LINE" | cut -d'=' -f2 | tr -d '"' | tr -d ' ')
-    fi
-
-    # Read VERSION_NAME
-    VERSION_NAME_LINE=$(grep "^VERSION_NAME=" "$ENV_FILE" || echo "")
-    if [ ! -z "$VERSION_NAME_LINE" ]; then
-        VERSION_NAME=$(echo "$VERSION_NAME_LINE" | cut -d'=' -f2 | tr -d '"' | tr -d ' ')
-    fi
-
-    # Read APP_NAME
-    APP_NAME_LINE=$(grep "^APP_NAME=" "$ENV_FILE" || echo "")
-    if [ ! -z "$APP_NAME_LINE" ]; then
-        APP_NAME=$(echo "$APP_NAME_LINE" | sed 's/^APP_NAME=//' | sed 's/^"//' | sed 's/"$//')
-    fi
-
-else
-    echo "Warning: Environment file not found, using default values"
-fi
-
-echo "Using versions - Code: $VERSION_CODE, Name: $VERSION_NAME, App Name: $APP_NAME"
-
-# Update Info.plist if it exists
-if [ -f "$INFO_PLIST" ]; then
-    echo "Updating Info.plist..."
-    /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $VERSION_CODE" "$INFO_PLIST" || true
-    /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $VERSION_NAME" "$INFO_PLIST" || true
-    if [ ! -z "$APP_NAME" ]; then
-        /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName $APP_NAME" "$INFO_PLIST" || true
-    fi
-    echo "Info.plist update completed"
-else
-    echo "Warning: Info.plist not found at $INFO_PLIST"
-fi
+pnpm env:setup     # create .env, .env.staging, .env.production
+pnpm prebuild      # regenerate ios/ and android/
 ```
 
-1. **Setup Steps for iOS**
+`pnpm ios` and `pnpm android` run prebuild themselves, so the second command is only needed
+when you want the native projects without building.
 
-- Copy the configuration block to your Podfile
-- Run `pod install` to apply configurations
-- Set up corresponding Build Configurations in Xcode
-- Add the version management script to Build Phases
-- Configure schemes to use appropriate configurations
+There is nothing to set up by hand: no Xcode scheme, no Android product flavor, no build phase
+to paste in. Editing `ios/` or `android/` directly has no lasting effect, because the next
+prebuild discards it.
 
-### Android Configuration
+### Environment Configuration
 
-1. **Product Flavors**
-   Add to app/build.gradle:
+Everything per-environment lives in `app.config.ts`:
 
-```gradle
-    flavorDimensions 'default'
-    productFlavors {
-        dev {
-            dimension 'default'
-            applicationId 'com.newreactnative'
-            resValue 'string', 'build_config_package', 'com.newreactnative'
+| APP_ENV       | env file          | bundle id (iOS and Android)     |
+| ------------- | ----------------- | ------------------------------- |
+| `development` | `.env`            | `com.newreactnative`            |
+| `staging`     | `.env.staging`    | `com.newreactnative.stg`        |
+| `production`  | `.env.production` | `com.newreactnative.production` |
 
-            def envFile = new File("${project.rootDir.parentFile}/.env")
-            if (envFile.exists()) {
-                def props = getVersionFromEnv(envFile)
-                versionCode props.code.toInteger()
-                versionName props.name
-                resValue "string", "app_name", props.appName
-            }
-        }
+| Native value                             | Comes from                                                     |
+| ---------------------------------------- | -------------------------------------------------------------- |
+| Bundle id / package                      | `ENV_TARGETS[env].bundleId`                                    |
+| App version                              | `VERSION_NAME`                                                 |
+| iOS build number / Android `versionCode` | `VERSION_CODE`                                                 |
+| Display name                             | `APP_NAME` → `CFBundleDisplayName` (iOS), `app_name` (Android) |
 
-        staging {
-            dimension 'default'
-            applicationId 'com.newreactnative.stg'
-            resValue 'string', 'build_config_package', 'com.newreactnative'
+Switching environment re-runs prebuild instead of selecting a variant, so it is slower to
+switch than flavors were. The three builds still install side by side, because their bundle ids
+differ.
 
-            def envFile = new File("${project.rootDir.parentFile}/.env.staging")
-            if (envFile.exists()) {
-                def props = getVersionFromEnv(envFile)
-                versionCode props.code.toInteger()
-                versionName props.name
-                resValue "string", "app_name", props.appName
-            }
-        }
-        production {
-            dimension 'default'
-            applicationId 'com.newreactnative.production'
-            resValue 'string', 'build_config_package', 'com.newreactnative'
+### Config Plugins
 
-            def envFile = new File("${project.rootDir.parentFile}/.env.production")
-            if (envFile.exists()) {
-                def props = getVersionFromEnv(envFile)
-                versionCode props.code.toInteger()
-                versionName props.name
-                resValue "string", "app_name", props.appName
-            }
-        }
-    }
+Three plugins carry the only native changes prebuild cannot infer. Change these rather than the
+generated projects:
 
-def getVersionFromEnv(File envFile) {
-    def versionCode = '1'
-    def versionName = '1.0.0'
-    def appName = ''
+| Plugin                                | What it does                                           |
+| ------------------------------------- | ------------------------------------------------------ |
+| `plugins/with-android-abi-splits.js`  | per-ABI plus universal APK split                       |
+| `plugins/with-react-native-config.js` | applies `dotenv.gradle` so native code sees env values |
+| `plugins/with-android-app-name.js`    | per-environment Android launcher label                 |
 
-    envFile.eachLine { line ->
-        if (line.contains('=')) {
-            def (key, value) = line.split('=', 2)
-            if (key == 'VERSION_CODE') versionCode = value?.trim()?.replaceAll('"', '')
-            if (key == 'VERSION_NAME') versionName = value?.trim()?.replaceAll('"', '')
-            if (key == 'APP_NAME') appName = value?.trim()?.replaceAll('"', '')
-        }
-    }
+iOS needs no plugin for react-native-config — its podspec carries its own build script phase,
+which CocoaPods runs before compiling.
 
-    println "Reading from ${envFile.path}"
-    println "VERSION_CODE: ${versionCode}"
-    println "VERSION_NAME: ${versionName}"
-    println "APP_NAME: ${appName}"
+### Two Env Mechanisms, One File
 
-    return [code: versionCode, name: versionName, appName: appName]
-}
+|                       | Source                                              | Readable from |
+| --------------------- | --------------------------------------------------- | ------------- |
+| `expo-constants`      | `app.config.ts` → `extra`, selected by `APP_ENV`    | JS            |
+| `react-native-config` | `BuildConfig` / `Info.plist`, selected by `ENVFILE` | JS and native |
 
-```
+Both read the same `.env*` file but through **different variables**, so every run script exports
+`APP_ENV` and `ENVFILE` together. `src/services/environment.ts` compares the two sources at
+startup and throws if they disagree — otherwise a build with only one variable set would ship a
+JS bundle and a native binary describing different environments, with no error anywhere.
 
-### Update package.json Scripts
+Two rules for `.env*` files, both enforced at runtime:
 
-```json
-{
-    "scripts": {
-        "android": "pnpm check:env && npx expo run:android --variant devDebug --device",
-        "android:stg": "pnpm check:env && APP_ENV=staging && npx expo run:android --variant stagingDebug --app-id com.newreactnative.stg --device",
-        "android:pro": "pnpm check:env && APP_ENV=production && npx expo run:android --variant productionDebug --app-id com.newreactnative.production --device",
-        "ios": "pnpm check:env && npx expo run:ios --device",
-        "ios:stg": "pnpm check:env && APP_ENV=staging && npx expo run:ios --scheme Staging --configuration Staging.Debug --device",
-        "ios:prod": "pnpm check:env && APP_ENV=production && npx expo run:ios --scheme Product --configuration Product.Debug --device"
-    }
-}
-```
+- **No trailing `#` comment on a value line.** dotenv strips it; react-native-config keeps
+  everything after `=` on both platforms, so the native side would receive the comment text as
+  part of the value.
+- **No empty values.** `app.config.ts` rejects them; delete the line instead.
 
-### Update .gitignore
-
-```bash
-.env*
-.flaskenv*
-!.env.project
-!.env.vault
-# Environment files
-.env
-.env.*
-!.env.example
-!.env.vault
-```
+See `.env.example`.
 
 ### Version Management
 
@@ -403,6 +251,8 @@ The setup automatically manages app versions based on environment files:
 
 ### Important Notes
 
+- `ios/` and `android/` are gitignored build output. Run `pnpm prebuild` after cloning, and
+  never commit them or expect a hand-edit there to survive
 - Never commit `.env` files to git (they are automatically added to .gitignore)
 - Always commit `.env.example` and `.env.vault` (if using dotenv-vault)
 - Share vault credentials with your team members if using dotenv-vault
