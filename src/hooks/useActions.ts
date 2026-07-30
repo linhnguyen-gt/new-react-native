@@ -28,9 +28,7 @@ function useActions<TPayload>(
 ): Array<BoundActionCreator<TPayload>>;
 function useActions<TPayload, TActionMap extends Record<string, ActionCreatorWithPayload<any, string>>>(
     actionCreator:
-        | ActionCreatorWithPayload<TPayload, string>
-        | TActionMap
-        | Array<ActionCreatorWithPayload<TPayload, string>>
+        ActionCreatorWithPayload<TPayload, string> | TActionMap | Array<ActionCreatorWithPayload<TPayload, string>>
 ): BoundActionCreator<TPayload> | ActionCreatorMap<TActionMap> | Array<BoundActionCreator<TPayload>> {
     const dispatch = useDispatch<Dispatch>();
 
