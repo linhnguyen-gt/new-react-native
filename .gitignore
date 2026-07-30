@@ -83,6 +83,12 @@ npm-debug.log
 .qodo
 .expo/
 
+# Continuous Native Generation: ios/ and android/ are build output, regenerated from
+# app.config.ts and plugins/ by `expo prebuild`. Do not commit them — an edit made directly
+# in either directory is silently discarded on the next prebuild.
+/ios/
+/android/
+
 docs/
 plans/
 
