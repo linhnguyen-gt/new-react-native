@@ -39,8 +39,8 @@ describe('<LoginPage />', () => {
         jest.clearAllMocks();
     });
 
-    it('renders login form elements', () => {
-        render(<LoginPage />);
+    it('renders login form elements', async () => {
+        await render(<LoginPage />);
         expect(screen.getByTestId('email-input')).toBeTruthy();
         expect(screen.getByTestId('password-input')).toBeTruthy();
         expect(screen.getByTestId('login-button')).toBeTruthy();
@@ -48,7 +48,7 @@ describe('<LoginPage />', () => {
     });
 
     it('navigates to Main screen on valid form submission', async () => {
-        render(<LoginPage />);
+        await render(<LoginPage />);
 
         fireEvent.press(screen.getByTestId('login-button'));
 
@@ -66,7 +66,10 @@ describe('<LoginPage />', () => {
                 resolver: zodResolver(mockLoginSchema),
                 mode: 'onChange',
             });
-            formState = methods.formState;
+            // react-hook-form's formState is a Proxy that only tracks the fields
+            // read during render, so `errors` must be read here for this component
+            // to re-render once validation populates it.
+            formState = { errors: methods.formState.errors };
 
             React.useEffect(() => {
                 methods.trigger();
@@ -79,7 +82,7 @@ describe('<LoginPage />', () => {
             );
         };
 
-        render(<TestComponent />);
+        await render(<TestComponent />);
 
         await waitFor(() => {
             expect(formState.errors).toBeDefined();
@@ -98,7 +101,10 @@ describe('<LoginPage />', () => {
                 resolver: zodResolver(mockLoginSchema),
                 mode: 'onChange',
             });
-            formState = methods.formState;
+            // react-hook-form's formState is a Proxy that only tracks the fields
+            // read during render, so `errors` must be read here for this component
+            // to re-render once validation populates it.
+            formState = { errors: methods.formState.errors };
 
             React.useEffect(() => {
                 methods.trigger();
@@ -111,7 +117,7 @@ describe('<LoginPage />', () => {
             );
         };
 
-        render(<TestComponent />);
+        await render(<TestComponent />);
 
         await waitFor(() => {
             expect(formState.errors).toBeDefined();
@@ -130,7 +136,10 @@ describe('<LoginPage />', () => {
                 resolver: zodResolver(mockLoginSchema),
                 mode: 'onChange',
             });
-            formState = methods.formState;
+            // react-hook-form's formState is a Proxy that only tracks the fields
+            // read during render, so `errors` must be read here for this component
+            // to re-render once validation populates it.
+            formState = { errors: methods.formState.errors };
 
             React.useEffect(() => {
                 methods.trigger();
@@ -143,7 +152,7 @@ describe('<LoginPage />', () => {
             );
         };
 
-        render(<TestComponent />);
+        await render(<TestComponent />);
 
         await waitFor(() => {
             expect(formState.errors).toBeDefined();

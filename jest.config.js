@@ -10,8 +10,10 @@ module.exports = {
             '|@react-native' +
             '|@react-navigation' +
             '|react-native-vector-icons' +
-            '|@gluestack-ui' +
             '|react-native-css-interop' +
+            '|react-native-reanimated' +
+            '|react-native-worklets' +
+            '|react-native-safe-area-context' +
             '|react-redux' +
             '|@react-native-aria' +
             '|react-native-config' +
@@ -20,12 +22,6 @@ module.exports = {
             '|reactotron-redux' +
             '|reactotron-redux-saga' +
             '|reactotron-core-client' +
-            '|@gluestack-ui/overlay' +
-            '|@gluestack-ui/button' +
-            '|@gluestack-ui/toast' +
-            '|@gluestack-ui/image' +
-            '|@gluestack-ui/nativewind-utils' +
-            '|@legendapp/motion' +
             '|nativewind' +
             '|expo-constants' +
             '|@reduxjs/toolkit' +
@@ -39,7 +35,16 @@ module.exports = {
         '\\.(css|less)$': '<rootDir>/__mocks__/styleMock.js',
         '^@react-native-vector-icons/(.*)$': '<rootDir>/__mocks__/react-native-vector-icons.js',
     },
-    testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.history/'],
+    testPathIgnorePatterns: [
+        '<rootDir>/node_modules/',
+        '<rootDir>/.history/',
+        // Vendored agent tooling — ships its own tests, not part of the app suite.
+        '<rootDir>/.opencode/',
+        '<rootDir>/.shared/',
+        '<rootDir>/.expo/',
+        '<rootDir>/android/',
+        '<rootDir>/ios/',
+    ],
     globals: {
         __DEV__: true,
     },
