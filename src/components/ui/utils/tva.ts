@@ -1,11 +1,16 @@
+import { mergeClasses } from './class-conflicts';
+
 /**
  * Minimal Tailwind-variants helper.
  *
- * Replaces `@gluestack-ui/nativewind-utils/tva`. Deliberately does NOT run
- * tailwind-merge: NativeWind emits prefixes such as `web:`, `data-[hover=true]:`
- * and arbitrary values that tailwind-merge does not understand and will drop.
- * Conflicts are instead resolved by order — later classes win, and the caller's
- * `class`/`className` is always appended last so it can override the variants.
+ * Replaces `@gluestack-ui/nativewind-utils/tva`. Deliberately does NOT run tailwind-merge:
+ * NativeWind emits prefixes such as `web:`, `data-[hover=true]:` and arbitrary values that
+ * tailwind-merge does not understand and will drop.
+ *
+ * Conflicts are resolved by `mergeClasses`, which removes the losing utility from the string
+ * entirely. Appending a class is not enough on its own — NativeWind resolves precedence by
+ * stylesheet rule order, not by position in `className` — so a conflicting earlier class has
+ * to actually go. Order of intent is still base, variants, compound variants, caller.
  */
 
 type ClassValue = string | false | null | undefined;
@@ -41,8 +46,6 @@ export type VariantProps<TComponent extends (...args: never[]) => string> = Omit
     NonNullable<Parameters<TComponent>[0]>,
     'class' | 'className'
 >;
-
-const join = (parts: ClassValue[]): string => parts.filter(Boolean).join(' ').replace(/\s+/g, ' ').trim();
 
 /** Variant keys are stored as strings, so booleans must be looked up as 'true'/'false'. */
 const toKey = (value: unknown): string | undefined => {
@@ -91,6 +94,6 @@ export function tva<TVariants extends VariantShape = {}>(config: TvaConfig<TVari
         // Caller-supplied classes go last so they win on conflict.
         classes.push(props?.class, props?.className);
 
-        return join(classes);
+        return mergeClasses(classes);
     };
 }

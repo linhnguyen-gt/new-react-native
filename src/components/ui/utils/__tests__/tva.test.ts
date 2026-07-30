@@ -57,10 +57,17 @@ describe('tva', () => {
         expect(style({ variant: 'outline', action: 'primary' })).toBe('btn v-outline a-primary');
     });
 
-    it('appends caller classes last so they win on conflict', () => {
+    it('drops the variant class a caller class conflicts with', () => {
+        // Keeping both would not make the caller win: NativeWind resolves precedence by
+        // stylesheet rule order, not by position in the string, so the loser has to go.
         const style = tva({ base: 'p-2', variants: { size: { sm: 'text-sm' } } });
-        expect(style({ size: 'sm', class: 'text-lg' })).toBe('p-2 text-sm text-lg');
+        expect(style({ size: 'sm', class: 'text-lg' })).toBe('p-2 text-lg');
         expect(style({ className: 'mt-1' })).toBe('p-2 mt-1');
+    });
+
+    it('keeps caller classes that do not conflict with a variant', () => {
+        const style = tva({ base: 'p-2', variants: { size: { sm: 'text-sm' } } });
+        expect(style({ size: 'sm', class: 'font-bold' })).toBe('p-2 text-sm font-bold');
     });
 
     it('does not emit stray whitespace for empty variant values', () => {

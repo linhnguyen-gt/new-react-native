@@ -72,15 +72,17 @@ const buttonTextStyle = tva({
             xl: 'text-xl',
         },
     },
+    // Solid fills paint the action colour as the background, so the label has to invert.
+    // Outline and link need no entries: they keep the background transparent, so the label
+    // colour from `action` above is already the correct one. The outline rows that used to
+    // sit here forced `text-primary-500` onto every action, which made a destructive button
+    // read as a neutral one — and on `negative` it lost to the base colour outright,
+    // rendering white text on a white button.
     compoundVariants: [
         { variant: 'solid', action: 'primary', class: 'text-typography-0' },
         { variant: 'solid', action: 'secondary', class: 'text-typography-800' },
         { variant: 'solid', action: 'positive', class: 'text-typography-0' },
         { variant: 'solid', action: 'negative', class: 'text-typography-0' },
-        { variant: 'outline', action: 'primary', class: 'text-primary-500' },
-        { variant: 'outline', action: 'secondary', class: 'text-typography-500' },
-        { variant: 'outline', action: 'positive', class: 'text-primary-500' },
-        { variant: 'outline', action: 'negative', class: 'text-primary-500' },
     ],
 });
 
