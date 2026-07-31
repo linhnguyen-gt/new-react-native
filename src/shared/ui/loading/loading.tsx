@@ -4,7 +4,7 @@ import { LoadingBox } from '..';
 
 import type { LoadingBoxProps } from '../box/loading-box';
 
-const Loading: React.FC<LoadingBoxProps> = (props) => {
+const Loading = (props: LoadingBoxProps) => {
     return <LoadingBox {...props} />;
 };
 

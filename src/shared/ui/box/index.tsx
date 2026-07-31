@@ -8,9 +8,12 @@ export type IBoxProps = BaseBoxProps & {
     isLoading?: boolean;
 };
 
-const Box = React.forwardRef<React.ComponentRef<typeof View>, IBoxProps>(({ isLoading: _isLoading, ...props }, ref) => {
+const Box = ({
+    ref,
+    isLoading: _isLoading,
+    ...props
+}: IBoxProps & { ref?: React.Ref<React.ComponentRef<typeof View>> }) => {
     return <BaseBox {...props} ref={ref} />;
-});
+};
 
-Box.displayName = 'Box';
 export default Box;

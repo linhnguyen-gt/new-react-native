@@ -28,11 +28,11 @@ export function withStyleContext<TProps extends object>(component: React.Compone
     const Context = getContext(scope);
     const Component = component;
 
-    const Wrapped = React.forwardRef<unknown, TProps & WithContextProps>(({ context, ...props }, ref) => (
+    const Wrapped = ({ ref, context, ...props }: TProps & WithContextProps & { ref?: React.Ref<unknown> }) => (
         <Context.Provider value={context ?? {}}>
             <Component {...(props as TProps)} ref={ref} />
         </Context.Provider>
-    ));
+    );
 
     Wrapped.displayName = `withStyleContext(${Component.displayName ?? Component.name ?? scope})`;
     return Wrapped;

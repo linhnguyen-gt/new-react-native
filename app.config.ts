@@ -142,6 +142,13 @@ export default ({ config }: ConfigContext): ExpoConfig => {
         slug: projectName.toLowerCase(),
         version: validatedConfig.VERSION_NAME,
         userInterfaceStyle: 'automatic',
+        /**
+         * The React Compiler memoises components automatically, which is why the hand-written
+         * React.memo/useMemo/useCallback wrappers were removed rather than kept alongside it.
+         * Jest reads babel.config.js and not this file, so tests run *without* the compiler —
+         * an accepted asymmetry: it is an optimisation, not a semantic change.
+         */
+        experiments: { reactCompiler: true },
         ios: {
             ...config.ios,
             bundleIdentifier: target.bundleId,

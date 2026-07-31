@@ -9,24 +9,23 @@ type MyTouchableProps = TouchableComponentProps & {
     throttleTime?: number;
 };
 
-const MyTouchable: React.FC<MyTouchableProps> = ({ throttleTime = 500, ...props }) => {
+const MyTouchable = ({ throttleTime = 500, ...props }: MyTouchableProps) => {
     const isButtonDisabledRef = React.useRef(false);
 
-    const handleOnPress = React.useCallback(
-        (event: GestureResponderEvent) => {
-            if (isButtonDisabledRef.current) return;
+    // The useCallback here memoised on `[props, throttleTime]` — `props` is a rest object
+    // rebuilt every render, so the callback was recreated every render anyway.
+    const handleOnPress = (event: GestureResponderEvent) => {
+        if (isButtonDisabledRef.current) return;
 
-            isButtonDisabledRef.current = true;
-            props.onPress?.(event);
+        isButtonDisabledRef.current = true;
+        props.onPress?.(event);
 
-            setTimeout(() => {
-                isButtonDisabledRef.current = false;
-            }, throttleTime);
-        },
-        [props, throttleTime]
-    );
+        setTimeout(() => {
+            isButtonDisabledRef.current = false;
+        }, throttleTime);
+    };
 
     return <Touchable {...props} onPress={handleOnPress} />;
 };
 
-export default React.memo(MyTouchable);
+export default MyTouchable;

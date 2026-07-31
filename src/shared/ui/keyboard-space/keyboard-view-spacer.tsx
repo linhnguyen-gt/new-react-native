@@ -24,10 +24,15 @@ const FALLBACK_DURATION = 250;
 const IOS_HEIGHT_OFFSET = 25;
 
 function KeyboardViewSpacer({ children }: KeyboardViewSpacerProps) {
-    const keyboardHeight = React.useRef(new Animated.Value(0)).current;
+    // Not a ref: reading `.current` during render makes the React Compiler bail out of the
+    // whole component. A lazy useState initialiser gives the same one-per-mount instance.
+    const [keyboardHeight] = React.useState(() => new Animated.Value(0));
 
-    const animateTo = React.useCallback(
-        (toValue: number, duration: number) => {
+    // Everything the subscription needs lives inside the effect. Defined outside, each
+    // function would be a new value on every render and the listeners would be torn down and
+    // re-added continuously — the React Compiler memoises renders, not effect dependencies.
+    React.useEffect(() => {
+        const animateTo = (toValue: number, duration: number) => {
             Animated.timing(keyboardHeight, {
                 duration,
                 toValue,
@@ -35,26 +40,17 @@ function KeyboardViewSpacer({ children }: KeyboardViewSpacerProps) {
                 // caller passing `true` broke the animation outright.
                 useNativeDriver: false,
             }).start();
-        },
-        [keyboardHeight]
-    );
+        };
 
-    const onKeyboardShow = React.useCallback(
-        (event: KeyboardEvent) => {
+        const onKeyboardShow = (event: KeyboardEvent) => {
             const height = event.endCoordinates.height - (Platform.OS === 'ios' ? IOS_HEIGHT_OFFSET : 0);
             animateTo(height, event.duration ?? FALLBACK_DURATION);
-        },
-        [animateTo]
-    );
+        };
 
-    const onKeyboardHide = React.useCallback(
-        (event: KeyboardEvent) => {
+        const onKeyboardHide = (event: KeyboardEvent) => {
             animateTo(0, event.duration ?? FALLBACK_DURATION);
-        },
-        [animateTo]
-    );
+        };
 
-    React.useEffect(() => {
         const [showEvent, hideEvent] = keyboardEvents();
         const showListener = Keyboard.addListener(showEvent, onKeyboardShow);
         const hideListener = Keyboard.addListener(hideEvent, onKeyboardHide);
@@ -63,9 +59,9 @@ function KeyboardViewSpacer({ children }: KeyboardViewSpacerProps) {
             showListener.remove();
             hideListener.remove();
         };
-    }, [onKeyboardHide, onKeyboardShow]);
+    }, [keyboardHeight]);
 
     return <Animated.View style={{ paddingBottom: keyboardHeight, flex: 1 }}>{children}</Animated.View>;
 }
 
-export default React.memo(KeyboardViewSpacer);
+export default KeyboardViewSpacer;

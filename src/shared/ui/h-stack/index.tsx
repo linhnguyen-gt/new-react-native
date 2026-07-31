@@ -26,35 +26,41 @@ type IHStackProps = Omit<React.ComponentProps<typeof View>, keyof StyleProps> &
  * role, so a pure layout row was announced to VoiceOver/TalkBack as "dimmed, button", and each
  * row cost an Animated.View plus a gesture responder.
  */
-const HStack = React.forwardRef<React.ComponentRef<typeof View>, IHStackProps>(
-    ({ className, space, reversed, style, onPress, onBlur, onFocus, ...props }, ref) => {
-        const styleProps = createStyleFromProps(props as StyleProps);
-        const resolvedClassName = hstackStyle({ space, reversed, class: className });
-        const resolvedStyle = [styleProps, style];
+const HStack = ({
+    ref,
+    className,
+    space,
+    reversed,
+    style,
+    onPress,
+    onBlur,
+    onFocus,
+    ...props
+}: IHStackProps & { ref?: React.Ref<React.ComponentRef<typeof View>> }) => {
+    const styleProps = createStyleFromProps(props as StyleProps);
+    const resolvedClassName = hstackStyle({ space, reversed, class: className });
+    const resolvedStyle = [styleProps, style];
 
-        if (!onPress) {
-            return <View ref={ref} className={resolvedClassName} style={resolvedStyle} {...props} />;
-        }
-
-        // onBlur/onFocus accept null on View but not on TouchableOpacity.
-        const touchableProps = {
-            ...props,
-            ...(onBlur !== null && onBlur !== undefined && { onBlur }),
-            ...(onFocus !== null && onFocus !== undefined && { onFocus }),
-        };
-
-        return (
-            <Touchable
-                onPress={onPress}
-                className={resolvedClassName}
-                style={resolvedStyle}
-                {...touchableProps}
-                ref={ref}
-            />
-        );
+    if (!onPress) {
+        return <View ref={ref} className={resolvedClassName} style={resolvedStyle} {...props} />;
     }
-);
 
-HStack.displayName = 'HStack';
+    // onBlur/onFocus accept null on View but not on TouchableOpacity.
+    const touchableProps = {
+        ...props,
+        ...(onBlur !== null && onBlur !== undefined && { onBlur }),
+        ...(onFocus !== null && onFocus !== undefined && { onFocus }),
+    };
+
+    return (
+        <Touchable
+            onPress={onPress}
+            className={resolvedClassName}
+            style={resolvedStyle}
+            {...touchableProps}
+            ref={ref}
+        />
+    );
+};
 
 export default HStack;

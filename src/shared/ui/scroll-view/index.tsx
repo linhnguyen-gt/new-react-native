@@ -26,45 +26,39 @@ export type IScrollViewProps = Omit<React.ComponentProps<typeof UIScrollView>, k
         space?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl';
     } & VariantProps<typeof scrollViewStyle>;
 
-const ScrollView = React.forwardRef<React.ComponentRef<typeof UIScrollView>, IScrollViewProps>(
-    (
-        {
-            className,
-            contentClassName,
-            space,
-            style,
-            contentContainerStyle,
-            showsVerticalScrollIndicator = false,
-            ...props
-        },
-        ref
-    ) => {
-        const styleProps = createStyleFromProps(props as StyleProps);
+const ScrollView = ({
+    ref,
+    className,
+    contentClassName,
+    space,
+    style,
+    contentContainerStyle,
+    showsVerticalScrollIndicator = false,
+    ...props
+}: IScrollViewProps & { ref?: React.Ref<React.ComponentRef<typeof UIScrollView>> }) => {
+    const styleProps = createStyleFromProps(props as StyleProps);
 
-        const contentClassNames = [
-            contentClassName,
-            space &&
-                scrollViewStyle({ space })
-                    .split(' ')
-                    .find((cls: string) => cls.startsWith('gap-')),
-        ]
-            .filter(Boolean)
-            .join(' ');
+    const contentClassNames = [
+        contentClassName,
+        space &&
+            scrollViewStyle({ space })
+                .split(' ')
+                .find((cls: string) => cls.startsWith('gap-')),
+    ]
+        .filter(Boolean)
+        .join(' ');
 
-        return (
-            <UIScrollView
-                ref={ref}
-                {...props}
-                className={scrollViewStyle({ class: className })}
-                contentContainerClassName={contentClassNames}
-                showsVerticalScrollIndicator={showsVerticalScrollIndicator}
-                style={[styleProps, style]}
-                contentContainerStyle={contentContainerStyle}
-            />
-        );
-    }
-);
-
-ScrollView.displayName = 'ScrollView';
+    return (
+        <UIScrollView
+            ref={ref}
+            {...props}
+            className={scrollViewStyle({ class: className })}
+            contentContainerClassName={contentClassNames}
+            showsVerticalScrollIndicator={showsVerticalScrollIndicator}
+            style={[styleProps, style]}
+            contentContainerStyle={contentContainerStyle}
+        />
+    );
+};
 
 export default ScrollView;

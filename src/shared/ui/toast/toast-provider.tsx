@@ -47,6 +47,9 @@ export function ToastProvider({ children }: { children?: React.ReactNode }) {
     const timers = React.useRef(new Map<string, ReturnType<typeof setTimeout>>());
     const insets = useSafeAreaInsets();
 
+    // The four callbacks and `api` stay memoised. They are a context value: every consumer of
+    // useShowToast re-renders when its identity changes, and the React Compiler is deliberately
+    // off under jest (see app.config.ts), so the tests would exercise an unmemoised provider.
     const close = React.useCallback((id: string) => {
         const timer = timers.current.get(id);
         if (timer) {

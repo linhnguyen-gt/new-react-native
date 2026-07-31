@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Logger from '@/shared/lib/logger';
+
 type IsRefreshing = boolean;
 type OnRefresh = () => Promise<void>;
 
@@ -11,15 +13,19 @@ type OnRefresh = () => Promise<void>;
 const useRefresh = (refresh: (() => void | Promise<void>) | undefined): [IsRefreshing, OnRefresh] => {
     const [isRefreshing, setIsRefreshing] = React.useState<boolean>(false);
 
-    const onRefresh = React.useCallback(async () => {
+    const onRefresh = async () => {
         setIsRefreshing(true);
 
         try {
             await refresh?.();
+        } catch (error) {
+            // Reported, not rethrown: this runs from a pull-to-refresh gesture, so a rejection
+            // has nowhere to go but an unhandled-promise warning the user cannot act on.
+            Logger.error('useRefresh', error instanceof Error ? error.message : String(error));
         } finally {
             setIsRefreshing(false);
         }
-    }, [refresh]);
+    };
 
     return [isRefreshing, onRefresh];
 };

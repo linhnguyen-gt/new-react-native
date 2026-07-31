@@ -33,6 +33,8 @@ function useActions<TPayload, TActionMap extends Record<string, ActionCreatorWit
 ): BoundActionCreator<TPayload> | ActionCreatorMap<TActionMap> | Array<BoundActionCreator<TPayload>> {
     const dispatch = useDispatch<Dispatch>();
 
+    // Stays memoised: callers put the bound creators straight into dependency arrays, and the
+    // React Compiler does not run under jest (see app.config.ts).
     return React.useMemo(() => {
         // Case 1: Single action creator
         if (typeof actionCreator === 'function') {

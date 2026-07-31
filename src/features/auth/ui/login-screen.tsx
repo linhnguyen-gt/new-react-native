@@ -44,7 +44,7 @@ const Login = () => {
         resolver: zodResolver(loginSchema),
     });
 
-    const handleLogin = React.useCallback(() => {
+    const handleLogin = () => {
         Keyboard.dismiss();
         handleSubmit((values) => {
             // TODO: call the login endpoint with `values` and set the session through
@@ -53,7 +53,7 @@ const Login = () => {
             // reset, not navigate: the login screen must not stay on the back stack.
             navigation.reset({ index: 0, routes: [{ name: RouteName.Main }] });
         })();
-    }, [handleSubmit, navigation]);
+    };
 
     return (
         <Box flex={1} safeArea>

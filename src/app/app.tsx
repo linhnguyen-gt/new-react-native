@@ -31,6 +31,9 @@ const Stack = createStackNavigator<RootStackParamList>();
 const AppStack = () => {
     return (
         <KeyboardViewSpacer>
+            {/* Not a React ref read: navigationRef is React Navigation's own container ref
+                object, created outside the tree so non-React callers can navigate. */}
+            {/* eslint-disable-next-line react-hooks/refs */}
             <NavigationContainer ref={RootNavigator.navigationRef}>
                 <Stack.Navigator screenOptions={screenOptions} initialRouteName={RouteName.Login}>
                     <Stack.Screen name={RouteName.Login} component={LoginPage} />

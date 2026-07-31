@@ -32,7 +32,7 @@ interface IconProps {
     disabled?: boolean;
 }
 
-const IconComponent: React.FC<IconProps> = ({
+const IconComponent = ({
     name,
     size = 16,
     className = '',
@@ -41,7 +41,7 @@ const IconComponent: React.FC<IconProps> = ({
     font = 'entypo',
     onPress,
     disabled = false,
-}) => {
+}: IconProps) => {
     // `color` accepts a design-system token as well as a literal, so it has to go through the
     // resolver too — passing `success-500` straight to the icon font yields black.
     const getIconColor = () => {

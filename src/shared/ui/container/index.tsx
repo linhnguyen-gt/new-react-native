@@ -10,11 +10,13 @@ type ContainerProps = BaseBoxProps & {
     safeArea?: boolean;
 };
 
-const Container = React.forwardRef<React.ComponentRef<typeof View>, ContainerProps>(
-    ({ safeArea = true, isLoading = false, ...restProps }, ref) => {
-        return <ContainerBox {...restProps} safeArea={safeArea} ref={ref} isLoading={isLoading} />;
-    }
-);
+const Container = ({
+    ref,
+    safeArea = true,
+    isLoading = false,
+    ...restProps
+}: ContainerProps & { ref?: React.Ref<React.ComponentRef<typeof View>> }) => {
+    return <ContainerBox {...restProps} safeArea={safeArea} ref={ref} isLoading={isLoading} />;
+};
 
-Container.displayName = 'Container';
 export default Container;

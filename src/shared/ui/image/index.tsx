@@ -34,25 +34,28 @@ export type ImageProps = Omit<React.ComponentProps<typeof RNImage>, keyof StyleP
         className?: string;
     };
 
-const Image = React.forwardRef<React.ComponentRef<typeof RNImage>, ImageProps>(
-    ({ size = 'md', className, style, ...props }, ref) => {
-        const styleProps = createStyleFromProps(props as StyleProps);
+const Image = ({
+    ref,
+    size = 'md',
+    className,
+    style,
+    ...props
+}: ImageProps & { ref?: React.Ref<React.ComponentRef<typeof RNImage>> }) => {
+    const styleProps = createStyleFromProps(props as StyleProps);
 
-        return (
-            <RNImage
-                className={imageStyle({ size, class: className })}
-                style={[
-                    styleProps,
-                    // @ts-expect-error : web-only sizing reset
-                    Platform.OS === 'web' ? { height: 'revert-layer', width: 'revert-layer' } : undefined,
-                    style,
-                ]}
-                {...props}
-                ref={ref}
-            />
-        );
-    }
-);
+    return (
+        <RNImage
+            className={imageStyle({ size, class: className })}
+            style={[
+                styleProps,
+                // @ts-expect-error : web-only sizing reset
+                Platform.OS === 'web' ? { height: 'revert-layer', width: 'revert-layer' } : undefined,
+                style,
+            ]}
+            {...props}
+            ref={ref}
+        />
+    );
+};
 
-Image.displayName = 'Image';
 export default Image;

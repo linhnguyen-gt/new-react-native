@@ -92,10 +92,13 @@ type IToastProps = React.ComponentProps<typeof View> & {
     className?: string;
 } & VariantProps<typeof toastStyle>;
 
-const Toast = React.forwardRef<React.ComponentRef<typeof View>, IToastProps>(function ToastRoot(
-    { className, variant = 'solid', action = 'muted', ...props },
-    ref
-) {
+const Toast = ({
+    ref,
+    className,
+    variant = 'solid',
+    action = 'muted',
+    ...props
+}: IToastProps & { ref?: React.Ref<React.ComponentRef<typeof View>> }) => {
     return (
         <Root
             ref={ref}
@@ -104,16 +107,19 @@ const Toast = React.forwardRef<React.ComponentRef<typeof View>, IToastProps>(fun
             {...props}
         />
     );
-});
+};
 
 type IToastTitleProps = React.ComponentProps<typeof Text> & {
     className?: string;
 } & VariantProps<typeof toastTitleStyle>;
 
-const ToastTitle = React.forwardRef<React.ComponentRef<typeof Text>, IToastTitleProps>(function ToastTitleInner(
-    { className, size = 'md', children, ...props },
-    ref
-) {
+const ToastTitle = ({
+    ref,
+    className,
+    size = 'md',
+    children,
+    ...props
+}: IToastTitleProps & { ref?: React.Ref<React.ComponentRef<typeof Text>> }) => {
     const parent = useStyleContext<ToastContextValue>(SCOPE);
 
     React.useEffect(() => {
@@ -138,29 +144,32 @@ const ToastTitle = React.forwardRef<React.ComponentRef<typeof Text>, IToastTitle
             {children}
         </Text>
     );
-});
+};
 
 type IToastDescriptionProps = React.ComponentProps<typeof Text> & {
     className?: string;
 } & VariantProps<typeof toastDescriptionStyle>;
 
-const ToastDescription = React.forwardRef<React.ComponentRef<typeof Text>, IToastDescriptionProps>(
-    function ToastDescriptionInner({ className, size = 'md', ...props }, ref) {
-        const parent = useStyleContext<ToastContextValue>(SCOPE);
+const ToastDescription = ({
+    ref,
+    className,
+    size = 'md',
+    ...props
+}: IToastDescriptionProps & { ref?: React.Ref<React.ComponentRef<typeof Text>> }) => {
+    const parent = useStyleContext<ToastContextValue>(SCOPE);
 
-        return (
-            <Text
-                ref={ref}
-                {...props}
-                className={toastDescriptionStyle({
-                    size,
-                    variant: parent.variant,
-                    class: className,
-                })}
-            />
-        );
-    }
-);
+    return (
+        <Text
+            ref={ref}
+            {...props}
+            className={toastDescriptionStyle({
+                size,
+                variant: parent.variant,
+                class: className,
+            })}
+        />
+    );
+};
 
 export { Toast, ToastDescription, ToastTitle };
 export { ToastProvider, useToast } from './toast-provider';

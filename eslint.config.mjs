@@ -113,6 +113,10 @@ export default [
             // `info` is allowed so Logger.info can report at info level; it used to call
             // console.error, which filed every informational record as an error.
             'no-console': ['error', { allow: ['info', 'warn', 'error'] }],
+            // The compiler-powered rule set from eslint-plugin-react-hooks 7. Each rule that
+            // fires marks a component the React Compiler has to bail out of, which is exactly
+            // the code that still needs its manual memoisation.
+            ...reactHooks.configs['recommended-latest'].rules,
             'react-hooks/rules-of-hooks': 'error',
             'react-hooks/exhaustive-deps': 'error',
             'react/jsx-filename-extension': ['error', { extensions: ['.ts', '.tsx'] }],

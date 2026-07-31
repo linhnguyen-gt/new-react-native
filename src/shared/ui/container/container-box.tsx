@@ -10,18 +10,20 @@ type ContainerBoxProps = BaseBoxProps & {
     safeArea?: boolean;
 };
 
-const ContainerBox = React.forwardRef<React.ComponentRef<typeof View>, ContainerBoxProps>(
-    ({ backgroundColor = 'white', safeArea, ...props }, ref) => {
-        return (
-            <BaseBox safeArea={safeArea} flex={1} backgroundColor={backgroundColor}>
-                <BaseBox flex={1} backgroundColor={backgroundColor} {...props} ref={ref}>
-                    {props.children}
-                </BaseBox>
-                <LoadingBox isLoading={props.isLoading} />
+const ContainerBox = ({
+    ref,
+    backgroundColor = 'white',
+    safeArea,
+    ...props
+}: ContainerBoxProps & { ref?: React.Ref<React.ComponentRef<typeof View>> }) => {
+    return (
+        <BaseBox safeArea={safeArea} flex={1} backgroundColor={backgroundColor}>
+            <BaseBox flex={1} backgroundColor={backgroundColor} {...props} ref={ref}>
+                {props.children}
             </BaseBox>
-        );
-    }
-);
+            <LoadingBox isLoading={props.isLoading} />
+        </BaseBox>
+    );
+};
 
-ContainerBox.displayName = 'ContainerBox';
 export default ContainerBox;

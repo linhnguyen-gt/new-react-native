@@ -16,21 +16,24 @@ export type IVStackProps = Omit<React.ComponentProps<typeof View>, keyof StylePr
         className?: string;
     };
 
-const VStack = React.forwardRef<React.ComponentRef<typeof View>, IVStackProps>(
-    ({ className, space, reversed, style, ...props }, ref) => {
-        const styleProps = createStyleFromProps(props as StyleProps);
+const VStack = ({
+    ref,
+    className,
+    space,
+    reversed,
+    style,
+    ...props
+}: IVStackProps & { ref?: React.Ref<React.ComponentRef<typeof View>> }) => {
+    const styleProps = createStyleFromProps(props as StyleProps);
 
-        return (
-            <View
-                className={vstackStyle({ space, reversed, class: className })}
-                style={[styleProps, style]}
-                {...props}
-                ref={ref}
-            />
-        );
-    }
-);
-
-VStack.displayName = 'VStack';
+    return (
+        <View
+            className={vstackStyle({ space, reversed, class: className })}
+            style={[styleProps, style]}
+            {...props}
+            ref={ref}
+        />
+    );
+};
 
 export default VStack;
