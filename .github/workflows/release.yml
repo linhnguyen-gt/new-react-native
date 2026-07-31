@@ -4,10 +4,14 @@ on:
     workflow_dispatch:
         inputs:
             bump:
-                description: Which part of the version to raise
+                description: Which part of the version to raise. auto reads the conventional commits.
                 type: choice
-                options: [patch, minor, major]
-                default: patch
+                options: [auto, patch, minor, major]
+                default: auto
+            version:
+                description: Exact version (x.y.z) — overrides the bump above
+                type: string
+                default: ''
             prerelease:
                 description: Mark the GitHub release as a pre-release
                 type: boolean
@@ -33,7 +37,8 @@ jobs:
         steps:
             - uses: actions/checkout@v5
               with:
-                  # --generate-notes diffs against the previous tag, which shallow history hides.
+                  # The notes are the commits since the previous tag, and a shallow clone has
+                  # neither the history nor the tags.
                   fetch-depth: 0
 
             - uses: actions/setup-node@v5
@@ -41,26 +46,65 @@ jobs:
                   node-version: 24
                   # setup-node defaults package-manager-cache to true, reads `packageManager`
                   # from package.json and shells out to `pnpm store path`. This job installs no
-                  # dependencies — it runs `npm version` and `gh` — so pnpm is not on PATH here
+                  # dependencies — the release script is plain node — so pnpm is not on PATH here
                   # and the default turns a cache warm-up into a hard failure.
                   package-manager-cache: false
 
-            - name: Raise the version and tag it
-              id: version
+            - name: Decide the version and write the notes
+              id: prepare
+              env:
+                  # Used for the compare link at the foot of the notes.
+                  GITHUB_REPOSITORY: ${{ github.repository }}
+                  BUMP: ${{ inputs.bump }}
+                  # Through the environment, never interpolated into the script: an input is a
+                  # string a human typed, and `${{ }}` in a run block is textual substitution.
+                  VERSION: ${{ inputs.version }}
+              run: |
+                  args=("--bump=$BUMP")
+                  if [ -n "$VERSION" ]; then
+                      args+=("--version=$VERSION")
+                  fi
+                  node scripts/prepare-release.cjs "${args[@]}"
+
+            - name: Commit and tag
+              env:
+                  TAG: ${{ steps.prepare.outputs.tag }}
+                  NEW_VERSION: ${{ steps.prepare.outputs.version }}
               run: |
                   git config user.name "github-actions[bot]"
                   git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-                  # npm version writes package.json, commits and tags in one step, and prints the
-                  # new tag. Lefthook is not installed in this job, so no hook intercepts it.
-                  echo "tag=$(npm version '${{ inputs.bump }}' -m 'chore(release): v%s')" >> "$GITHUB_OUTPUT"
+                  # Only package.json: the notes file is written outside the working tree.
+                  git add package.json
+                  git commit -m "chore(release): $TAG"
+                  git tag -a "$TAG" -m "Release $NEW_VERSION"
+                  git push origin "HEAD:${{ github.ref_name }}"
+                  git push origin "$TAG"
 
-            - name: Push the commit and the tag
-              run: git push --follow-tags origin HEAD:${{ github.ref_name }}
-
-            - name: Create the GitHub release
+            - name: Publish the GitHub release
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  TAG: ${{ steps.prepare.outputs.tag }}
+                  NOTES_FILE: ${{ steps.prepare.outputs.notes_file }}
+                  PRERELEASE: ${{ inputs.prerelease }}
               run: |
-                  gh release create '${{ steps.version.outputs.tag }}' \
-                      --title '${{ steps.version.outputs.tag }}' \
-                      --generate-notes ${{ inputs.prerelease && '--prerelease' || '' }}
+                  args=(--title "$TAG" --notes-file "$NOTES_FILE")
+                  if [ "$PRERELEASE" = "true" ]; then
+                      args+=(--prerelease)
+                  fi
+                  gh release create "$TAG" "${args[@]}"
+
+            - name: Summary
+              env:
+                  TAG: ${{ steps.prepare.outputs.tag }}
+                  PREVIOUS_TAG: ${{ steps.prepare.outputs.previous_tag }}
+                  COMMIT_COUNT: ${{ steps.prepare.outputs.commit_count }}
+                  NOTES_FILE: ${{ steps.prepare.outputs.notes_file }}
+              run: |
+                  {
+                      echo "## Released $TAG"
+                      echo ""
+                      echo "- Previous tag: ${PREVIOUS_TAG:-(none)}"
+                      echo "- Commits included: $COMMIT_COUNT"
+                      echo ""
+                      cat "$NOTES_FILE"
+                  } >> "$GITHUB_STEP_SUMMARY"

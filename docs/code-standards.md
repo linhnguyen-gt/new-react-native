@@ -128,10 +128,21 @@ push to `main` or a numbered version branch. It writes `.env` from `.env.example
 development flavor, the one whose `API_URL` is allowed to be http. The coverage floor fails the
 job on its own — there is no separate coverage step.
 
-Releasing is `.github/workflows/release.yml`, run by hand from the Actions tab. Pick `patch`,
-`minor` or `major`: it runs the CI job first, then `npm version` writes `package.json`, commits and
-tags, and `gh release create --generate-notes` publishes the GitHub release. It calls `ci.yml`
-rather than repeating its steps, so the two can never drift.
+Releasing is `.github/workflows/release.yml`, run by hand from the Actions tab. It calls `ci.yml`
+rather than repeating its steps, so the two can never drift, then hands the version decision to
+`scripts/prepare-release.cjs`: `auto` reads the conventional commits since the previous tag — a
+breaking change is a major (a minor while the version is below 1.0.0), a `feat` is a minor,
+anything else a patch — or pass `patch`/`minor`/`major`, or an exact `version`.
+
+The same script renders the release notes from those commits, grouped by type, and the workflow
+publishes them with `--notes-file`. It does not use `gh release create --generate-notes`: that
+groups by pull request rather than by change, and with no previous tag to diff against it walks
+the entire history and announces the repository owner as a first-time contributor. Preview what a
+release would say without touching anything:
+
+```bash
+node scripts/prepare-release.cjs --bump=auto --dry-run
+```
 
 The app's own `VERSION_NAME` / `VERSION_CODE` live in the uncommitted `.env` files and are **not**
 touched by a release — a store build's version is a separate, deliberate edit.
