@@ -39,4 +39,4 @@ minimumReleaseAgeExclude:
   - expo@57.0.9
 
 patchedDependencies:
-  react-native@0.86.2: patches/react-native@0.86.2.patch
+  react-native-css-interop@0.2.6: patches/react-native-css-interop@0.2.6.patch

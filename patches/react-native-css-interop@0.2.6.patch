@@ -1,0 +1,39 @@
+diff --git a/dist/runtime/native/native-interop.js b/dist/runtime/native/native-interop.js
+index 254b7ba65bd7e77982db73d793b157b15272f434..36333d0f9693713b30148e65f5825b299b2d47e6 100644
+--- a/dist/runtime/native/native-interop.js
++++ b/dist/runtime/native/native-interop.js
+@@ -637,6 +637,12 @@ function collectInlineRules(state, refs, target, effect, normal, important) {
+             collectInlineRules(state, refs, t, effect, normal, important);
+         }
+     }
++    else if (typeof target === "function") {
++        // Pressable accepts style as ({pressed}) => style. It has no own
++        // enumerable properties, so treating it as a rule turns it into {} in
++        // applyRules and the caller's styles are lost. Leave it for
++        // renderComponent to pass through untouched.
++    }
+     else if (target) {
+         const styles = (0, styles_1.getOpaqueStyles)(target, effect);
+         for (const style of styles) {
+diff --git a/dist/runtime/native/render-component.js b/dist/runtime/native/render-component.js
+index eba25ece1cf3fe3170cd55134df6b70c7aabd70e..a62700708d29628a5cb09b64c5b84da36936bbf6 100644
+--- a/dist/runtime/native/render-component.js
++++ b/dist/runtime/native/render-component.js
+@@ -73,7 +73,17 @@ function renderComponent(baseComponent, state, props, possiblyAnimatedProps, var
+         }
+     }
+     else {
++        // A function style survives collectInlineRules untouched, so it is still
++        // on props here. Spreading possiblyAnimatedProps would drop it whenever
++        // a className produced styles, so compose the two instead.
++        const inlineStyle = typeof props?.style === "function" ? props.style : undefined;
+         props = { ...props, ...possiblyAnimatedProps };
++        if (inlineStyle) {
++            const classNameStyle = possiblyAnimatedProps.style;
++            props.style = classNameStyle
++                ? (pressableState) => [classNameStyle, inlineStyle(pressableState)]
++                : inlineStyle;
++        }
+     }
+     if (state.variables !== exports.UpgradeState.NONE) {
+         if (process.env.NODE_ENV !== "production") {
