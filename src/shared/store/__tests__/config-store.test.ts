@@ -22,8 +22,9 @@ describe('createAppStore', () => {
 
         const store: EnhancedStore = createAppStore();
 
+        // `responseApi` is RTK Query's cache slice; `response` was its saga-era predecessor.
         expect(Object.keys(store.getState() as object)).toEqual(
-            expect.arrayContaining(['count', 'response', 'loading'])
+            expect.arrayContaining(['count', 'loading', 'responseApi'])
         );
     });
 

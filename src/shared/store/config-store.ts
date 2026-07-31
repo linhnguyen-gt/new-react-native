@@ -1,12 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { compact } from 'lodash';
 import createSagaMiddleware from 'redux-saga';
 
 import RootReducers from './root-reducers';
 import RootSaga from './root-saga';
 
-import type { EnhancedStore, StoreEnhancer } from '@reduxjs/toolkit';
+import type { EnhancedStore } from '@reduxjs/toolkit';
 
+import { responseApi } from '@/features/response/api/response-api';
 import { reactotron } from '@/shared/config/reactotron';
 import { initReactotron } from '@/shared/config/reactotron';
 import Logger from '@/shared/lib/logger';
@@ -34,17 +34,25 @@ export const createAppStore = (): EnhancedStore => {
             }),
     });
 
-    const enhancers: StoreEnhancer[] = compact([reactotron?.createEnhancer?.()]);
+    // A conditional concat rather than an array of possibly-undefined enhancers: a
+    // `StoreEnhancer[]` widens the store's enhancer tuple, and the inference failure surfaces
+    // as an unrelated middleware type error further down.
+    const reactotronEnhancer = reactotron?.createEnhancer?.();
 
     const store = configureStore({
         reducer: RootReducers,
-        enhancers: (getDefaultEnhancers) => getDefaultEnhancers().concat(enhancers),
         middleware: (getDefaultMiddleware) =>
             getDefaultMiddleware({
                 serializableCheck: false,
-                thunk: false,
+                // RTK Query's middleware is built on thunks; with `thunk: false` its endpoints
+                // silently never run.
                 immutableCheck: !__DEV__,
-            }).concat(sagaMiddleware),
+            }).concat(sagaMiddleware, responseApi.middleware),
+        // Must stay *after* `middleware`: TypeScript infers these keys in source order, and an
+        // `enhancers` callback seen first pins the middleware tuple to its default single entry,
+        // which then rejects the two middlewares added above.
+        enhancers: (getDefaultEnhancers) =>
+            reactotronEnhancer ? getDefaultEnhancers().concat(reactotronEnhancer) : getDefaultEnhancers(),
         devTools: __DEV__,
     });
 

@@ -4,11 +4,10 @@ import type { Task } from 'redux-saga';
 import type { Effect } from 'redux-saga/effects';
 
 import watchCount from '@/features/count/model/count-sagas';
-import watchResponse from '@/features/response/model/response-sagas';
 import ActionTypes from '@/shared/store/action-types';
 
 function* watchers() {
-    yield all([fork(watchCount), fork(watchResponse)]);
+    yield all([fork(watchCount)]);
 }
 
 class RootSaga {

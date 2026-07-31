@@ -3,7 +3,13 @@ import { delay, put, takeEvery } from 'redux-saga/effects';
 import * as CountActions from '@/features/count/model/count-actions';
 import { handleApiCall } from '@/shared/store/api-saga-helper';
 
-/** The delay stands in for a request; it is what makes the lost-update race reachable at all. */
+/**
+ * Count is local state with a multi-step async flow, so it stays on redux-saga. Server state
+ * belongs to RTK Query — see `features/response/api/response-api.ts` for the other half of that
+ * boundary.
+ *
+ * The delay stands in for a request; it is what makes the lost-update race reachable at all.
+ */
 function* increment() {
     yield* handleApiCall(CountActions.increment.type, function* () {
         yield delay(1000);
