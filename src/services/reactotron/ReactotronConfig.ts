@@ -22,13 +22,19 @@ export interface ReactotronConfig {
 /**
  * The default Reactotron configuration.
  */
-const host =
+/** The Metro host, which is where Reactotron listens. Resolved on read, not at import. */
+const resolveHost = (): string =>
     (TurboModuleRegistry.getEnforcing('SourceCode')?.getConstants?.() as { scriptURL?: string })?.scriptURL
         ?.split('://')[1]
         ?.split(':')[0] ?? 'localhost';
+
 export const DEFAULT_REACTOTRON_CONFIG: ReactotronConfig = {
     clearOnLoad: true,
-    host,
+    // A getter: `getEnforcing` is a native-module lookup and this module is imported through the
+    // services barrel, so as a plain value it ran during module loading on every app start.
+    get host() {
+        return resolveHost();
+    },
     useAsyncStorage: true,
     ignoreUrls: /(logs|symbolicate)$/,
     state: {

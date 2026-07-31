@@ -108,5 +108,43 @@ class EnvironmentService {
     }
 }
 
-const environmentService = EnvironmentService.getInstance();
-export { environmentService as environment };
+export type Environment = Pick<
+    EnvironmentService,
+    | 'apiBaseUrl'
+    | 'appFlavor'
+    | 'appName'
+    | 'versionName'
+    | 'versionCode'
+    | 'isDevelopment'
+    | 'isStaging'
+    | 'isProduction'
+>;
+
+/**
+ * A facade, not the instance.
+ *
+ * Constructing `EnvironmentService` reads the Expo config and can throw. Building it at import
+ * time meant a bad `.env` threw while the module graph was still loading — before React mounted,
+ * so there was no error boundary and no log, just a white screen. Every member below resolves
+ * the singleton on access instead, which moves the failure inside the bootstrap try/catch.
+ */
+export const environment: Environment = Object.freeze({
+    get apiBaseUrl() {
+        return EnvironmentService.getInstance().apiBaseUrl;
+    },
+    get appFlavor() {
+        return EnvironmentService.getInstance().appFlavor;
+    },
+    get appName() {
+        return EnvironmentService.getInstance().appName;
+    },
+    get versionName() {
+        return EnvironmentService.getInstance().versionName;
+    },
+    get versionCode() {
+        return EnvironmentService.getInstance().versionCode;
+    },
+    isDevelopment: () => EnvironmentService.getInstance().isDevelopment(),
+    isStaging: () => EnvironmentService.getInstance().isStaging(),
+    isProduction: () => EnvironmentService.getInstance().isProduction(),
+});

@@ -2,15 +2,27 @@ import { configureStore, EnhancedStore, StoreEnhancer } from '@reduxjs/toolkit';
 import { compact } from 'lodash';
 import createSagaMiddleware from 'redux-saga';
 
-import { reactotron, StoreService } from '@/services';
+import { initReactotron, reactotron, StoreService } from '@/services';
 
 import RootReducers from './RootReducers';
 import RootSaga from './RootSaga';
 
 import Logger from '@/helper/logger';
 
-class StoreConfig {
-    private sagaMiddleware = createSagaMiddleware({
+/**
+ * A factory, not a module-level instance.
+ *
+ * The store used to be built while this module loaded, and a `sagaMiddleware.run()` failure was
+ * swallowed by a `console.error` — the app then rendered normally with no saga watchers at all:
+ * every button dead, nothing reported. Failing here is fatal on purpose, and `Root` turns it
+ * into a visible bootstrap screen.
+ */
+export const createAppStore = (): EnhancedStore => {
+    // Must precede the enhancer and saga-monitor calls below; both come from `tron`, which only
+    // exists after setup.
+    if (__DEV__) initReactotron();
+
+    const sagaMiddleware = createSagaMiddleware({
         sagaMonitor: reactotron?.createSagaMonitor?.(),
         onError: (error) =>
             Logger.error('SagaMiddleware', {
@@ -19,28 +31,28 @@ class StoreConfig {
             }),
     });
 
-    private enhancers: StoreEnhancer[] = compact([reactotron?.createEnhancer?.()]);
+    const enhancers: StoreEnhancer[] = compact([reactotron?.createEnhancer?.()]);
 
-    public store: EnhancedStore = configureStore({
+    const store = configureStore({
         reducer: RootReducers,
-        enhancers: (getDefaultEnhancers) => getDefaultEnhancers().concat(this.enhancers),
+        enhancers: (getDefaultEnhancers) => getDefaultEnhancers().concat(enhancers),
         middleware: (getDefaultMiddleware) =>
             getDefaultMiddleware({
                 serializableCheck: false,
                 thunk: false,
                 immutableCheck: !__DEV__,
-            }).concat(this.sagaMiddleware),
+            }).concat(sagaMiddleware),
         devTools: __DEV__,
     });
 
-    constructor() {
-        try {
-            this.sagaMiddleware.run(RootSaga.saga);
-            StoreService.getInstance().initialize(this.store);
-        } catch (error) {
-            console.error('Failed to start saga:', error);
-        }
+    try {
+        sagaMiddleware.run(RootSaga.saga);
+    } catch (error) {
+        Logger.error('createAppStore', 'the root saga failed to start', error);
+        throw error;
     }
-}
 
-export default new StoreConfig().store;
+    StoreService.getInstance().initialize(store);
+
+    return store;
+};

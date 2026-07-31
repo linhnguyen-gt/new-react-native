@@ -1,11 +1,11 @@
-import { ApiMethod, HttpClient, HttpResponse } from '@/services';
+import { ApiMethod, getHttpClient, HttpResponse } from '@/services';
 
 /**
  * Failures are returned, not dropped. The previous `if (!response?.ok) return;` collapsed every
  * error into `undefined`, which the caller could not tell apart from an empty result.
  */
 export const responseApi = async (): Promise<HttpResponse<ResponseData[]>> => {
-    const response = await HttpClient.request<{
+    const response = await getHttpClient().request<{
         data: ResponseData[];
     }>({
         endpoint: 'data',

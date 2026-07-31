@@ -8,22 +8,20 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-
-import { RootNavigator } from '@/services';
+import '../global.css';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { screenOptions } from '@/helper';
-
-import '../global.css';
-
-// eslint-disable-next-line import/order
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-// eslint-disable-next-line import/order
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { KeyboardViewSpacer } from './components/keyboardSpace';
 import { UIProvider } from './components/ui';
 import { RouteName } from './constants';
 import { LoginPage, MainPage } from './screens';
+
+// The narrow path, not the `@/services` barrel: the barrel reaches the http client and the
+// environment, neither of which this file needs.
+import { RootNavigator } from '@/services/navigation';
 
 const Stack = createStackNavigator<RootStackParamList>();
 

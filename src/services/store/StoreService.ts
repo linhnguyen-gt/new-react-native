@@ -1,5 +1,6 @@
 import { EnhancedStore } from '@reduxjs/toolkit';
 
+import Logger from '@/helper/logger';
 import { ResetActions } from '@/redux/actions';
 
 export class StoreService {
@@ -20,12 +21,16 @@ export class StoreService {
         this.store = store;
     }
 
+    /**
+     * Silence here used to be indistinguishable from success: an uninitialised service made
+     * every logout a no-op, so a session that failed to clear looked exactly like one that did.
+     */
     public logout() {
-        // TODO: Implement logout
-        // logic logout here!!!
-
-        if (this.store) {
-            this.store.dispatch(ResetActions.resetState());
+        if (!this.store) {
+            Logger.error('StoreService', 'logout() called before initialize(); the session was not cleared');
+            return;
         }
+
+        this.store.dispatch(ResetActions.resetState());
     }
 }

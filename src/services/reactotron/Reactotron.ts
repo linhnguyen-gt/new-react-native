@@ -52,12 +52,14 @@ export default class Reactotron {
         }
     }
 
+    // Optional: both are called while the store is being built, and `tron` only exists once
+    // `setup()` has run. Returning undefined is what `compact()` in the store config expects.
     createEnhancer() {
-        return this.tron.createEnhancer?.();
+        return this.tron?.createEnhancer?.();
     }
 
     createSagaMonitor() {
-        return this.tron.createSagaMonitor?.();
+        return this.tron?.createSagaMonitor?.();
     }
 }
 

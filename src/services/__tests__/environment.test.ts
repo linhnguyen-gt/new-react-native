@@ -1,9 +1,13 @@
 type EnvironmentModule = typeof import('../environment');
 
 /**
- * The module builds its singleton at import time, so each case resets the module registry and
- * re-requires with the mocks it needs. Constructing the service directly is not an option —
- * the constructor is private and the instance is cached.
+ * Each case resets the module registry and re-requires with the mocks it needs — constructing
+ * the service directly is not an option, since the constructor is private and the instance is
+ * cached.
+ *
+ * The module no longer creates its singleton at import time, so the failure cases below read a
+ * member to trigger construction. That laziness is deliberate: an import-time throw happened
+ * before React mounted, which meant a white screen instead of the bootstrap error screen.
  */
 const loadEnvironment = (
     jsExtra: Record<string, string> | null,
@@ -34,6 +38,12 @@ const STAGING_EXTRA = {
 };
 
 describe('environment', () => {
+    it('reads nothing until a member is accessed', () => {
+        // The whole point of the facade: importing must not throw, so a bad config surfaces on
+        // the bootstrap error screen rather than as a white screen during module loading.
+        expect(() => loadEnvironment(null, {})).not.toThrow();
+    });
+
     it('exposes the JS config when both sources agree', () => {
         const { environment } = loadEnvironment(STAGING_EXTRA, { APP_FLAVOR: 'staging' });
 
@@ -50,7 +60,7 @@ describe('environment', () => {
     it('throws naming both values when the sources disagree', () => {
         // APP_ENV selected .env.staging for the bundle while ENVFILE left the native side on
         // .env — the silent-wrong-config case the guard exists to catch.
-        expect(() => loadEnvironment(STAGING_EXTRA, { APP_FLAVOR: 'development' })).toThrow(
+        expect(() => loadEnvironment(STAGING_EXTRA, { APP_FLAVOR: 'development' }).environment.appFlavor).toThrow(
             /APP_FLAVOR: JS bundle has "staging", native build has "development"/
         );
     });
@@ -59,15 +69,18 @@ describe('environment', () => {
         // dotenv strips `# ...` from a value; react-native-config keeps everything after `=` on
         // both platforms. Observed for real in a generated Android BuildConfig, which is why
         // this is a distinct case rather than a variation of the mismatch above.
-        expect(() => loadEnvironment(STAGING_EXTRA, { APP_FLAVOR: 'staging # (development|staging)' })).toThrow(
-            /APP_FLAVOR: JS bundle has "staging", native build has "staging # /
-        );
+        expect(
+            () =>
+                loadEnvironment(STAGING_EXTRA, { APP_FLAVOR: 'staging # (development|staging)' }).environment.appFlavor
+        ).toThrow(/APP_FLAVOR: JS bundle has "staging", native build has "staging # /);
     });
 
     it('reports every disagreeing key, not just the first', () => {
-        expect(() => loadEnvironment(STAGING_EXTRA, { APP_FLAVOR: 'development', API_URL: 'http://wrong' })).toThrow(
-            /APP_FLAVOR:[\s\S]*API_URL:/
-        );
+        expect(
+            () =>
+                loadEnvironment(STAGING_EXTRA, { APP_FLAVOR: 'development', API_URL: 'http://wrong' }).environment
+                    .appFlavor
+        ).toThrow(/APP_FLAVOR:[\s\S]*API_URL:/);
     });
 
     it('ignores keys the native build does not define', () => {
@@ -86,6 +99,6 @@ describe('environment', () => {
     });
 
     it('throws when the Expo config is missing entirely', () => {
-        expect(() => loadEnvironment(null, {})).toThrow('Missing Expo configuration');
+        expect(() => loadEnvironment(null, {}).environment.appFlavor).toThrow('Missing Expo configuration');
     });
 });

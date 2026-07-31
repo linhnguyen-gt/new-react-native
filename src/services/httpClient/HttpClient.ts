@@ -8,10 +8,7 @@ import { ErrorHandler } from './services/ErrorHandler';
 import { RequestInterceptor } from './services/RequestInterceptor';
 import { TokenService } from './services/TokenService';
 
-const DEFAULT_API_CONFIG = {
-    baseURL: environment.apiBaseUrl,
-    timeout: 30000,
-} as const;
+const DEFAULT_TIMEOUT_MS = 30000;
 
 export class HttpClient implements IHttpClient, ITokenHttpPort {
     private static _instance: HttpClient;
@@ -32,8 +29,10 @@ export class HttpClient implements IHttpClient, ITokenHttpPort {
         config: Partial<AxiosRequestConfig> = {}
     ) {
         this.INSTANCE = axios.create({
-            baseURL: DEFAULT_API_CONFIG.baseURL,
-            timeout: DEFAULT_API_CONFIG.timeout,
+            // Read here rather than at module scope: importing this file must not touch the
+            // environment, which can throw on a bad config.
+            baseURL: environment.apiBaseUrl,
+            timeout: DEFAULT_TIMEOUT_MS,
             // TODO: Uncomment this when the backend is ready to receive cookies
             // withCredentials: true,
             ...config,
@@ -127,7 +126,15 @@ export class HttpClient implements IHttpClient, ITokenHttpPort {
     }
 }
 
-export default HttpClient.getInstance();
+/**
+ * The single entry point for callers.
+ *
+ * This module used to end in `export default HttpClient.getInstance()`, so merely importing
+ * anything from `@/services` constructed axios and read the environment. It also meant the
+ * `getInstance(tokenService, errorHandler)` parameters were already spent by the time any test
+ * could pass its own — DI in shape only.
+ */
+export const getHttpClient = (): HttpClient => HttpClient.getInstance();
 
 declare global {
     type HttpClientBaseConfig<M extends ApiMethod, P = Record<string, any>, B = Record<string, any>> = {
