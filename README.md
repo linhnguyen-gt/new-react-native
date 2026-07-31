@@ -237,7 +237,7 @@ which CocoaPods runs before compiling.
 | `react-native-config` | `BuildConfig` / `Info.plist`, selected by `ENVFILE` | JS and native |
 
 Both read the same `.env*` file but through **different variables**, so every run script exports
-`APP_ENV` and `ENVFILE` together. `src/services/environment.ts` compares the two sources at
+`APP_ENV` and `ENVFILE` together. `src/shared/config/environment.ts` compares the two sources at
 startup and throws if they disagree — otherwise a build with only one variable set would ship a
 JS bundle and a native binary describing different environments, with no error anywhere.
 
@@ -269,29 +269,45 @@ The setup automatically manages app versions based on environment files:
 
 ```
 src/
-├── App.tsx          # Main App component
-├── Root.tsx         # Root component with Redux Provider
-├── apis/            # API integration
-├── components/      # Reusable UI components
-├── constants/       # Constants Keys
-├── enums/           # TypeScript enums
-├── helper/          # Helper functions
-├── hooks/           # Custom React hooks
-├── models/          # Models related to API
-└── redux/           # Redux store configuration
-    ├── actions/     # Redux actions
-    ├── reducers/    # Redux reducers
-    ├── sagas/       # Redux sagas
-    └── selectors/   # Redux selectors
-├── screens/         # Screen components
-├── services/        # Business logic and services
-    └── reactotron/  # Reactotron configuration
-    └── navigation/  # Navigation configuration
-    └── httpClient/  # Base API client configuration
-└── store/           # Redux store configuration
-└── types/           # TypeScript types
-
+├── app/                 the shell: root, error boundary, providers, navigation
+│   └── navigation/      route map, root navigator, screen options
+├── features/            one directory per feature, each owning api/ model/ ui/
+│   ├── auth/            login screen and schema
+│   ├── count/           the redux-saga example (local state, async flow)
+│   ├── home/            the screen that composes the other features
+│   └── response/        the RTK Query example (server state)
+├── shared/
+│   ├── api/             axios client, interceptors, token service, RTKQ base query
+│   ├── config/          environment facade, Reactotron
+│   ├── constants/       colors, errors
+│   ├── lib/             logger, keystore storage, hooks
+│   ├── store/           store factory, root reducer/saga, loading slice
+│   └── ui/              the design system
+└── types/               ambient declarations
 ```
+
+A feature imports `shared/`; it never imports another feature. `npx madge --circular
+--extensions ts,tsx src` enforces it.
+
+`docs/system-architecture.md` explains the layering, the RTK-Query-vs-saga boundary and the auth
+refresh cycle. `docs/code-standards.md` covers naming, the TypeScript flags and the testing
+policy.
+
+## Notes for forkers
+
+Three behaviours differ from a stock React Native template, and each will surprise you if you
+carry code in from elsewhere:
+
+- **The refresh token is in the platform keystore**, not AsyncStorage. `src/shared/lib/storage.ts`
+  is the only module that touches it, and `setToken({ refreshToken: null })` deletes rather than
+  no-oping. A fork migrating from an AsyncStorage build should treat existing sessions as logged
+  out.
+- **Nothing is logged in release builds.** Use `Logger`, never `console.*`, and never pass a
+  header or a response body to it.
+- **`KeyboardViewSpacer` no longer accepts `useNativeDriver`.** It animates `paddingBottom`, which
+  the native driver cannot animate, so the prop never worked; passing `true` broke the animation
+  outright.
+
 
 ## Development Tools
 
