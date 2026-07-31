@@ -95,7 +95,9 @@ export default [
             ...tsPlugin.configs['eslint-recommended'].overrides[0].rules,
             ...tsPlugin.configs.recommended.rules,
 
-            'no-console': ['error', { allow: ['warn', 'error'] }],
+            // `info` is allowed so Logger.info can report at info level; it used to call
+            // console.error, which filed every informational record as an error.
+            'no-console': ['error', { allow: ['info', 'warn', 'error'] }],
             'react-hooks/rules-of-hooks': 'error',
             'react-hooks/exhaustive-deps': 'error',
             'react/jsx-filename-extension': ['error', { extensions: ['.ts', '.tsx'] }],
