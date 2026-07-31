@@ -81,10 +81,22 @@ port interface, which removed the only import cycle in the tree.
   default catch-variable narrowing.
 - ESLint now covers the ~20 `.js`/`.mjs`/`.cjs` files it used to ignore.
 
-### Tests
+### Tests and CI
 
-46 tests in 5 suites → 116 in 21, with an enforced coverage floor in `jest.config.js`. Each test
-covering a fixed defect states in a comment what used to happen.
+46 tests in 5 suites → 125 in 22, with an enforced coverage floor in `jest.config.js`. Each test
+covering a fixed defect states in a comment what used to happen. `HttpClient.request` — the one
+call every request passes through — went from untested to nine tests pinning the response envelope
+in both directions.
+
+The repository had no CI. `.github/workflows/ci.yml` now runs eslint, `tsc --noEmit`, jest and
+`expo export --platform android` on every pull request; before this, lefthook's staged-file lint
+was the only gate, and the coverage floor had nothing enforcing it. `.github/workflows/release.yml`
+is a manual GitHub release: it calls the CI workflow, then bumps, tags and publishes. There is no
+CD — nothing builds or ships a binary.
+
+`docs/` was in `.gitignore`, so none of these documents had ever been committed even though the
+README links into them. It is tracked now; `plans/` deliberately is not. `AGENTS.md` states the
+same rules for coding agents.
 
 ### Known gaps
 

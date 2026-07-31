@@ -1,6 +1,7 @@
 # Codebase Summary
 
-112 TypeScript files under `src/`. The layer rules and the reasoning behind them are in
+113 TypeScript files under `src/`, 91 of them outside `__tests__/`. The layer rules and the
+reasoning behind them are in
 [system-architecture.md](./system-architecture.md); this document is the map.
 
 ## Directory map
