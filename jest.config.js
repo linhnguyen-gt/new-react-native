@@ -62,9 +62,9 @@ module.exports = {
     },
     // Without these, a coverage drop is invisible to CI. Index files are re-exports only.
     collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/**/*.d.ts', '!src/**/__tests__/**', '!src/**/index.ts'],
-    // Re-measured after the RTK Query migration (68.18 / 56.52 / 55.04 / 69.30) and rounded down
-    // to the nearest 5, so the floor catches a regression without failing on noise.
+    // Re-measured after the HttpClient.request tests (70.51 / 58.69 / 57.79 / 71.71) and rounded
+    // down to the nearest 5, so the floor catches a regression without failing on noise.
     coverageThreshold: {
-        global: { statements: 65, branches: 55, functions: 55, lines: 65 },
+        global: { statements: 70, branches: 55, functions: 55, lines: 70 },
     },
 };
