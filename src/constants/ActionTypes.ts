@@ -6,6 +6,7 @@ const ActionTypes = {
 
     GET_RESPONSE: 'GET_RESPONSE',
     SET_RESPONSE: 'SET_RESPONSE',
+    SET_RESPONSE_ERROR: 'SET_RESPONSE_ERROR',
 
     RESET_STATE: 'RESET_STATE',
 } as const;

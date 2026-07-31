@@ -1,6 +1,10 @@
-import { ApiMethod, HttpClient } from '@/services';
+import { ApiMethod, HttpClient, HttpResponse } from '@/services';
 
-export const responseApi = async (): Promise<BaseResponse<ResponseData[]>> => {
+/**
+ * Failures are returned, not dropped. The previous `if (!response?.ok) return;` collapsed every
+ * error into `undefined`, which the caller could not tell apart from an empty result.
+ */
+export const responseApi = async (): Promise<HttpResponse<ResponseData[]>> => {
     const response = await HttpClient.request<{
         data: ResponseData[];
     }>({
@@ -13,7 +17,7 @@ export const responseApi = async (): Promise<BaseResponse<ResponseData[]>> => {
         },
     });
 
-    if (!response?.ok) return;
+    if (!response.ok) return response;
 
-    return { ok: response.ok, data: response.data?.data };
+    return { ok: true, data: response.data.data, status: response.status };
 };

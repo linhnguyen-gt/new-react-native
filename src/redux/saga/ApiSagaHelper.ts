@@ -1,6 +1,9 @@
+import { Action } from '@reduxjs/toolkit';
 import { Effect, put } from 'redux-saga/effects';
 
 import { startLoading, stopLoading } from '../reducers';
+
+import Logger from '@/helper/logger';
 
 type EffectType = Effect | Promise<any>;
 type SagaGenerator = Generator<EffectType, any, any>;
@@ -8,10 +11,15 @@ type SagaFunction = (...args: unknown[]) => SagaGenerator;
 
 type LoadingOptions = {
     isLoading?: boolean;
+    /**
+     * Dispatched when the wrapped saga throws. Without it a thrown error is logged and
+     * forgotten, which is how every failure in this app used to become invisible.
+     */
+    onFailure?: (message: string) => Action;
 };
 
-function isLoadingOptions(obj: any): obj is LoadingOptions {
-    return typeof obj === 'object' && !('type' in obj);
+function isLoadingOptions(obj: unknown): obj is LoadingOptions {
+    return typeof obj === 'object' && obj !== null && !('type' in obj);
 }
 
 export function* handleApiCall(
@@ -20,7 +28,7 @@ export function* handleApiCall(
     apiSaga?: SagaFunction,
     ...args: unknown[]
 ): Generator {
-    const options = isLoadingOptions(optionsOrActionType) ? optionsOrActionType : { isLoading: true };
+    const options = isLoadingOptions(optionsOrActionType) ? optionsOrActionType : {};
     const actionType = isLoadingOptions(optionsOrActionType)
         ? (actionTypeOrSaga as string)
         : (optionsOrActionType as string);
@@ -34,7 +42,11 @@ export function* handleApiCall(
         }
         yield* saga(...args);
     } catch (error) {
-        console.error(`Error in saga ${actionType}:`, error);
+        const message = error instanceof Error ? error.message : String(error);
+        Logger.error(actionType, message);
+        if (options.onFailure) {
+            yield put(options.onFailure(message));
+        }
     } finally {
         if (isLoading) {
             yield put(stopLoading(actionType));

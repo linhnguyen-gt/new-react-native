@@ -13,5 +13,7 @@ declare global {
     type ResponseData = z.infer<typeof ResponseSchema>;
     type ResponseReducers = {
         response: ResponseData[] | undefined;
+        /** Set when the last load failed; cleared by the next success. */
+        error?: string;
     };
 }

@@ -3,7 +3,7 @@ import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { environment } from '../environment';
 
 import ApiMethod from './ApiMethod';
-import { HttpRequestConfig, HttpResponse, IHttpClient } from './interfaces/IHttpClient';
+import { HttpRequestConfig, HttpResponse, IHttpClient, ITokenHttpPort } from './interfaces/IHttpClient';
 import { ErrorHandler } from './services/ErrorHandler';
 import { RequestInterceptor } from './services/RequestInterceptor';
 import { TokenService } from './services/TokenService';
@@ -13,7 +13,7 @@ const DEFAULT_API_CONFIG = {
     timeout: 30000,
 } as const;
 
-export class HttpClient implements IHttpClient {
+export class HttpClient implements IHttpClient, ITokenHttpPort {
     private static _instance: HttpClient;
 
     private readonly INSTANCE: AxiosInstance;
@@ -51,7 +51,7 @@ export class HttpClient implements IHttpClient {
         return HttpClient._instance;
     }
 
-    async request<T>(config: HttpRequestConfig): Promise<HttpResponse<T> | undefined> {
+    async request<T>(config: HttpRequestConfig): Promise<HttpResponse<T>> {
         try {
             const headers = { ...config.headers };
 
@@ -60,6 +60,11 @@ export class HttpClient implements IHttpClient {
                 method: config.method.toLowerCase(),
                 params: this.shouldIncludeParams(config.method) ? config.params : undefined,
                 data: this.shouldIncludeBody(config.method) ? config.body : undefined,
+                // Was silently dropped: HttpRequestConfig.timeout is part of the public type.
+                timeout: config.timeout,
+                // Read back by the response interceptor; keeps the refresh call out of the
+                // refresh flow it would otherwise trigger.
+                skipAuthRefresh: config.skipAuthRefresh,
                 headers,
             });
 
@@ -70,8 +75,10 @@ export class HttpClient implements IHttpClient {
                 headers: response.headers,
             };
         } catch (e) {
-            this.errorHandler.handleError(e);
-            return;
+            // Resolves with the failure instead of returning `undefined` and leaving a floating
+            // rejection behind. Callers narrow on `ok`; nobody has to guess what `undefined` meant.
+            const error = this.errorHandler.toApiError(e);
+            return { ok: false, error, status: error.status };
         }
     }
 

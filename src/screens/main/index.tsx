@@ -24,6 +24,7 @@ const MainPage = () => {
 
     const count = useSelector(CountSelectors.count);
     const response = useSelector(ResponseSelectors.response);
+    const responseError = useSelector(ResponseSelectors.responseError);
     const isDarkMode = useColorScheme() === 'dark';
 
     const backgroundStyle = {
@@ -52,6 +53,11 @@ const MainPage = () => {
                     <Text size="2xl" fontWeight="bold">
                         Response: {response?.length}
                     </Text>
+                    {responseError ? (
+                        <Text size="sm" color="red" textAlign="center" testID="response-error">
+                            {responseError}
+                        </Text>
+                    ) : null}
                     <Text size="lg" color="gray" fontWeight="bold">
                         Counter: {count}
                     </Text>

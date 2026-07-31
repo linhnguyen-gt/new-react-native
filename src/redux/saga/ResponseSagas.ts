@@ -6,13 +6,24 @@ import { ResponseActions } from '../actions';
 
 import { handleApiCall } from './ApiSagaHelper';
 
-function* getResponse() {
-    yield* handleApiCall(ResponseActions.getResponse.type, function* () {
-        const response: ThenArg<ReturnType<typeof ResponseApi.responseApi>> = yield ResponseApi.responseApi();
-        if (response?.ok) {
-            yield put(ResponseActions.setResponse(response.data));
+/** Exported for the unit test, which steps the generator directly rather than adding a dep. */
+export function* getResponse() {
+    yield* handleApiCall(
+        { onFailure: ResponseActions.setResponseError },
+        ResponseActions.getResponse.type,
+        function* () {
+            const response: ThenArg<ReturnType<typeof ResponseApi.responseApi>> = yield ResponseApi.responseApi();
+
+            if (response.ok) {
+                yield put(ResponseActions.setResponse(response.data));
+                return;
+            }
+
+            // Previously the failure branch did not exist: a 500 left the list empty and the
+            // screen silent.
+            yield put(ResponseActions.setResponseError(response.error.message));
         }
-    });
+    );
 }
 
 export default function* watchResponse() {
