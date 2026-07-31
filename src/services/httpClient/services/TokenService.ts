@@ -1,7 +1,8 @@
 import { clearToken, getToken, setToken } from '@/helper';
 
 import ApiMethod from '../ApiMethod';
-import { ITokenHttpPort, ITokenService, Session } from '../interfaces/IHttpClient';
+
+import type { ITokenHttpPort, ITokenService, Session } from '../interfaces/IHttpClient';
 
 import Logger from '@/helper/logger';
 import { StoreService } from '@/services/store';

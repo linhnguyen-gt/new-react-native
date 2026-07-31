@@ -1,5 +1,5 @@
 import React from 'react';
-import { Animated, TextInput, TextInputProps } from 'react-native';
+import { Animated, TextInput } from 'react-native';
 
 import { getColor } from '@/hooks';
 
@@ -7,6 +7,8 @@ import { MyTouchable } from '../touchable';
 import { Box, HStack, IconComponent, Text, VStack } from '../ui';
 
 import useShakeView from './Input.Hook';
+
+import type { TextInputProps } from 'react-native';
 
 export type InputProps = TextInputProps & {
     prefixIcon?: React.ReactNode;

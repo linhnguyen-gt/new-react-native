@@ -1,11 +1,12 @@
 import React from 'react';
-import { ActivityIndicator, Pressable, StyleProp, Text, View, ViewStyle } from 'react-native';
+import { ActivityIndicator, Pressable, Text, View } from 'react-native';
 
 import { useStyleContext, withStyleContext } from '../utils/style-context';
 import { createStyleFromProps } from '../utils/style-props';
 import { tva } from '../utils/tva';
 
 import type { VariantProps } from '../utils/tva';
+import type { StyleProp, ViewStyle } from 'react-native';
 
 const SCOPE = 'BUTTON';
 

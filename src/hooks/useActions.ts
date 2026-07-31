@@ -1,7 +1,8 @@
-import { ActionCreatorWithPayload, PayloadAction } from '@reduxjs/toolkit';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { Dispatch } from 'redux';
+
+import type { ActionCreatorWithPayload, PayloadAction } from '@reduxjs/toolkit';
+import type { Dispatch } from 'redux';
 
 type BoundActionCreator<TPayload> = {
     (payload: TPayload): PayloadAction<TPayload>;
@@ -61,6 +62,10 @@ function useActions<TPayload, TActionMap extends Record<string, ActionCreatorWit
 
         for (const key in actionCreator) {
             const action = actionCreator[key];
+            // `for...in` yields keys the compiler cannot prove are present under
+            // noUncheckedIndexedAccess; a prototype key would reach here as undefined.
+            if (!action) continue;
+
             boundActionCreators[key] = function (this: void, payload?: TPayload) {
                 return dispatch(action(payload));
             } as TActionMap[typeof key] extends ActionCreatorWithPayload<infer ActionPayload, any>

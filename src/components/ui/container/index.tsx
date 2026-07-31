@@ -1,9 +1,9 @@
 import React from 'react';
-import { View } from 'react-native';
 
 import ContainerBox from './ContainerBox';
 
 import type { BaseBoxProps } from '../box/BaseBox';
+import type { View } from 'react-native';
 
 type ContainerProps = BaseBoxProps & {
     isLoading?: boolean;

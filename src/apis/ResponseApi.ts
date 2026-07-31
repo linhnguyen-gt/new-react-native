@@ -1,4 +1,5 @@
-import { ApiMethod, getHttpClient, HttpResponse } from '@/services';
+import type { HttpResponse } from '@/services';
+import { ApiMethod, getHttpClient } from '@/services';
 
 /**
  * Failures are returned, not dropped. The previous `if (!response?.ok) return;` collapsed every

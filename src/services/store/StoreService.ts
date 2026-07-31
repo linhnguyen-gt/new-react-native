@@ -1,4 +1,4 @@
-import { EnhancedStore } from '@reduxjs/toolkit';
+import type { EnhancedStore } from '@reduxjs/toolkit';
 
 import Logger from '@/helper/logger';
 import { ResetActions } from '@/redux/actions';

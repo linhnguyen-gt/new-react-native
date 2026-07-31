@@ -1,4 +1,4 @@
-import { configureStore, EnhancedStore, StoreEnhancer } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import { compact } from 'lodash';
 import createSagaMiddleware from 'redux-saga';
 
@@ -6,6 +6,8 @@ import { initReactotron, reactotron, StoreService } from '@/services';
 
 import RootReducers from './RootReducers';
 import RootSaga from './RootSaga';
+
+import type { EnhancedStore, StoreEnhancer } from '@reduxjs/toolkit';
 
 import Logger from '@/helper/logger';
 

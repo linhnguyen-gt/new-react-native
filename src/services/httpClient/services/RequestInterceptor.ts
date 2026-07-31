@@ -1,6 +1,7 @@
-import { AxiosError, AxiosInstance, HttpStatusCode, InternalAxiosRequestConfig } from 'axios';
+import { HttpStatusCode } from 'axios';
 
-import { ITokenService } from '../interfaces/IHttpClient';
+import type { ITokenService } from '../interfaces/IHttpClient';
+import type { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 
 interface ErrorResponseData {
     message: string;

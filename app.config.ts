@@ -1,7 +1,8 @@
 import * as dotenv from 'dotenv';
-import { ConfigContext, ExpoConfig } from 'expo/config';
 
 import { name as projectName } from './package.json';
+
+import type { ConfigContext, ExpoConfig } from 'expo/config';
 
 type AppEnv = 'development' | 'staging' | 'production';
 
@@ -68,7 +69,10 @@ const loadEnvFile = (path: string): Record<string, string> => {
     return parsed;
 };
 
-const validateEnvConfig = (env: Record<string, string>, appEnv: AppEnv) => {
+/** Exactly the published keys, each proven present by `validateEnvConfig`. */
+type PublishedEnv = Record<(typeof PUBLISHED_ENV_KEYS)[number], string>;
+
+const validateEnvConfig = (env: Record<string, string>, appEnv: AppEnv): PublishedEnv => {
     const missingVars = PUBLISHED_ENV_KEYS.filter((key) => !env[key]);
     if (missingVars.length > 0) {
         throw new Error(`Missing required env variables: ${missingVars.join(', ')}`);
@@ -82,14 +86,16 @@ const validateEnvConfig = (env: Record<string, string>, appEnv: AppEnv) => {
         throw new Error(`Empty values for environment variables: ${emptyVars.join(', ')}`);
     }
 
+    const published = Object.fromEntries(PUBLISHED_ENV_KEYS.map((key) => [key, env[key]])) as PublishedEnv;
+
     // The refresh token travels in a request body, so a plaintext base URL outside development
     // puts the whole session on the wire. `.env.example` ships `http://localhost:3000`, which is
     // exactly the value most likely to be copied into a staging file by accident.
-    if (appEnv !== 'development' && !env.API_URL.startsWith('https://')) {
-        throw new Error(`API_URL must use https outside development, received "${env.API_URL}"`);
+    if (appEnv !== 'development' && !published.API_URL.startsWith('https://')) {
+        throw new Error(`API_URL must use https outside development, received "${published.API_URL}"`);
     }
 
-    return env;
+    return published;
 };
 
 /**
@@ -159,10 +165,10 @@ export default ({ config }: ConfigContext): ExpoConfig => {
             ['./plugins/with-android-app-name', { appName: validatedConfig.APP_NAME }],
         ],
         /**
-         * An allowlist, not a spread of the parsed file. `extra` ends up inside the IPA/APK in
-         * plain text, so spreading meant any variable a future dev added to `.env` — a token, a
-         * key — shipped with the binary and could be read by unzipping it.
+         * The allowlisted keys only, never a spread of the parsed file. `extra` ends up inside
+         * the IPA/APK in plain text, so spreading meant any variable a future dev added to
+         * `.env` — a token, a key — shipped with the binary and could be read by unzipping it.
          */
-        extra: Object.fromEntries(PUBLISHED_ENV_KEYS.map((key) => [key, validatedConfig[key]])),
+        extra: { ...validatedConfig },
     };
 };

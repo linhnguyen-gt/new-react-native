@@ -1,7 +1,8 @@
 import React from 'react';
-import { View } from 'react-native';
 
 import BaseBox, { type BaseBoxProps } from './BaseBox';
+
+import type { View } from 'react-native';
 
 export type IBoxProps = BaseBoxProps & {
     isLoading?: boolean;

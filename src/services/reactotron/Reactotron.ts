@@ -5,7 +5,9 @@ import sagaPlugin from 'reactotron-redux-saga';
 
 import { name } from '../../../package.json';
 
-import { DEFAULT_REACTOTRON_CONFIG, ReactotronConfig } from './ReactotronConfig';
+import { DEFAULT_REACTOTRON_CONFIG } from './ReactotronConfig';
+
+import type { ReactotronConfig } from './ReactotronConfig';
 
 /** Do Nothing. */
 

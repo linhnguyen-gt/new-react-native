@@ -3,8 +3,9 @@ import * as SecureStore from 'expo-secure-store';
 import { setToken } from '@/helper';
 
 import ApiMethod from '../ApiMethod';
-import { HttpRequestConfig, HttpResponse, ITokenHttpPort } from '../interfaces/IHttpClient';
 import { TokenService } from '../services/TokenService';
+
+import type { HttpRequestConfig, HttpResponse, ITokenHttpPort } from '../interfaces/IHttpClient';
 
 import { StoreService } from '@/services/store';
 

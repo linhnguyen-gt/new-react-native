@@ -8,8 +8,7 @@ import React from 'react';
 
 import { MyTouchable } from '../../touchable';
 
-import { getColor } from '@/hooks/useThemeColor';
-import {
+import type {
     AntDesignIconName,
     EntypoIconName,
     EvilIconsIconName,
@@ -19,6 +18,8 @@ import {
     IoniconsIconName,
     MaterialIconsIconName,
 } from '@/types/icon';
+
+import { getColor } from '@/hooks/useThemeColor';
 
 interface IconProps {
     name: IconName;

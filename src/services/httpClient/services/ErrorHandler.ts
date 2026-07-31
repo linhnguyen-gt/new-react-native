@@ -1,6 +1,6 @@
 import { isAxiosError } from 'axios';
 
-import { ApiError, ApiErrorKind } from '../interfaces/IHttpClient';
+import type { ApiError, ApiErrorKind } from '../interfaces/IHttpClient';
 
 import Logger from '@/helper/logger';
 

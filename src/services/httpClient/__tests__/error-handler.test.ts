@@ -1,6 +1,8 @@
-import { AxiosError, AxiosHeaders } from 'axios';
+import { AxiosHeaders } from 'axios';
 
 import { ErrorHandler } from '../services/ErrorHandler';
+
+import type { AxiosError } from 'axios';
 
 /**
  * The leak this file guards: axios merges `INSTANCE.defaults.headers` into `error.config.headers`,

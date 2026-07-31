@@ -1,9 +1,10 @@
 import React from 'react';
-import { Text as RNText, TextStyle } from 'react-native';
+import { Text as RNText } from 'react-native';
 
 import { textStyle } from './styles';
 
 import type { VariantProps } from '../utils/tva';
+import type { TextStyle } from 'react-native';
 
 type StyleProps = Omit<TextStyle, 'transform'>;
 

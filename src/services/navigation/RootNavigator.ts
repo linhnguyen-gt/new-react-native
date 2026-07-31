@@ -1,17 +1,20 @@
 import { CommonActions, createNavigationContainerRef } from '@react-navigation/native';
 
-import { RouteName } from '@/constants';
+import type { RouteName } from '@/constants';
 
-import { INavigationService } from './INavigationService';
 import { NavigationLogger } from './NavigationLogger';
+
+import type { INavigationService } from './INavigationService';
 
 export type NavigatorParamsType = Record<string, never>;
 
 class RootNavigator implements INavigationService {
     public readonly navigationRef = createNavigationContainerRef();
 
-    async navigate<RouteName extends keyof RootStackParamList, Param extends RootStackParamList[RouteName]>(
-        route: RouteName,
+    // `TRoute`, not `RouteName`: the imported RouteName enum is used below for
+    // DefaultStackParamList, and a generic of the same name shadowed it.
+    async navigate<TRoute extends keyof RootStackParamList, Param extends RootStackParamList[TRoute]>(
+        route: TRoute,
         params?: Param
     ): Promise<void> {
         if (!this.navigationRef.isReady()) return;
@@ -27,8 +30,8 @@ class RootNavigator implements INavigationService {
         }
     }
 
-    async replaceName<RouteName extends keyof RootStackParamList, Param extends RootStackParamList[RouteName]>(
-        route: RouteName,
+    async replaceName<TRoute extends keyof RootStackParamList, Param extends RootStackParamList[TRoute]>(
+        route: TRoute,
         params?: Param
     ): Promise<void> {
         if (!this.navigationRef.isReady()) return;

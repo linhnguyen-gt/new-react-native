@@ -1,7 +1,9 @@
-import { Action } from '@reduxjs/toolkit';
-import { Effect, put } from 'redux-saga/effects';
+import { put } from 'redux-saga/effects';
 
 import { startLoading, stopLoading } from '../reducers';
+
+import type { Action } from '@reduxjs/toolkit';
+import type { Effect } from 'redux-saga/effects';
 
 import Logger from '@/helper/logger';
 

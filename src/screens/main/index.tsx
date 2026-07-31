@@ -15,12 +15,14 @@ import { CountSelectors, ResponseSelectors } from '@/redux/selectors';
 // new value every pass, which defeats the memoisation in `useActions` and in `useSelector`.
 const LOADING_TYPES = [CountActions.increment.type, CountActions.decrement.type, ResponseActions.getResponse.type];
 
-const COUNT_ACTIONS = [CountActions.increment, CountActions.decrement];
+// The object form rather than the array form: destructuring an array of bound creators types
+// each element as possibly undefined, and there is nothing to check at runtime.
+const COUNT_ACTIONS = { increment: CountActions.increment, decrement: CountActions.decrement };
 
 const MainPage = () => {
     const isLoading = useLoading(LOADING_TYPES);
 
-    const [increment, decrement] = useActions(COUNT_ACTIONS);
+    const { increment, decrement } = useActions(COUNT_ACTIONS);
 
     const getResponse = useActions(ResponseActions.getResponse);
 

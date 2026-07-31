@@ -1,7 +1,9 @@
 import React from 'react';
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator } from 'react-native';
 
 import BaseBox, { type BaseBoxProps } from './BaseBox';
+
+import type { View } from 'react-native';
 
 export type LoadingBoxProps = BaseBoxProps & {
     isLoading?: boolean;

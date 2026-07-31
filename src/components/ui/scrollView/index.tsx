@@ -1,10 +1,11 @@
 import { cssInterop } from 'nativewind';
 import React from 'react';
-import { ScrollView as RNScrollView, ViewStyle } from 'react-native';
+import { ScrollView as RNScrollView } from 'react-native';
 
 import { scrollViewStyle } from './styles';
 
 import type { VariantProps } from '../utils/tva';
+import type { ViewStyle } from 'react-native';
 
 const UIScrollView = RNScrollView;
 cssInterop(UIScrollView, {

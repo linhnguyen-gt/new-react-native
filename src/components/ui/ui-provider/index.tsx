@@ -1,10 +1,12 @@
 import { colorScheme as colorSchemeNW } from 'nativewind';
 import React from 'react';
-import { ColorSchemeName, useColorScheme, View, ViewProps } from 'react-native';
+import { useColorScheme, View } from 'react-native';
 
 import { ToastProvider } from '../toast/toast-provider';
 
 import { config } from './config';
+
+import type { ColorSchemeName, ViewProps } from 'react-native';
 
 type ModeType = 'light' | 'dark' | 'system';
 

@@ -1,12 +1,14 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import axios from 'axios';
 
 import { environment } from '../environment';
 
 import ApiMethod from './ApiMethod';
-import { HttpRequestConfig, HttpResponse, IHttpClient, ITokenHttpPort } from './interfaces/IHttpClient';
 import { ErrorHandler } from './services/ErrorHandler';
 import { RequestInterceptor } from './services/RequestInterceptor';
 import { TokenService } from './services/TokenService';
+
+import type { HttpRequestConfig, HttpResponse, IHttpClient, ITokenHttpPort } from './interfaces/IHttpClient';
+import type { AxiosInstance, AxiosRequestConfig } from 'axios';
 
 const DEFAULT_TIMEOUT_MS = 30000;
 

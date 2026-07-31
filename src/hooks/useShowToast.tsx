@@ -1,10 +1,11 @@
 import React from 'react';
 
+import type { IconName } from '@/types/icon';
+
 import { IconComponent } from '@/components/ui';
 import Box from '@/components/ui/box';
 import HStack from '@/components/ui/hStack';
 import { Toast, ToastTitle, useToast } from '@/components/ui/toast';
-import { IconName } from '@/types/icon';
 
 export { useToast };
 

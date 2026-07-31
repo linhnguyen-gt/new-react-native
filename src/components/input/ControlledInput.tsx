@@ -1,7 +1,10 @@
 import React from 'react';
-import { Control, FieldValues, Path, useController } from 'react-hook-form';
+import { useController } from 'react-hook-form';
 
-import Input, { InputProps } from './Input';
+import Input from './Input';
+
+import type { InputProps } from './Input';
+import type { Control, FieldValues, Path } from 'react-hook-form';
 
 interface ControlledInputProps<T extends FieldValues> extends Omit<
     InputProps,

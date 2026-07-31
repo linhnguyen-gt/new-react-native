@@ -1,9 +1,11 @@
-import { Task } from 'redux-saga';
-import { all, cancel, Effect, fork, take } from 'redux-saga/effects';
+import { all, cancel, fork, take } from 'redux-saga/effects';
 
 import { saga } from '@/redux';
 
 import { ActionTypes } from '@/constants';
+
+import type { Task } from 'redux-saga';
+import type { Effect } from 'redux-saga/effects';
 
 function* watchers() {
     yield all([fork(saga.watchCount), fork(saga.watchResponse)]);

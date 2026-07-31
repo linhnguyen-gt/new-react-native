@@ -1,6 +1,8 @@
-import { Action, combineReducers } from 'redux';
+import { combineReducers } from 'redux';
 
 import { ActionTypes } from '@/constants';
+
+import type { Action } from 'redux';
 
 import { CountReducers, LoadingReducers, ResponseReducers } from '@/redux/reducers';
 

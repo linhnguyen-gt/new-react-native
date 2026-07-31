@@ -1,11 +1,12 @@
 import React from 'react';
-import { View, ViewStyle } from 'react-native';
+import { View } from 'react-native';
 
 import Touchable from '../touch';
 
 import { hstackStyle } from './styles';
 
 import type { VariantProps } from '../utils/tva';
+import type { ViewStyle } from 'react-native';
 
 type StyleProps = Omit<ViewStyle, 'transform'>;
 

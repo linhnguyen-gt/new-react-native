@@ -1,11 +1,12 @@
 import { cssInterop } from 'nativewind';
 import React from 'react';
-import { ImageStyle, Platform, Image as RNImage } from 'react-native';
+import { Platform, Image as RNImage } from 'react-native';
 
 import { createStyleFromProps } from '../utils/style-props';
 import { tva } from '../utils/tva';
 
 import type { VariantProps } from '../utils/tva';
+import type { ImageStyle } from 'react-native';
 
 type StyleProps = Omit<ImageStyle, 'transform'>;
 

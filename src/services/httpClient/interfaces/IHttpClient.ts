@@ -1,4 +1,4 @@
-import ApiMethod from '../ApiMethod';
+import type ApiMethod from '../ApiMethod';
 
 declare module 'axios' {
     interface AxiosRequestConfig {

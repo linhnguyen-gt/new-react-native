@@ -134,6 +134,11 @@ export default [
             'react/jsx-uses-react': 'off',
             'react/jsx-curly-brace-presence': 'error',
             'prettier/prettier': ['error'],
+            // Pairs with verbatimModuleSyntax in tsconfig: a type-only import must say so, or
+            // the emitted module keeps an import of something that does not exist at runtime.
+            // `disallowTypeAnnotations: false` keeps `typeof import('…')` usable, which is how the
+            // module-registry tests describe a module they re-require under a fresh registry.
+            '@typescript-eslint/consistent-type-imports': ['error', { disallowTypeAnnotations: false }],
             '@typescript-eslint/no-shadow': 'error',
             '@typescript-eslint/no-explicit-any': 'off',
             'linebreak-style': ['error', 'unix'],

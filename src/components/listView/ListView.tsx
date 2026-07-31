@@ -1,10 +1,13 @@
-import { FlashList, FlashListProps, FlashListRef, ListRenderItem } from '@shopify/flash-list';
+import { FlashList } from '@shopify/flash-list';
 import React from 'react';
-import { DimensionValue, RefreshControl } from 'react-native';
+import { RefreshControl } from 'react-native';
 
 import { useRefresh } from '@/hooks';
 
 import { LoadingFooter } from '../loading';
+
+import type { FlashListProps, FlashListRef, ListRenderItem } from '@shopify/flash-list';
+import type { DimensionValue } from 'react-native';
 
 type Data = Record<string, any>;
 

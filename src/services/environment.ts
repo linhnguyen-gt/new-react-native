@@ -1,7 +1,7 @@
 import Constants from 'expo-constants';
-// eslint-disable-next-line import/order
-import { ExpoConfig } from 'expo/config';
 import Config from 'react-native-config';
+
+import type { ExpoConfig } from 'expo/config';
 
 /**
  * Two independent sources describe the same environment:

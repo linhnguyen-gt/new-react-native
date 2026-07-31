@@ -1,7 +1,9 @@
-import { AxiosError, AxiosInstance, HttpStatusCode, InternalAxiosRequestConfig } from 'axios';
+import { HttpStatusCode } from 'axios';
 
-import { ITokenService } from '../interfaces/IHttpClient';
 import { RequestInterceptor } from '../services/RequestInterceptor';
+
+import type { ITokenService } from '../interfaces/IHttpClient';
+import type { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 
 type ResponseErrorHandler = (error: AxiosError) => Promise<unknown>;
 

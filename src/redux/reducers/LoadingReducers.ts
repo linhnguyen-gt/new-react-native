@@ -1,4 +1,6 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
+
+import type { PayloadAction } from '@reduxjs/toolkit';
 
 /**
  * A count of in-flight tasks per action type, not a boolean.

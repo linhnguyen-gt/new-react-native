@@ -1,9 +1,10 @@
 import React from 'react';
-import { TouchableOpacity, TouchableOpacityProps, ViewStyle } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 
 import { tva } from '../ui/utils/tva';
 
 import type { VariantProps } from '../ui/utils/tva';
+import type { TouchableOpacityProps, ViewStyle } from 'react-native';
 
 export const touchableStyle = tva({});
 
