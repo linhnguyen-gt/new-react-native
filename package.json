@@ -45,6 +45,7 @@
         "expo": "~57.0.9",
         "expo-constants": "~57.0.8",
         "expo-font": "~57.0.1",
+        "expo-secure-store": "~57.0.1",
         "lodash": "^4.18.1",
         "nativewind": "^4.2.6",
         "react": "19.2.3",

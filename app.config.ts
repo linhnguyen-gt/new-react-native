@@ -124,6 +124,8 @@ export default ({ config }: ConfigContext): ExpoConfig => {
         },
         plugins: [
             ...(config.plugins ?? []),
+            // Keystore-backed refresh-token storage; the config plugin wires the native module.
+            'expo-secure-store',
             './plugins/with-android-abi-splits',
             './plugins/with-react-native-config',
             ['./plugins/with-android-app-name', { appName: validatedConfig.APP_NAME }],
