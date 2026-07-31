@@ -2,6 +2,8 @@ import { cssInterop } from 'nativewind';
 import React from 'react';
 import { ScrollView as RNScrollView } from 'react-native';
 
+import { createStyleFromProps } from '../utils/style-props';
+
 import { scrollViewStyle } from './styles';
 
 import type { VariantProps } from '../utils/tva';
@@ -23,11 +25,6 @@ export type IScrollViewProps = Omit<React.ComponentProps<typeof UIScrollView>, k
         contentClassName?: string;
         space?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl';
     } & VariantProps<typeof scrollViewStyle>;
-
-const createStyleFromProps = (props: StyleProps): ViewStyle => {
-    const styleKeys = Object.keys(props).filter((key) => props[key as keyof StyleProps] !== undefined);
-    return Object.fromEntries(styleKeys.map((key) => [key, props[key as keyof StyleProps]])) as ViewStyle;
-};
 
 const ScrollView = React.forwardRef<React.ComponentRef<typeof UIScrollView>, IScrollViewProps>(
     (

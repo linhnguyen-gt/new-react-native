@@ -2,6 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 
 import Touchable from '../touch';
+import { createStyleFromProps } from '../utils/style-props';
 
 import { hstackStyle } from './styles';
 
@@ -16,11 +17,6 @@ type IHStackProps = Omit<React.ComponentProps<typeof View>, keyof StyleProps> &
         className?: string;
         onPress?: () => void;
     };
-
-const createStyleFromProps = (props: StyleProps): ViewStyle => {
-    const styleKeys = Object.keys(props).filter((key) => props[key as keyof StyleProps] !== undefined);
-    return Object.fromEntries(styleKeys.map((key) => [key, props[key as keyof StyleProps]])) as ViewStyle;
-};
 
 /**
  * Renders a plain View unless it is actually pressable — VStack always has.

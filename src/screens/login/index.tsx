@@ -13,6 +13,7 @@ import { getColor } from '@/hooks';
 import { ControlledInput } from '@/components/input';
 import { MyTouchable } from '@/components/touchable';
 import { Box, ScrollView, Text, VStack } from '@/components/ui';
+import Logger from '@/helper/logger';
 
 const RNLogo = () => (
     <Box width={80} height={80} backgroundColor="black" borderRadius={16} alignItems="center" justifyContent="center">
@@ -23,28 +24,29 @@ const RNLogo = () => (
 );
 
 const loginSchema = z.object({
-    email: z
-        .string()
-        .min(1, Errors.REQUIRED_EMAIL_INPUT)
-        .pipe(z.email(Errors.EMAIL_INVALID))
-        .refine((value) => value.endsWith('.com'), {
-            message: Errors.IS_NOT_EMAIL,
-        }),
+    // No TLD restriction: the previous `.endsWith('.com')` refine rejected every .org, .vn
+    // and .co.uk address, which z.email() already accepts as valid.
+    email: z.string().min(1, Errors.REQUIRED_EMAIL_INPUT).pipe(z.email(Errors.EMAIL_INVALID)),
     password: z.string().min(1, Errors.REQUIRED_PASSWORD_INPUT),
 });
 
+/** Dev-only: shipping these in a release put a working credential inside the bundle. */
+const DEV_DEFAULTS = { email: 'test@test.com', password: '123456' };
+
+const EMPTY_DEFAULTS = { email: '', password: '' };
+
 const Login = () => {
     const { control, handleSubmit } = useForm({
-        defaultValues: {
-            email: 'test@test.com',
-            password: '123456',
-        },
+        defaultValues: __DEV__ ? DEV_DEFAULTS : EMPTY_DEFAULTS,
         resolver: zodResolver(loginSchema),
     });
 
     const handleLogin = React.useCallback(() => {
         Keyboard.dismiss();
-        handleSubmit((_values) => {
+        handleSubmit((values) => {
+            // TODO: call the login endpoint with `values` and set the session through
+            // TokenService.setSession before navigating.
+            Logger.info('Login', `submitting for ${values.email}`);
             RootNavigator.replaceName(RouteName.Main);
         })();
     }, [handleSubmit]);

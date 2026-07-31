@@ -1,6 +1,8 @@
 import React from 'react';
 import { Text as RNText } from 'react-native';
 
+import { createStyleFromProps } from '../utils/style-props';
+
 import { textStyle } from './styles';
 
 import type { VariantProps } from '../utils/tva';
@@ -13,11 +15,6 @@ export type ITextProps = Omit<React.ComponentProps<typeof RNText>, keyof StylePr
     VariantProps<typeof textStyle> & {
         className?: string;
     };
-
-const createStyleFromProps = (props: StyleProps): TextStyle => {
-    const styleKeys = Object.keys(props).filter((key) => props[key as keyof StyleProps] !== undefined);
-    return Object.fromEntries(styleKeys.map((key) => [key, props[key as keyof StyleProps]])) as TextStyle;
-};
 
 const Text = React.forwardRef<React.ComponentRef<typeof RNText>, ITextProps>(
     (

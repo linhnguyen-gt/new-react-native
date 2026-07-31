@@ -1,8 +1,8 @@
 import React from 'react';
 
-import TouchableComponent from './TouchableComponent';
+import Touchable from '../ui/touch';
 
-import type { TouchableComponentProps } from './TouchableComponent';
+import type { TouchableComponentProps } from '../ui/touch';
 import type { GestureResponderEvent } from 'react-native';
 
 type MyTouchableProps = TouchableComponentProps & {
@@ -26,7 +26,7 @@ const MyTouchable: React.FC<MyTouchableProps> = ({ throttleTime = 500, ...props 
         [props, throttleTime]
     );
 
-    return <TouchableComponent {...props} onPress={handleOnPress} />;
+    return <Touchable {...props} onPress={handleOnPress} />;
 };
 
 export default React.memo(MyTouchable);

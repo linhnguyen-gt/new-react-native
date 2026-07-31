@@ -24,13 +24,7 @@ jest.mock('@/services', () => ({
 
 // Define test schema that matches the one in the component
 const mockLoginSchema = z.object({
-    email: z
-        .string()
-        .min(1, Errors.REQUIRED_EMAIL_INPUT)
-        .pipe(z.email(Errors.EMAIL_INVALID))
-        .refine((value) => value.endsWith('.com'), {
-            message: Errors.IS_NOT_EMAIL,
-        }),
+    email: z.string().min(1, Errors.REQUIRED_EMAIL_INPUT).pipe(z.email(Errors.EMAIL_INVALID)),
     password: z.string().min(1, Errors.REQUIRED_PASSWORD_INPUT),
 });
 
@@ -92,7 +86,9 @@ describe('<LoginPage />', () => {
         expect(formState.errors.email.message).toBe(Errors.EMAIL_INVALID);
     });
 
-    it('shows validation error for non .com email', async () => {
+    it('accepts an address whose TLD is not .com', async () => {
+        // The schema used to refine on `.endsWith('.com')`, so every .org, .vn and .co.uk
+        // address was rejected as invalid.
         let formState: any;
 
         const TestComponent = () => {
@@ -101,9 +97,6 @@ describe('<LoginPage />', () => {
                 resolver: zodResolver(mockLoginSchema),
                 mode: 'onChange',
             });
-            // react-hook-form's formState is a Proxy that only tracks the fields
-            // read during render, so `errors` must be read here for this component
-            // to re-render once validation populates it.
             formState = { errors: methods.formState.errors };
 
             React.useEffect(() => {
@@ -121,10 +114,9 @@ describe('<LoginPage />', () => {
 
         await waitFor(() => {
             expect(formState.errors).toBeDefined();
-            expect(formState.errors.email).toBeDefined();
         });
 
-        expect(formState.errors.email.message).toBe(Errors.IS_NOT_EMAIL);
+        expect(formState.errors.email).toBeUndefined();
     });
 
     it('shows validation error for missing password', async () => {

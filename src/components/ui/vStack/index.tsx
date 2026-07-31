@@ -1,6 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
 
+import { createStyleFromProps } from '../utils/style-props';
+
 import { vstackStyle } from './styles';
 
 import type { VariantProps } from '../utils/tva';
@@ -13,11 +15,6 @@ export type IVStackProps = Omit<React.ComponentProps<typeof View>, keyof StylePr
     VariantProps<typeof vstackStyle> & {
         className?: string;
     };
-
-const createStyleFromProps = (props: StyleProps): ViewStyle => {
-    const styleKeys = Object.keys(props).filter((key) => props[key as keyof StyleProps] !== undefined);
-    return Object.fromEntries(styleKeys.map((key) => [key, props[key as keyof StyleProps]])) as ViewStyle;
-};
 
 const VStack = React.forwardRef<React.ComponentRef<typeof View>, IVStackProps>(
     ({ className, space, reversed, style, ...props }, ref) => {
