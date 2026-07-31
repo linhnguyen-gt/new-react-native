@@ -93,7 +93,3 @@ npm-debug.log
 # README links into it, and a fork needs it to understand the tree.
 plans/
 
-# AIKit - AI Development Kits
-.cursor/
-.shared/
-.opencode/
