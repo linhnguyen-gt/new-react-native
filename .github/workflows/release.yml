@@ -39,6 +39,11 @@ jobs:
             - uses: actions/setup-node@v5
               with:
                   node-version: 24
+                  # setup-node defaults package-manager-cache to true, reads `packageManager`
+                  # from package.json and shells out to `pnpm store path`. This job installs no
+                  # dependencies — it runs `npm version` and `gh` — so pnpm is not on PATH here
+                  # and the default turns a cache warm-up into a hard failure.
+                  package-manager-cache: false
 
             - name: Raise the version and tag it
               id: version
