@@ -21,12 +21,25 @@ const createStyleFromProps = (props: StyleProps): ViewStyle => {
     return Object.fromEntries(styleKeys.map((key) => [key, props[key as keyof StyleProps]])) as ViewStyle;
 };
 
+/**
+ * Renders a plain View unless it is actually pressable — VStack always has.
+ *
+ * It used to render a TouchableOpacity in every case, and TouchableComponent marks itself
+ * `disabled` when there is no `onPress`. TouchableOpacity defaults to `accessible` with a button
+ * role, so a pure layout row was announced to VoiceOver/TalkBack as "dimmed, button", and each
+ * row cost an Animated.View plus a gesture responder.
+ */
 const HStack = React.forwardRef<React.ComponentRef<typeof View>, IHStackProps>(
     ({ className, space, reversed, style, onPress, onBlur, onFocus, ...props }, ref) => {
         const styleProps = createStyleFromProps(props as StyleProps);
+        const resolvedClassName = hstackStyle({ space, reversed, class: className });
+        const resolvedStyle = [styleProps, style];
 
-        // Filter out incompatible props (onBlur/onFocus can be null in View but not in TouchableOpacity)
-        // Conditionally include onBlur and onFocus only if they're not null
+        if (!onPress) {
+            return <View ref={ref} className={resolvedClassName} style={resolvedStyle} {...props} />;
+        }
+
+        // onBlur/onFocus accept null on View but not on TouchableOpacity.
         const touchableProps = {
             ...props,
             ...(onBlur !== null && onBlur !== undefined && { onBlur }),
@@ -36,8 +49,8 @@ const HStack = React.forwardRef<React.ComponentRef<typeof View>, IHStackProps>(
         return (
             <Touchable
                 onPress={onPress}
-                className={hstackStyle({ space, reversed, class: className })}
-                style={[styleProps, style]}
+                className={resolvedClassName}
+                style={resolvedStyle}
                 {...touchableProps}
                 ref={ref}
             />
