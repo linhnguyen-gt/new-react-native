@@ -14,19 +14,11 @@ import globals from 'globals';
 
 const compat = new FlatCompat({ baseDirectory: import.meta.dirname });
 
-/** Internal path aliases, ordered so `import/order` groups them predictably. */
-const internalAliases = [
-    '@/components',
-    '@/redux',
-    '@/constants',
-    '@/apis',
-    '@/services',
-    '@/model',
-    '@/hooks',
-    '@/helper',
-    '@/screens',
-    '@/store',
-];
+/**
+ * Internal path aliases, ordered so `import/order` groups them predictably: the app shell, then
+ * features, then the shared layer they both sit on.
+ */
+const internalAliases = ['@/app', '@/features', '@/shared', '@/types'];
 
 export default [
     {

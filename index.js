@@ -5,6 +5,6 @@
 import { registerRootComponent } from 'expo';
 
 import './gesture-handler.native';
-import Root from './src/root';
+import Root from './src/app/root';
 
 registerRootComponent(Root);
