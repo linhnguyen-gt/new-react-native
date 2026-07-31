@@ -1,13 +1,15 @@
+import type { RootStackParamList } from './types';
+
 export interface INavigationService {
-    navigate<RouteName extends keyof RootStackParamList, Param extends RootStackParamList[RouteName]>(
-        route: RouteName,
+    navigate<TRoute extends keyof RootStackParamList, Param extends RootStackParamList[TRoute]>(
+        route: TRoute,
         params?: Param
     ): Promise<void>;
 
     goBack(): void;
 
-    replaceName<RouteName extends keyof RootStackParamList, Param extends RootStackParamList[RouteName]>(
-        route: RouteName,
+    replaceName<TRoute extends keyof RootStackParamList, Param extends RootStackParamList[TRoute]>(
+        route: TRoute,
         params?: Param
     ): Promise<void>;
 }

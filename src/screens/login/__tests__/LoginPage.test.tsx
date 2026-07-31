@@ -6,9 +6,16 @@ import { z } from 'zod';
 
 import { Errors, RouteName } from '@/constants';
 
-import { RootNavigator } from '@/services';
-
 import { LoginPage } from '@/screens';
+
+const mockReset = jest.fn();
+
+// The screen navigates with useNavigation() now, not with the RootNavigator singleton — that
+// one exists for callers outside the React tree.
+jest.mock('@react-navigation/native', () => ({
+    ...jest.requireActual('@react-navigation/native'),
+    useNavigation: () => ({ reset: mockReset }),
+}));
 
 jest.mock('@/services', () => ({
     environment: {
@@ -16,9 +23,6 @@ jest.mock('@/services', () => ({
         isDevelopment: () => true,
         isStaging: () => false,
         isProduction: () => false,
-    },
-    RootNavigator: {
-        replaceName: jest.fn(),
     },
 }));
 
@@ -41,13 +45,14 @@ describe('<LoginPage />', () => {
         expect(screen.getByText(/Welcome Back/)).toBeTruthy();
     });
 
-    it('navigates to Main screen on valid form submission', async () => {
+    it('resets to the Main screen on valid form submission', async () => {
         await render(<LoginPage />);
 
         fireEvent.press(screen.getByTestId('login-button'));
 
+        // reset rather than navigate: the login screen must not remain on the back stack.
         await waitFor(() => {
-            expect(RootNavigator.replaceName).toHaveBeenCalledWith(RouteName.Main);
+            expect(mockReset).toHaveBeenCalledWith({ index: 0, routes: [{ name: RouteName.Main }] });
         });
     });
 

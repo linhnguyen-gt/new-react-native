@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Keyboard } from 'react-native';
@@ -6,7 +7,7 @@ import { z } from 'zod';
 
 import { Errors, RouteName } from '@/constants';
 
-import { environment, RootNavigator } from '@/services';
+import { environment } from '@/services';
 
 import { getColor } from '@/hooks';
 
@@ -36,6 +37,10 @@ const DEV_DEFAULTS = { email: 'test@test.com', password: '123456' };
 const EMPTY_DEFAULTS = { email: '', password: '' };
 
 const Login = () => {
+    // The hook, not RootNavigator: this screen is inside the tree, so it does not need the
+    // module singleton — that exists for callers React cannot reach.
+    const navigation = useNavigation();
+
     const { control, handleSubmit } = useForm({
         defaultValues: __DEV__ ? DEV_DEFAULTS : EMPTY_DEFAULTS,
         resolver: zodResolver(loginSchema),
@@ -47,9 +52,10 @@ const Login = () => {
             // TODO: call the login endpoint with `values` and set the session through
             // TokenService.setSession before navigating.
             Logger.info('Login', `submitting for ${values.email}`);
-            RootNavigator.replaceName(RouteName.Main);
+            // reset, not navigate: the login screen must not stay on the back stack.
+            navigation.reset({ index: 0, routes: [{ name: RouteName.Main }] });
         })();
-    }, [handleSubmit]);
+    }, [handleSubmit, navigation]);
 
     return (
         <Box flex={1} safeArea>

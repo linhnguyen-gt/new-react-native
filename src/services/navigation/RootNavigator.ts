@@ -1,18 +1,18 @@
 import { CommonActions, createNavigationContainerRef } from '@react-navigation/native';
 
-import type { RouteName } from '@/constants';
-
 import { NavigationLogger } from './NavigationLogger';
 
 import type { INavigationService } from './INavigationService';
+import type { RootStackParamList } from './types';
 
-export type NavigatorParamsType = Record<string, never>;
-
+/**
+ * Imperative navigation for callers **outside** the React tree — `TokenService.logout()` is the
+ * real case. Inside a screen, use `useNavigation()`: it is typed by the `ReactNavigation`
+ * augmentation in `./types` and it does not need a module singleton.
+ */
 class RootNavigator implements INavigationService {
-    public readonly navigationRef = createNavigationContainerRef();
+    public readonly navigationRef = createNavigationContainerRef<RootStackParamList>();
 
-    // `TRoute`, not `RouteName`: the imported RouteName enum is used below for
-    // DefaultStackParamList, and a generic of the same name shadowed it.
     async navigate<TRoute extends keyof RootStackParamList, Param extends RootStackParamList[TRoute]>(
         route: TRoute,
         params?: Param
@@ -48,9 +48,3 @@ class RootNavigator implements INavigationService {
 }
 
 export default new RootNavigator();
-
-declare global {
-    type DefaultStackParamList = Record<keyof typeof RouteName, NavigatorParamsType>;
-
-    export type RootStackParamList = DefaultStackParamList;
-}

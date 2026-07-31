@@ -21,6 +21,8 @@ import { LoginPage, MainPage } from './screens';
 
 // The narrow path, not the `@/services` barrel: the barrel reaches the http client and the
 // environment, neither of which this file needs.
+import type { RootStackParamList } from '@/services/navigation';
+
 import { RootNavigator } from '@/services/navigation';
 
 const Stack = createStackNavigator<RootStackParamList>();
