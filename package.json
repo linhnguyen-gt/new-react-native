@@ -1,6 +1,6 @@
 {
     "name": "NewReactNative",
-    "version": "0.1.0",
+    "version": "0.0.1",
     "private": true,
     "scripts": {
         "android": "node scripts/detect-package-manager.js && node scripts/run-app.js android development --device",
