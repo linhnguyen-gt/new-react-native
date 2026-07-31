@@ -1,0 +1,42 @@
+# Metro and Babel resolve plugin/preset names from the project root rather than
+# from the requiring package, which pnpm.s isolated layout cannot satisfy
+# (Babel fails with "Cannot find module @babel/plugin-transform-react-jsx").
+# A hoisted layout is what Expo and React Native support.
+nodeLinker: hoisted
+
+# pnpm 11 no longer reads the "pnpm" field in package.json; these settings live here.
+
+# Carried over from the previous yarn "resolutions" block: force transitive
+# copies above their advisory ranges.
+overrides:
+  '@babel/core': ^7.29.7
+  axios: ^1.19.0
+  lodash: ^4.18.1
+  shell-quote: ^1.10.0
+  tar: ^7.5.22
+  # 2.x calls context.getAllComments(), removed in ESLint 9.
+  eslint-plugin-ft-flow: ^3.0.11
+
+# pnpm blocks dependency install scripts by default. lefthook needs its own to
+# fetch the binary that installs the git hooks; nothing else is allowed.
+allowBuilds:
+  lefthook: true
+
+# pnpm refuses packages published very recently as a supply-chain guard.
+# Expo SDK 57 and axios 1.19.0 shipped within that window, so they are listed
+# explicitly rather than turning the guard off globally.
+minimumReleaseAgeExclude:
+  - '@expo/cli@57.0.11'
+  - '@expo/inline-modules@0.1.4'
+  - '@expo/local-build-cache-provider@57.0.5'
+  - '@expo/log-box@57.0.2'
+  - '@expo/prebuild-config@57.0.10'
+  - axios@1.19.0
+  - babel-preset-expo@57.0.5
+  - expo-asset@57.0.8
+  - expo-constants@57.0.8
+  - expo-modules-core@57.0.8
+  - expo@57.0.9
+
+patchedDependencies:
+  react-native-css-interop@0.2.6: patches/react-native-css-interop@0.2.6.patch

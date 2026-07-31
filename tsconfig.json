@@ -2,43 +2,40 @@
     "compilerOptions": {
         "target": "esnext",
         "module": "esnext",
-        "lib": ["es2021"],
+        "lib": ["es2022"],
         "allowJs": true,
         "jsx": "react-native",
         "noEmit": true,
         "isolatedModules": true,
+        "verbatimModuleSyntax": true,
         "resolveJsonModule": true,
         "strict": true,
-        "useUnknownInCatchVariables": false,
+        "noUncheckedIndexedAccess": true,
         "moduleResolution": "bundler",
         "moduleDetection": "force",
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
         "skipDefaultLibCheck": true,
-        "typeRoots": ["./node_modules/@types", "./src/types"],
         "paths": {
             "@/*": ["./src/*"]
-        }
+        },
+        "types": ["jest"]
     },
     "include": [
         ".prettierrc.mjs",
-        ".eslintrc.js",
         "babel.config.js",
         "metro.config.js",
         "jest.config.js",
         "index.js",
         "src",
-        "__tests__/App.test.tsx",
         "tailwind.config.js",
         "nativewind-env.d.ts",
         "global.css.d.ts",
-        "react-native-config.d.ts",
         "gesture-handler.native.js",
         "jest.setup.js",
         "app.config.ts",
-        "global.css",
-        "global.css.d.ts"
+        "eslint.config.mjs"
     ],
     "exclude": ["node_modules"],
     "extends": "expo/tsconfig.base.json"

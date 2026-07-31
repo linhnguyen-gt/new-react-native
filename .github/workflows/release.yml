@@ -1,0 +1,61 @@
+name: Release
+
+on:
+    workflow_dispatch:
+        inputs:
+            bump:
+                description: Which part of the version to raise
+                type: choice
+                options: [patch, minor, major]
+                default: patch
+            prerelease:
+                description: Mark the GitHub release as a pre-release
+                type: boolean
+                default: false
+
+# Two releases at once would race on the version commit.
+concurrency:
+    group: release
+    cancel-in-progress: false
+
+jobs:
+    verify:
+        # A release is not a reason to skip the checks; this is the same job every push runs.
+        uses: ./.github/workflows/ci.yml
+
+    release:
+        needs: verify
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+        permissions:
+            # Pushes the version commit and its tag, and creates the release.
+            contents: write
+        steps:
+            - uses: actions/checkout@v5
+              with:
+                  # --generate-notes diffs against the previous tag, which shallow history hides.
+                  fetch-depth: 0
+
+            - uses: actions/setup-node@v5
+              with:
+                  node-version: 24
+
+            - name: Raise the version and tag it
+              id: version
+              run: |
+                  git config user.name "github-actions[bot]"
+                  git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                  # npm version writes package.json, commits and tags in one step, and prints the
+                  # new tag. Lefthook is not installed in this job, so no hook intercepts it.
+                  echo "tag=$(npm version '${{ inputs.bump }}' -m 'chore(release): v%s')" >> "$GITHUB_OUTPUT"
+
+            - name: Push the commit and the tag
+              run: git push --follow-tags origin HEAD:${{ github.ref_name }}
+
+            - name: Create the GitHub release
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                  gh release create '${{ steps.version.outputs.tag }}' \
+                      --title '${{ steps.version.outputs.tag }}' \
+                      --generate-notes ${{ inputs.prerelease && '--prerelease' || '' }}

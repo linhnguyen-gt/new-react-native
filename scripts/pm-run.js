@@ -1,25 +1,20 @@
 #!/usr/bin/env node
 
 const { execSync } = require('child_process');
-const fs = require('fs');
-const path = require('path');
 
-function detectPackageManager() {
-    const cwd = process.cwd();
+const { detectPackageManager } = require('./detect-package-manager');
 
-    if (fs.existsSync(path.join(cwd, 'yarn.lock'))) {
-        try {
-            execSync('yarn --version', { stdio: 'ignore' });
-            return 'yarn';
-        } catch {
-            // Fall through
-        }
+/** `install` is a top-level command, not a script, so it must not take `run`. */
+const TOP_LEVEL_COMMANDS = new Set(['install']);
+
+function buildCommand(manager, script) {
+    if (TOP_LEVEL_COMMANDS.has(script)) {
+        return `${manager} install`;
     }
-
-    return 'npm';
+    // yarn omits `run`; npm and pnpm require it.
+    return manager === 'yarn' ? `yarn ${script}` : `${manager} run ${script}`;
 }
 
-const pm = detectPackageManager();
 const script = process.argv[2];
 
 if (!script) {
@@ -28,11 +23,7 @@ if (!script) {
 }
 
 try {
-    if (pm === 'yarn') {
-        execSync(`yarn ${script}`, { stdio: 'inherit', shell: true });
-    } else {
-        execSync(`npm run ${script}`, { stdio: 'inherit', shell: true });
-    }
+    execSync(buildCommand(detectPackageManager(), script), { stdio: 'inherit', shell: true });
 } catch (error) {
     process.exit(error.status || 1);
 }
