@@ -1,0 +1,59 @@
+name: CI
+
+on:
+    pull_request:
+        branches: [main]
+    push:
+        # main plus the long-lived version branches, which are named by number.
+        branches: [main, '[0-9]*']
+    # Called by release.yml so a release runs exactly these checks, not a copy of them.
+    workflow_call:
+
+# A second push to the same branch makes the first run's answer worthless.
+concurrency:
+    group: ci-${{ github.ref }}
+    cancel-in-progress: true
+
+env:
+    EXPO_NO_TELEMETRY: '1'
+
+jobs:
+    verify:
+        name: Verify
+        runs-on: ubuntu-latest
+        timeout-minutes: 20
+        steps:
+            - uses: actions/checkout@v5
+
+            # No `version:` input on purpose: the action reads `packageManager` from
+            # package.json, so CI and the lockfile cannot disagree about which pnpm ran.
+            - uses: pnpm/action-setup@v4
+
+            - uses: actions/setup-node@v5
+              with:
+                  node-version: 24
+                  cache: pnpm
+
+            - run: pnpm install --frozen-lockfile
+
+            # app.config.ts refuses to resolve without the five published keys. The example file
+            # is the development flavor, the one whose API_URL is allowed to be http.
+            - name: Provide a development .env
+              run: cp .env.example .env
+
+            - name: Lint
+              run: pnpm exec eslint .
+
+            - name: Typecheck
+              run: pnpm exec tsc --noEmit
+
+            # --ci turns a missing snapshot into a failure instead of a file written on the runner.
+            # The coverage floor lives in jest.config.js and fails the job on its own.
+            - name: Test
+              run: pnpm exec jest --coverage --ci
+
+            # The only check that catches a Metro resolution error. tsc resolves through tsconfig
+            # paths and never sees an asset import, a relative depth or a runtime require, so a
+            # broken one reaches the device otherwise.
+            - name: Bundle
+              run: pnpm exec expo export --platform android --output-dir .expo-export
