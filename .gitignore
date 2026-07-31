@@ -89,7 +89,8 @@ npm-debug.log
 /ios/
 /android/
 
-docs/
+# Working notes for a change in progress, not a description of the result. docs/ is tracked:
+# README links into it, and a fork needs it to understand the tree.
 plans/
 
 # AIKit - AI Development Kits
