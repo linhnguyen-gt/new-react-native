@@ -29,7 +29,7 @@ const runCommand = (command) => {
     try {
         execSync(command, { stdio: 'inherit' });
         return true;
-    } catch (error) {
+    } catch {
         console.error(`Failed to execute ${command}`);
         return false;
     }
@@ -54,7 +54,9 @@ const createEnvFiles = async (environment, vaultKey = null, envVarsFromVault = {
                     return envVars;
                 }
             }
-        } catch (error) {}
+        } catch {
+            // The file is unreadable or absent; either way there is nothing to preserve.
+        }
     }
 
     console.log(`\n📝 Setting up ${envDisplayName} environment in ${envFileName}...`);
@@ -282,7 +284,7 @@ const main = async () => {
                 }
                 break;
 
-            case '3':
+            case '3': {
                 const newVaultKey = await question('Enter your DOTENV_VAULT key: ');
                 if (newVaultKey.startsWith('vlt_')) {
                     vaultKey = newVaultKey.trim();
@@ -321,6 +323,7 @@ const main = async () => {
                     useVault = false;
                 }
                 break;
+            }
 
             case '4':
             default:

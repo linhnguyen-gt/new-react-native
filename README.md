@@ -140,18 +140,23 @@ This script will:
 Each environment file contains:
 
 ```bash
-# Required Variables
 APP_FLAVOR=development|staging|production
 VERSION_CODE=1
 VERSION_NAME=1.0.0
 API_URL=https://api.example.com
-APP_NAME=""
-
-# Optional Variables (configured during setup)
-GOOGLE_API_KEY=
-FACEBOOK_APP_ID=
-# ... other variables
+APP_NAME=My App
 ```
+
+See `.env.example` for the authoritative list. Two rules the build enforces:
+
+- **No empty values.** `app.config.ts` rejects any variable with an empty value, so declaring a
+  placeholder such as `GOOGLE_API_KEY=` fails the build. Add the variable when you have a value.
+- **No trailing `#` comments on a value line.** dotenv strips them, react-native-config does not,
+  so the JS bundle and the native build end up with different values and the app refuses to start.
+
+Only `APP_FLAVOR`, `APP_NAME`, `API_URL`, `VERSION_NAME` and `VERSION_CODE` are published to the
+app. Everything else in the file stays out of the binary. `API_URL` must use https outside
+development.
 
 ### Using Different Environments
 

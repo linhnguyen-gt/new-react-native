@@ -43,15 +43,8 @@ export default [
             '.shared/**',
             '.expo/**',
             '.pnpm-store/**',
-            // Carried over from the previous .eslintignore: this project lints
-            // TS/TSX only. Plain JS (config files, scripts, mocks) is formatted
-            // by Prettier via lint-staged but not linted.
-            '**/*.js',
-            '**/*.mjs',
-            '**/*.cjs',
+            // Generated declarations; nothing here is hand-written.
             '**/*.d.ts',
-            '__mocks__/**',
-            'scripts/**',
             'tsconfig.json',
         ],
     },
@@ -66,8 +59,38 @@ export default [
     importPlugin.flatConfigs.typescript,
     prettierRecommended,
 
+    /**
+     * Node-side JavaScript: the entry file, the root configs, the Expo config plugins, the build
+     * scripts and the manual mocks. All of it was in `ignores` until now — Prettier formatted it,
+     * nothing checked it, so an unused variable or a typo'd global went unreported.
+     *
+     * A light rule set on purpose: this is CommonJS running in Node, not app code.
+     */
     {
-        files: ['**/*.{js,jsx,ts,tsx}'],
+        files: ['**/*.{js,mjs,cjs}'],
+        languageOptions: {
+            ecmaVersion: 2022,
+            // `module` covers both styles here: the entry file and the mocks are ESM that Babel
+            // transforms, the scripts and root configs are CommonJS, and `globals.node` declares
+            // `require`/`module` for the latter.
+            sourceType: 'module',
+            globals: { ...globals.node, __DEV__: 'readonly' },
+        },
+        rules: {
+            ...js.configs.recommended.rules,
+            'prettier/prettier': 'error',
+        },
+    },
+
+    {
+        files: ['__mocks__/**', 'jest.setup.js'],
+        languageOptions: {
+            globals: { ...globals.node, ...globals.jest },
+        },
+    },
+
+    {
+        files: ['**/*.{jsx,ts,tsx}'],
         languageOptions: {
             parser: tsParser,
             ecmaVersion: 2022,
@@ -158,5 +181,4 @@ export default [
         files: ['**/__tests__/**/*.{js,jsx,ts,tsx}', '**/*.{spec,test}.{js,jsx,ts,tsx}'],
         ...jestPlugin.configs['flat/recommended'],
     },
-
 ];

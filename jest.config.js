@@ -27,7 +27,7 @@ const packagesToTransform = [
 module.exports = {
     preset: 'react-native',
     transform: {
-        '^.+\.(js|jsx|ts|tsx)$': 'babel-jest',
+        '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
     },
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
     setupFiles: ['<rootDir>/jest.setup.js'],
@@ -56,5 +56,12 @@ module.exports = {
     ],
     globals: {
         __DEV__: true,
+    },
+    // Without these, a coverage drop is invisible to CI. Index files are re-exports only.
+    collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/**/*.d.ts', '!src/**/__tests__/**', '!src/**/index.ts'],
+    // Measured on 2026-07-31 (66.54 / 52.92 / 51.76 / 67.44) and rounded down to the nearest 5,
+    // so the floor catches a regression without failing on noise. Re-measure after phase 15.
+    coverageThreshold: {
+        global: { statements: 65, branches: 50, functions: 50, lines: 65 },
     },
 };

@@ -22,9 +22,32 @@ const ENV_TARGETS: Record<AppEnv, EnvTarget> = {
     production: { envFile: '.env.production', bundleId: 'com.newreactnative.production' },
 };
 
+/**
+ * The keys published to the running app through `extra`, and the ones every env file must
+ * define. This list is duplicated as `SHARED_KEYS` in `src/services/environment.ts` and the two
+ * must agree — they cannot share a module, because this file runs in Node before Metro exists.
+ */
+const PUBLISHED_ENV_KEYS = ['APP_FLAVOR', 'APP_NAME', 'API_URL', 'VERSION_NAME', 'VERSION_CODE'] as const;
+
+/**
+ * An unrecognised value is a typo, not a request for development.
+ *
+ * The fallback used to swallow it: `APP_ENV=stg` — this repo's own vocabulary, from `ios:stg`
+ * and the `com.newreactnative.stg` bundle id — produced a development build with a development
+ * bundle id, and `assertFlavorMatchesEnv` could not catch it because after the fallback both
+ * sides agreed. An absent value still means development.
+ */
 const resolveAppEnv = (value: string | undefined): AppEnv => {
     const candidate = value?.toLowerCase() ?? '';
-    return candidate in ENV_TARGETS ? (candidate as AppEnv) : 'development';
+    if (!candidate) return 'development';
+
+    if (!(candidate in ENV_TARGETS)) {
+        throw new Error(
+            `APP_ENV="${value}" is not a known environment. Use one of: ${Object.keys(ENV_TARGETS).join(', ')}`
+        );
+    }
+
+    return candidate as AppEnv;
 };
 
 /**
@@ -45,10 +68,8 @@ const loadEnvFile = (path: string): Record<string, string> => {
     return parsed;
 };
 
-const validateEnvConfig = (env: Record<string, string>) => {
-    const coreRequiredVars = ['APP_FLAVOR', 'VERSION_CODE', 'VERSION_NAME', 'API_URL', 'APP_NAME'];
-
-    const missingVars = coreRequiredVars.filter((key) => !env[key]);
+const validateEnvConfig = (env: Record<string, string>, appEnv: AppEnv) => {
+    const missingVars = PUBLISHED_ENV_KEYS.filter((key) => !env[key]);
     if (missingVars.length > 0) {
         throw new Error(`Missing required env variables: ${missingVars.join(', ')}`);
     }
@@ -59,6 +80,13 @@ const validateEnvConfig = (env: Record<string, string>) => {
 
     if (emptyVars.length > 0) {
         throw new Error(`Empty values for environment variables: ${emptyVars.join(', ')}`);
+    }
+
+    // The refresh token travels in a request body, so a plaintext base URL outside development
+    // puts the whole session on the wire. `.env.example` ships `http://localhost:3000`, which is
+    // exactly the value most likely to be copied into a staging file by accident.
+    if (appEnv !== 'development' && !env.API_URL.startsWith('https://')) {
+        throw new Error(`API_URL must use https outside development, received "${env.API_URL}"`);
     }
 
     return env;
@@ -92,7 +120,7 @@ const assertFlavorMatchesEnv = (flavor: string, appEnv: AppEnv, envFile: string)
 export default ({ config }: ConfigContext): ExpoConfig => {
     const appEnv = resolveAppEnv(process.env.APP_ENV);
     const target = ENV_TARGETS[appEnv];
-    const validatedConfig = validateEnvConfig(loadEnvFile(target.envFile));
+    const validatedConfig = validateEnvConfig(loadEnvFile(target.envFile), appEnv);
     assertFlavorMatchesEnv(validatedConfig.APP_FLAVOR, appEnv, target.envFile);
     const versionCode = parseVersionCode(validatedConfig.VERSION_CODE);
 
@@ -130,8 +158,11 @@ export default ({ config }: ConfigContext): ExpoConfig => {
             './plugins/with-react-native-config',
             ['./plugins/with-android-app-name', { appName: validatedConfig.APP_NAME }],
         ],
-        extra: {
-            ...validatedConfig,
-        },
+        /**
+         * An allowlist, not a spread of the parsed file. `extra` ends up inside the IPA/APK in
+         * plain text, so spreading meant any variable a future dev added to `.env` — a token, a
+         * key — shipped with the binary and could be read by unzipping it.
+         */
+        extra: Object.fromEntries(PUBLISHED_ENV_KEYS.map((key) => [key, validatedConfig[key]])),
     };
 };

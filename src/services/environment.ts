@@ -17,7 +17,11 @@ import Config from 'react-native-config';
  * reports an error. `assertSourcesAgree` converts that into a startup failure, which is the
  * whole reason for keeping both sources rather than either one alone.
  */
-/** The keys `app.config.ts` requires, and therefore the ones both sources must agree on. */
+/**
+ * The keys `app.config.ts` requires, and therefore the ones both sources must agree on.
+ * Duplicated there as `PUBLISHED_ENV_KEYS`; the two lists must be kept identical, and cannot
+ * share a module because `app.config.ts` runs in Node before Metro exists.
+ */
 const SHARED_KEYS = ['APP_FLAVOR', 'APP_NAME', 'API_URL', 'VERSION_NAME', 'VERSION_CODE'] as const;
 
 class EnvironmentService {
