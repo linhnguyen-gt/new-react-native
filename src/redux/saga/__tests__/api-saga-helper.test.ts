@@ -2,7 +2,7 @@ import { runSaga, stdChannel } from 'redux-saga';
 import { delay, put } from 'redux-saga/effects';
 
 import { startLoading, stopLoading } from '../../reducers';
-import { handleApiCall } from '../ApiSagaHelper';
+import { handleApiCall } from '../api-saga-helper';
 
 const runWith = (saga: () => Generator) => {
     const dispatched: { type: string; payload?: unknown }[] = [];

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import BaseBox, { type BaseBoxProps } from './BaseBox';
+import BaseBox, { type BaseBoxProps } from './base-box';
 
 import type { View } from 'react-native';
 

@@ -1,1 +1,1 @@
-export { createAppStore } from './ConfigStore';
+export { createAppStore } from './config-store';

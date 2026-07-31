@@ -1,5 +1,5 @@
-import * as CountSelectors from './CountSelectors';
-import * as LoadingSelectors from './LoadingSelectors';
-import * as ResponseSelectors from './ResponseSelectors';
+import * as CountSelectors from './count-selectors';
+import * as LoadingSelectors from './loading-selectors';
+import * as ResponseSelectors from './response-selectors';
 
 export { CountSelectors, LoadingSelectors, ResponseSelectors };

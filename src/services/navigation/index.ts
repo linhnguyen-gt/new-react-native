@@ -1,2 +1,2 @@
-export { default as RootNavigator } from './RootNavigator';
+export { default as RootNavigator } from './root-navigator';
 export type { RootStackParamList } from './types';

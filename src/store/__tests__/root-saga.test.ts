@@ -2,7 +2,7 @@ import { cancel, take } from 'redux-saga/effects';
 
 import { ActionTypes } from '@/constants';
 
-import RootSaga from '../RootSaga';
+import RootSaga from '../root-saga';
 
 describe('RootSaga', () => {
     it('cancels the running watchers on RESET_STATE and forks them again', () => {

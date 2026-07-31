@@ -1,3 +1,3 @@
-import * as ResponseApi from './ResponseApi';
+import * as ResponseApi from './response-api';
 
 export { ResponseApi };

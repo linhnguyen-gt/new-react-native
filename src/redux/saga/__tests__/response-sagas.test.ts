@@ -2,7 +2,7 @@ import type { HttpResponse } from '@/services';
 
 import { ResponseActions } from '../../actions';
 import { startLoading, stopLoading } from '../../reducers';
-import { getResponse } from '../ResponseSagas';
+import { getResponse } from '../response-sagas';
 
 jest.mock('@/apis', () => ({
     ResponseApi: { responseApi: jest.fn() },

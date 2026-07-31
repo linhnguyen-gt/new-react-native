@@ -19,7 +19,7 @@ import type {
     MaterialIconsIconName,
 } from '@/types/icon';
 
-import { getColor } from '@/hooks/useThemeColor';
+import { getColor } from '@/hooks/use-theme-color';
 
 interface IconProps {
     name: IconName;

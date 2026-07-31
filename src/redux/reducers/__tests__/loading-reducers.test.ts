@@ -1,4 +1,4 @@
-import LoadingReducers, { startLoading, stopLoading } from '../LoadingReducers';
+import LoadingReducers, { startLoading, stopLoading } from '../loading-reducers';
 
 type LoadingAction = ReturnType<typeof startLoading> | ReturnType<typeof stopLoading>;
 

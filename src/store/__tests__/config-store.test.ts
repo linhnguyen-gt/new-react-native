@@ -1,11 +1,11 @@
 import type { EnhancedStore } from '@reduxjs/toolkit';
 
-type ConfigStoreModule = typeof import('../ConfigStore');
+type ConfigStoreModule = typeof import('../config-store');
 
 /** Keeps the dev socket shut: `setup()` calls `Tron.connect()` under `__DEV__`. */
 const stubReactotronSetup = () => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const Reactotron = require('@/services/reactotron/Reactotron').default;
+    const Reactotron = require('@/services/reactotron/reactotron').default;
     jest.spyOn(Reactotron.prototype, 'setup').mockImplementation(() => {});
 };
 
@@ -18,7 +18,7 @@ describe('createAppStore', () => {
     it('builds a store carrying every app slice', () => {
         stubReactotronSetup();
         // eslint-disable-next-line @typescript-eslint/no-require-imports
-        const { createAppStore } = require('../ConfigStore') as ConfigStoreModule;
+        const { createAppStore } = require('../config-store') as ConfigStoreModule;
 
         const store: EnhancedStore = createAppStore();
 
@@ -33,7 +33,7 @@ describe('createAppStore', () => {
         const { StoreService } = require('@/services/store');
         const initialize = jest.spyOn(StoreService.getInstance(), 'initialize');
         // eslint-disable-next-line @typescript-eslint/no-require-imports
-        const { createAppStore } = require('../ConfigStore') as ConfigStoreModule;
+        const { createAppStore } = require('../config-store') as ConfigStoreModule;
 
         const store = createAppStore();
 
@@ -44,9 +44,9 @@ describe('createAppStore', () => {
         jest.resetModules();
         stubReactotronSetup();
         // `run` rejects anything that is not a saga; this stands in for a broken watcher.
-        jest.doMock('../RootSaga', () => ({ __esModule: true, default: { saga: null } }));
+        jest.doMock('../root-saga', () => ({ __esModule: true, default: { saga: null } }));
         // eslint-disable-next-line @typescript-eslint/no-require-imports
-        const { createAppStore } = require('../ConfigStore') as ConfigStoreModule;
+        const { createAppStore } = require('../config-store') as ConfigStoreModule;
 
         // The regression: the failure was caught and logged, and the app then rendered with a
         // store but no saga watchers — every button dead, nothing reported.
@@ -64,7 +64,7 @@ describe('the services barrel', () => {
         jest.resetModules();
         /* eslint-disable @typescript-eslint/no-require-imports */
         const axios = require('axios').default;
-        const Reactotron = require('@/services/reactotron/Reactotron').default;
+        const Reactotron = require('@/services/reactotron/reactotron').default;
         const create = jest.spyOn(axios, 'create');
         const setup = jest.spyOn(Reactotron.prototype, 'setup').mockImplementation(() => {});
 

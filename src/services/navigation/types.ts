@@ -1,4 +1,4 @@
-import type RouteName from '@/constants/RouteName';
+import type RouteName from '@/constants/route-name';
 
 /**
  * The route map, keyed by the `RouteName` values so the strings have one source.

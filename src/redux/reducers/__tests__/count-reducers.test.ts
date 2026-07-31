@@ -1,5 +1,5 @@
 import { CountActions } from '../../actions';
-import CountReducers from '../CountReducers';
+import CountReducers from '../count-reducers';
 
 const initial = { count: 0 };
 

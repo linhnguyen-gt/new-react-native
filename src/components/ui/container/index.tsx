@@ -1,8 +1,8 @@
 import React from 'react';
 
-import ContainerBox from './ContainerBox';
+import ContainerBox from './container-box';
 
-import type { BaseBoxProps } from '../box/BaseBox';
+import type { BaseBoxProps } from '../box/base-box';
 import type { View } from 'react-native';
 
 type ContainerProps = BaseBoxProps & {
