@@ -11,11 +11,11 @@ const CountReducers = createSlice({
     initialState,
     reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(CountActions.setIncrement, (state, action) => {
-            state.count = action.payload;
+        builder.addCase(CountActions.setIncrement, (state) => {
+            state.count += 1;
         });
-        builder.addCase(CountActions.setDecrement, (state, action) => {
-            state.count = action.payload;
+        builder.addCase(CountActions.setDecrement, (state) => {
+            state.count -= 1;
         });
         builder.addDefaultCase((state) => state);
     },

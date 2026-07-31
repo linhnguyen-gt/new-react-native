@@ -11,14 +11,16 @@ import { Box, HStack, ScrollView, Text, VStack } from '@/components/ui';
 import { CountActions, ResponseActions } from '@/redux/actions';
 import { CountSelectors, ResponseSelectors } from '@/redux/selectors';
 
-const MainPage = () => {
-    const isLoading = useLoading([
-        CountActions.increment.type,
-        CountActions.decrement.type,
-        ResponseActions.getResponse.type,
-    ]);
+// Module scope so the arguments are reference-stable: an array literal in the render body is a
+// new value every pass, which defeats the memoisation in `useActions` and in `useSelector`.
+const LOADING_TYPES = [CountActions.increment.type, CountActions.decrement.type, ResponseActions.getResponse.type];
 
-    const [increment, decrement] = useActions([CountActions.increment, CountActions.decrement]);
+const COUNT_ACTIONS = [CountActions.increment, CountActions.decrement];
+
+const MainPage = () => {
+    const isLoading = useLoading(LOADING_TYPES);
+
+    const [increment, decrement] = useActions(COUNT_ACTIONS);
 
     const getResponse = useActions(ResponseActions.getResponse);
 
