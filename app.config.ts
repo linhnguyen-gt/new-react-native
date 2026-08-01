@@ -1,34 +1,18 @@
-import * as dotenv from 'dotenv';
-
 import { name as projectName } from './package.json';
+// Replaces `dotenv.config({ path: envFile })` feeding the parsed object straight into
+// validation. See that module for the precedence it enforces — shell / eas env:exec beats
+// the variant file beats whatever @expo/env already loaded — and why plain "skip anything
+// already defined" is not sufficient.
+import { loadVariantEnv } from './scripts/lib/load-variant-env.cjs';
+// Shared with check-env.js, env-sync.cjs, env-exec.cjs and setup-env.js so the copies
+// cannot drift. Imported rather than `require`d: under `moduleResolution: bundler`,
+// `require` is a function typed `any`, which would silently discard the exhaustiveness
+// checking the local `Record<AppEnv, EnvTarget>` annotation used to provide. An import
+// resolves the sibling `.d.cts`, so adding a fourth variant stays a compile error.
+import { DEFAULT_VARIANT, PUBLISHED_ENV_KEYS, VARIANTS } from './scripts/lib/variant-config.cjs';
 
+import type { AppEnv } from './scripts/lib/variant-config.cjs';
 import type { ConfigContext, ExpoConfig } from 'expo/config';
-
-type AppEnv = 'development' | 'staging' | 'production';
-
-type EnvTarget = {
-    /** Which dotenv file supplies this environment's values. */
-    envFile: string;
-    /**
-     * Shared by iOS and Android. One identifier per environment is what stops the two
-     * platforms drifting apart — the pre-CNG setup kept them in separate native files and
-     * ended up with three mutually inconsistent ids.
-     */
-    bundleId: string;
-};
-
-const ENV_TARGETS: Record<AppEnv, EnvTarget> = {
-    development: { envFile: '.env', bundleId: 'com.newreactnative' },
-    staging: { envFile: '.env.staging', bundleId: 'com.newreactnative.stg' },
-    production: { envFile: '.env.production', bundleId: 'com.newreactnative.production' },
-};
-
-/**
- * The keys published to the running app through `extra`, and the ones every env file must
- * define. This list is duplicated as `SHARED_KEYS` in `src/services/environment.ts` and the two
- * must agree — they cannot share a module, because this file runs in Node before Metro exists.
- */
-const PUBLISHED_ENV_KEYS = ['APP_FLAVOR', 'APP_NAME', 'API_URL', 'VERSION_NAME', 'VERSION_CODE'] as const;
 
 /**
  * An unrecognised value is a typo, not a request for development.
@@ -40,50 +24,52 @@ const PUBLISHED_ENV_KEYS = ['APP_FLAVOR', 'APP_NAME', 'API_URL', 'VERSION_NAME',
  */
 const resolveAppEnv = (value: string | undefined): AppEnv => {
     const candidate = value?.toLowerCase() ?? '';
-    if (!candidate) return 'development';
+    if (!candidate) return DEFAULT_VARIANT;
 
-    if (!(candidate in ENV_TARGETS)) {
+    if (!(candidate in VARIANTS)) {
         throw new Error(
-            `APP_ENV="${value}" is not a known environment. Use one of: ${Object.keys(ENV_TARGETS).join(', ')}`
+            `APP_ENV="${value}" is not a known environment. Use one of: ${Object.keys(VARIANTS).join(', ')}`
         );
     }
 
     return candidate as AppEnv;
 };
 
-/**
- * dotenv reports a missing file as `{ parsed: {}, error: ENOENT }` — an empty object, which
- * is truthy. Checking `error` is what separates "file is not there" from "file has no
- * usable values"; without it a missing file surfaces as five missing variables instead.
- */
-const loadEnvFile = (path: string): Record<string, string> => {
-    const { parsed, error } = dotenv.config({ path, quiet: true });
-
-    if (error) {
-        throw new Error(`Cannot read env file ${path}: ${error.message}`);
-    }
-    if (!parsed || Object.keys(parsed).length === 0) {
-        throw new Error(`Env file ${path} contains no variables`);
-    }
-
-    return parsed;
-};
-
-/** Exactly the published keys, each proven present by `validateEnvConfig`. */
+/** Exactly the published keys, each proven present by `readPublishedEnv`. */
 type PublishedEnv = Record<(typeof PUBLISHED_ENV_KEYS)[number], string>;
 
-const validateEnvConfig = (env: Record<string, string>, appEnv: AppEnv): PublishedEnv => {
+/**
+ * Reads the published keys out of the environment the variant file has been merged into.
+ *
+ * Reading from `process.env` rather than from the parsed file is what makes the EAS path
+ * work: under `eas env:exec` the values arrive through the environment and the file may
+ * legitimately not exist at all. A missing file is therefore no longer an error on its
+ * own — only a value that neither route supplied is.
+ */
+const readPublishedEnv = (
+    env: NodeJS.ProcessEnv,
+    fileValues: Record<string, string>,
+    appEnv: AppEnv,
+    envFile: string
+): PublishedEnv => {
     const missingVars = PUBLISHED_ENV_KEYS.filter((key) => !env[key]);
     if (missingVars.length > 0) {
-        throw new Error(`Missing required env variables: ${missingVars.join(', ')}`);
+        throw new Error(
+            `Missing required env variables: ${missingVars.join(', ')}. ` +
+                `Define them in ${envFile} (run "pnpm env:setup" or "pnpm env:pull ${appEnv}"), ` +
+                `or supply them through the environment with "pnpm env:exec ${appEnv} -- <command>".`
+        );
     }
 
-    const emptyVars = Object.entries(env)
-        .filter(([_, value]) => value === undefined || value === '')
+    // Scoped to the file's own keys: `process.env` legitimately holds empty values that
+    // have nothing to do with this project, while an empty line in the env file is the
+    // mistake `.env.example` warns about — delete the line instead of assigning nothing.
+    const emptyVars = Object.entries(fileValues)
+        .filter(([, value]) => value === '')
         .map(([key]) => key);
 
     if (emptyVars.length > 0) {
-        throw new Error(`Empty values for environment variables: ${emptyVars.join(', ')}`);
+        throw new Error(`Empty values in ${envFile}: ${emptyVars.join(', ')}`);
     }
 
     const published = Object.fromEntries(PUBLISHED_ENV_KEYS.map((key) => [key, env[key]])) as PublishedEnv;
@@ -125,10 +111,21 @@ const assertFlavorMatchesEnv = (flavor: string, appEnv: AppEnv, envFile: string)
 
 export default ({ config }: ConfigContext): ExpoConfig => {
     const appEnv = resolveAppEnv(process.env.APP_ENV);
-    const target = ENV_TARGETS[appEnv];
-    const validatedConfig = validateEnvConfig(loadEnvFile(target.envFile), appEnv);
+    const target = VARIANTS[appEnv];
+    const fileValues = loadVariantEnv({ envFile: target.envFile });
+    const validatedConfig = readPublishedEnv(process.env, fileValues, appEnv, target.envFile);
     assertFlavorMatchesEnv(validatedConfig.APP_FLAVOR, appEnv, target.envFile);
     const versionCode = parseVersionCode(validatedConfig.VERSION_CODE);
+
+    /**
+     * Resolved from the environment, never committed. An EAS project id identifies one
+     * project on expo.dev; baking this template author's id into the boilerplate would put
+     * every generated app on the same EAS project, sharing environments and update
+     * channels with strangers. Each project runs `eas init` to get its own — see the
+     * README's EAS section.
+     */
+    const easProjectId =
+        process.env.EXPO_PROJECT_ID || (config.extra?.eas as { projectId?: string } | undefined)?.projectId;
 
     return {
         ...config,
@@ -175,7 +172,13 @@ export default ({ config }: ConfigContext): ExpoConfig => {
          * The allowlisted keys only, never a spread of the parsed file. `extra` ends up inside
          * the IPA/APK in plain text, so spreading meant any variable a future dev added to
          * `.env` — a token, a key — shipped with the binary and could be read by unzipping it.
+         *
+         * `eas` is omitted entirely when no project id is set, so a clone with no Expo
+         * account still resolves a valid config instead of publishing an empty id.
          */
-        extra: { ...validatedConfig },
+        extra: {
+            ...validatedConfig,
+            ...(easProjectId ? { eas: { projectId: easProjectId } } : {}),
+        },
     };
 };

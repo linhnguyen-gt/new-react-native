@@ -21,12 +21,7 @@
 
 const { spawnSync } = require('node:child_process');
 
-/** Which dotenv file each environment uses. Mirrors ENV_TARGETS in app.config.ts. */
-const ENV_FILES = {
-    development: '.env',
-    staging: '.env.staging',
-    production: '.env.production',
-};
+const { VARIANTS } = require('./lib/variant-config.cjs');
 
 const PLATFORMS = ['ios', 'android'];
 
@@ -37,15 +32,17 @@ if (!PLATFORMS.includes(platform)) {
     process.exit(1);
 }
 
-const envFile = ENV_FILES[appEnv];
-if (!envFile) {
-    console.error(`run-app: unknown environment "${appEnv}". Expected one of ${Object.keys(ENV_FILES).join(', ')}.`);
+const variant = VARIANTS[appEnv];
+if (!variant) {
+    console.error(`run-app: unknown environment "${appEnv}". Expected one of ${Object.keys(VARIANTS).join(', ')}.`);
     process.exit(1);
 }
 
+const envFile = variant.envFile;
+
 // APP_ENV selects the config file for app.config.ts; ENVFILE selects it for
 // react-native-config on both platforms. They must name the same environment, and
-// src/services/environment.ts throws at startup if they ever disagree.
+// src/shared/config/environment.ts throws at startup if they ever disagree.
 const env = { ...process.env, APP_ENV: appEnv, ENVFILE: envFile };
 
 const run = (args) => {

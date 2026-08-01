@@ -1,5 +1,43 @@
 # Changelog
 
+## 2026-08-01 — Environment variables move to EAS
+
+`dotenv-vault` is gone: the dependency, the `env:push` / `env:pull` chains, the ~450-line vault
+wizard inside `scripts/setup-env.js`, and the author's own `.env.vault`, which was committed and
+whitelisted twice in `.gitignore`. Shared values now live in EAS, and the local `.env*` files are
+copies of them rather than an encrypted artifact everyone had to hold a key for.
+
+- **`pnpm env:pull` / `env:push` / `env:exec`** replace the vault commands. The variant→EAS
+  mapping lives in one table, because EAS ships only three environments and pushing a variant to
+  the wrong one succeeds silently — the next build simply reads another environment's `API_URL`.
+  This repo's `staging` maps onto EAS's `preview`.
+- **Shell values now beat file values.** `app.config.ts` read its values straight out of the
+  parsed env file, so nothing in the environment could ever win — including anything
+  `eas env:exec` injects. The order is now shell / EAS, then the variant file, then defaults, and
+  a missing file is no longer an error when the environment supplies the values. A key the
+  variant's file does not declare stays _missing_ rather than being inherited from `.env`:
+  otherwise a `.env.production` omitting `VERSION_CODE` would silently ship development's.
+- **`env:exec` is for JS-side commands only.** react-native-config compiles the file named by
+  `ENVFILE` into the native build and never sees an injected value, so putting `env:exec` in
+  front of a native build ships two halves that disagree and the app throws at startup. Pull
+  first, then build.
+- **The template ships no EAS project id.** One id baked into a boilerplate would put every
+  generated app on the same EAS project; each project runs `eas init` and the id is resolved from
+  `EXPO_PROJECT_ID`. With it unset, everything still resolves and builds — an Expo account is not
+  a prerequisite for running the app.
+- **One variant table** (`scripts/lib/variant-config.cjs`) replaces the copies in
+  `app.config.ts`, `run-app.js`, `check-env.js` and `setup-env.js`.
+- **`pnpm check:env` parses instead of substring-matching.** `contents.includes('API_URL=')` was
+  satisfied by a commented-out `# API_URL=`, so the pre-build check passed on files
+  `app.config.ts` then rejected.
+- **`pnpm clear:cache` works.** It chained Unix `rm -rf` with Windows `del`, so on every platform
+  one of the two was an unknown command and `expo start --clear` — the point of the script — was
+  never reached. It is a Node script now.
+- **`pnpm android:prod`** matches `ios:prod`; `android:pro` stays as an alias for one release
+  cycle. `.codegraph/` is no longer tracked, and `engines.node` drops a redundant range.
+- **`dotenv` is no longer a dependency.** One parser (`scripts/lib/parse-env-file.cjs`) now reads
+  every env file, following dotenv's comment rules so the behaviour is unchanged.
+
 ## 2026-07-31 — Modernisation (GH-57)
 
 A full review of the boilerplate followed by sixteen phases of work. Six Critical and fourteen

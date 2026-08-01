@@ -57,7 +57,6 @@
 ### Environment & Storage
 
   <p>
-    <img src="https://img.shields.io/badge/Dotenv-v17.4.2-ECD53F?style=for-the-badge&logo=dotenv&logoColor=black" alt="dotenv" />
     <img src="https://img.shields.io/badge/Async_Storage-v2.2.0-3B82F6?style=for-the-badge" alt="async-storage" />
   </p>
 
@@ -124,12 +123,59 @@ pnpm env:setup
 
 This script will:
 
-1. Set up dotenv-vault (optional)
+1. Offer to pull the shared values from EAS, if you have an EAS project (see below)
 2. Create environment files for all environments:
     - `.env` (Development environment)
     - `.env.staging` (Staging environment)
     - `.env.production` (Production environment)
 3. Configure necessary environment variables
+4. Offer to push what you entered back to EAS, so the team shares one set of values
+
+An Expo account is optional. Without one, the files are filled in by hand and everything
+below still works — EAS is how values are _shared_, not how the app reads them.
+
+### Sharing Values Through EAS
+
+The shared values live in EAS (expo.dev); the local `.env*` files are copies, for working
+offline and for the build tools that read files. This template ships no EAS project id of
+its own — one project id baked into a boilerplate would put every app generated from it on
+the same EAS project, sharing environments with strangers. Create your own once:
+
+```bash
+pnpm dlx eas-cli login
+pnpm dlx eas-cli init        # creates the project, prints its id
+```
+
+Then either export `EXPO_PROJECT_ID` or add it to your env files. It is optional: with it
+unset, `app.config.ts` simply publishes no `extra.eas` and the app builds as before.
+
+```bash
+pnpm env:pull                        # write every .env* file from EAS
+pnpm env:pull staging                # just one variant
+pnpm env:push production             # upload one variant (prompts; --force skips)
+pnpm env:exec staging -- pnpm exec expo export   # run a JS command with EAS values injected
+```
+
+**Precedence:** shell or `eas env:exec` beats the `.env*` file beats a hardcoded default.
+A key the variant's file does not declare is _missing_, not inherited from `.env` — so a
+`.env.production` that omits `VERSION_CODE` fails the build instead of shipping
+development's. (`.env.local` is not consulted; the variant file wins.)
+
+**`env:exec` is for JS-side commands, not native builds.** Only `app.config.ts` reads
+`process.env`. react-native-config compiles the _file_ named by `ENVFILE` into the native
+build and never sees an injected value, so `env:exec` in front of `pnpm ios:stg` produces a
+binary whose two halves disagree — and the app throws at startup saying so. For a native
+build, run `pnpm env:pull <variant>` first and then build normally.
+
+**Why there is no `staging` environment in the EAS dashboard:** EAS ships exactly three
+environments — `development`, `preview` and `production` — and naming a fourth one is a paid
+feature. This repo's `staging` variant therefore maps onto EAS's `preview`. Everywhere
+else — the file name, the bundle id, `APP_FLAVOR` — it is still called staging.
+
+Keep every variable at `plaintext` or `sensitive` visibility. `eas env:exec` refuses to read
+`secret` values outside EAS's own servers, and `app.config.ts` needs all of them while it
+resolves. That costs nothing here: everything in these files is compiled into the binary and
+is publicly readable anyway.
 
 ### Environment Files Structure
 
@@ -147,8 +193,9 @@ See `.env.example` for the authoritative list. Two rules the build enforces:
 
 - **No empty values.** `app.config.ts` rejects any variable with an empty value, so declaring a
   placeholder such as `GOOGLE_API_KEY=` fails the build. Add the variable when you have a value.
-- **No trailing `#` comments on a value line.** dotenv strips them, react-native-config does not,
-  so the JS bundle and the native build end up with different values and the app refuses to start.
+- **No trailing `#` comments on a value line.** The env parser strips them, react-native-config
+  does not, so the JS bundle and the native build end up with different values and the app
+  refuses to start.
 
 Only `APP_FLAVOR`, `APP_NAME`, `API_URL`, `VERSION_NAME` and `VERSION_CODE` are published to the
 app. Everything else in the file stays out of the binary. `API_URL` must use https outside
@@ -166,7 +213,7 @@ pnpm android:stg
 pnpm ios:stg
 
 # Production
-pnpm android:pro
+pnpm android:prod
 pnpm ios:prod
 ```
 
@@ -202,7 +249,7 @@ Everything per-environment lives in `app.config.ts`:
 
 | Native value                             | Comes from                                                     |
 | ---------------------------------------- | -------------------------------------------------------------- |
-| Bundle id / package                      | `ENV_TARGETS[env].bundleId`                                    |
+| Bundle id / package                      | `VARIANTS[env].bundleId`                                       |
 | App version                              | `VERSION_NAME`                                                 |
 | iOS build number / Android `versionCode` | `VERSION_CODE`                                                 |
 | Display name                             | `APP_NAME` → `CFBundleDisplayName` (iOS), `app_name` (Android) |
@@ -239,9 +286,9 @@ JS bundle and a native binary describing different environments, with no error a
 
 Two rules for `.env*` files, both enforced at runtime:
 
-- **No trailing `#` comment on a value line.** dotenv strips it; react-native-config keeps
-  everything after `=` on both platforms, so the native side would receive the comment text as
-  part of the value.
+- **No trailing `#` comment on a value line.** `scripts/lib/parse-env-file.cjs` strips it;
+  react-native-config keeps everything after `=` on both platforms, so the native side would
+  receive the comment text as part of the value.
 - **No empty values.** `app.config.ts` rejects them; delete the line instead.
 
 See `.env.example`.
@@ -257,9 +304,9 @@ The setup automatically manages app versions based on environment files:
 
 - `ios/` and `android/` are gitignored build output. Run `pnpm prebuild` after cloning, and
   never commit them or expect a hand-edit there to survive
-- Never commit `.env` files to git (they are automatically added to .gitignore)
-- Always commit `.env.example` and `.env.vault` (if using dotenv-vault)
-- Share vault credentials with your team members if using dotenv-vault
+- Never commit `.env` files to git — `.gitignore` already excludes them
+- `.env.example` is the only env file that is committed; keep it current when you add a variable
+- Share values with your team through `pnpm env:push` / `pnpm env:pull`, not by sending files
 
 ## Project Structure
 

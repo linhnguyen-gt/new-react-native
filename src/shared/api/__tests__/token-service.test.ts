@@ -126,11 +126,15 @@ describe('TokenService', () => {
         });
     });
 
+    // `globalThis` rather than `global`: which declaration of `global` wins depends on the
+    // order files enter the TS program, so pulling a new module into it (app.config.ts's
+    // shared variant table did) could resolve `global` to a type without `setTimeout` and
+    // break these spies. `globalThis` is declared by the standard lib and does not move.
     describe('setSession', () => {
         it('schedules the refresh from expiredAt, not a hardcoded lifetime', async () => {
             const port = createPort();
             const service = new TokenService(port);
-            const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
+            const setTimeoutSpy = jest.spyOn(globalThis, 'setTimeout');
 
             await service.setSession({ accessToken: 'a', expiredAt: Date.now() + 120_000 });
 
@@ -144,7 +148,7 @@ describe('TokenService', () => {
         it('falls back to the 15-minute lifetime when the server sends no expiredAt', async () => {
             const port = createPort();
             const service = new TokenService(port);
-            const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
+            const setTimeoutSpy = jest.spyOn(globalThis, 'setTimeout');
 
             await service.setSession({ accessToken: 'a' });
 
@@ -154,7 +158,7 @@ describe('TokenService', () => {
         it('floors an already-expired session at the minimum delay', async () => {
             const port = createPort();
             const service = new TokenService(port);
-            const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
+            const setTimeoutSpy = jest.spyOn(globalThis, 'setTimeout');
 
             await service.setSession({ accessToken: 'a', expiredAt: Date.now() - 60_000 });
 

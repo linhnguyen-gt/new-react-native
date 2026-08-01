@@ -84,7 +84,11 @@ Query) · `redux-saga` · `react-redux` · `axios` · `@react-navigation/native`
 
 Tooling: `typescript` · `jest` + `@testing-library/react-native` · `eslint` with the
 TypeScript, React, React Native, import, jsx-a11y, jest and prettier plugins ·
-`babel-plugin-react-compiler` · `lefthook` + `lint-staged` + `commitlint` · `dotenv-vault`.
+`babel-plugin-react-compiler` · `lefthook` + `lint-staged` + `commitlint`.
+
+Environment values are shared through EAS (`eas.json`, `scripts/env-sync.cjs`,
+`scripts/env-exec.cjs`), with the local `.env*` files as offline copies. `eas-cli` is invoked
+through `pnpm dlx` rather than installed — pinning it here would be a second version to maintain.
 
 Removed as unreferenced: `@shopify/flash-list`, `@react-native/new-app-screen`, `react-dom`,
 `@types/react-dom`, `@babel/preset-env`, `babel-plugin-module-resolver`. Web is not a target — no

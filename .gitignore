@@ -70,18 +70,17 @@ npm-debug.log
 .pnpm-debug.log
 
 
+# Environment files. Real values live in EAS; only the template is committed.
 .env*
 .flaskenv*
-!.env.project
-!.env.vault
-# Environment files
-.env
-.env.*
 !.env.example
-!.env.vault
+!.env.project
 
 .qodo
 .expo/
+
+# Local code-indexing output from an editor-side tool, not part of the project.
+.codegraph/
 
 # Continuous Native Generation: ios/ and android/ are build output, regenerated from
 # app.config.ts and plugins/ by `expo prebuild`. Do not commit them — an edit made directly

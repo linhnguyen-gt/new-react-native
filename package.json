@@ -5,7 +5,8 @@
     "scripts": {
         "android": "node scripts/detect-package-manager.js && node scripts/run-app.js android development --device",
         "android:stg": "node scripts/detect-package-manager.js && node scripts/run-app.js android staging --device",
-        "android:pro": "node scripts/detect-package-manager.js && node scripts/run-app.js android production --device",
+        "android:prod": "node scripts/detect-package-manager.js && node scripts/run-app.js android production --device",
+        "android:pro": "node scripts/pm-run.js android:prod",
         "ios": "node scripts/detect-package-manager.js && node scripts/run-app.js ios development --device",
         "ios:stg": "node scripts/detect-package-manager.js && node scripts/run-app.js ios staging --device",
         "ios:prod": "node scripts/detect-package-manager.js && node scripts/run-app.js ios production --device",
@@ -15,10 +16,11 @@
         "start": "npx expo start",
         "lint:fix": "eslint . --fix",
         "test": "jest",
-        "clear:cache": "rm -rf node_modules && node scripts/pm-run.js install && watchman watch-del-all && del %localappdata%Temphaste-map-* && del %localappdata%Tempmetro-cache && npx expo start --clear",
+        "clear:cache": "node scripts/clear-cache.js",
         "clear:expo": "npx expo start --clear",
-        "env:push": "dotenv-vault push && dotenv-vault push staging && dotenv-vault push production",
-        "env:pull": "dotenv-vault pull && dotenv-vault pull staging && dotenv-vault pull production",
+        "env:push": "node scripts/env-sync.cjs push",
+        "env:pull": "node scripts/env-sync.cjs pull",
+        "env:exec": "node scripts/env-exec.cjs",
         "env:setup": "node scripts/setup-env.js",
         "adb:reactotron": "adb reverse tcp:9090 tcp:9090",
         "update-versions": "node scripts/update-readme-versions.js",
@@ -39,7 +41,6 @@
         "@react-navigation/stack": "^7.10.17",
         "@reduxjs/toolkit": "^2.12.0",
         "axios": "1.19.0",
-        "dotenv": "^17.4.2",
         "expo": "~57.0.9",
         "expo-constants": "~57.0.8",
         "expo-font": "~57.0.1",
@@ -90,7 +91,6 @@
         "@typescript-eslint/parser": "^8.65.0",
         "babel-plugin-react-compiler": "1.0.0",
         "babel-preset-expo": "~57.0.5",
-        "dotenv-vault": "^1.26.2",
         "eslint": "^9.39.5",
         "eslint-plugin-import": "^2.32.0",
         "eslint-plugin-jest": "^29.16.0",
@@ -109,13 +109,13 @@
         "typescript": "~6.0.3"
     },
     "lint-staged": {
-        "*.{js,ts,jsx,tsx}": [
+        "*.{js,cjs,mjs,ts,cts,mts,jsx,tsx}": [
             "eslint --fix",
             "prettier --write"
         ]
     },
     "engines": {
-        "node": "^22.22.1 || ^24.3.0 || >= 25.0.0"
+        "node": "^22.22.1 || >=24.3.0"
     },
     "packageManager": "pnpm@11.18.0"
 }

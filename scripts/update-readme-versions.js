@@ -21,7 +21,6 @@ const packagesToUpdate = {
     ESLint: packageJson.devDependencies.eslint,
     Prettier: packageJson.devDependencies.prettier,
     Jest: packageJson.devDependencies.jest,
-    Dotenv: packageJson.dependencies.dotenv,
     Async_Storage: packageJson.dependencies['@react-native-async-storage/async-storage'],
     Reactotron: packageJson.dependencies['reactotron-react-native'],
     React_Native_Reanimated: packageJson.dependencies['react-native-reanimated'],

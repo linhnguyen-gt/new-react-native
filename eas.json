@@ -1,0 +1,26 @@
+{
+    "cli": {
+        "version": ">= 21.4.0",
+        "appVersionSource": "local"
+    },
+    "build": {
+        "development": {
+            "developmentClient": true,
+            "distribution": "internal",
+            "environment": "development",
+            "env": { "APP_ENV": "development" }
+        },
+        "staging": {
+            "distribution": "internal",
+            "environment": "preview",
+            "env": { "APP_ENV": "staging" }
+        },
+        "production": {
+            "environment": "production",
+            "env": { "APP_ENV": "production" }
+        }
+    },
+    "submit": {
+        "production": {}
+    }
+}

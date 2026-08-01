@@ -85,7 +85,8 @@ used to happen. Mock a leaf module, never a barrel.
 - **In `configureStore`, `enhancers` must appear after `middleware`.** An `enhancers` callback seen
   first pins the middleware tuple to the default entry and the RTK Query types stop matching.
 - **`docs/` is tracked, `plans/` is not.** Docs describe the result; plans are working notes.
-- **Never commit a `.env*` file** other than `.env.example` and `.env.vault`.
+- **Never commit a `.env*` file** other than `.env.example`. Shared values live in EAS; sync them
+  with `pnpm env:pull` / `pnpm env:push`.
 
 ## Where things are documented
 
